@@ -1,1 +1,1 @@
-# go-microservices-k8s
+# go-microservice-k8s

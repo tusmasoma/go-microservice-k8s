@@ -7,9 +7,9 @@ import (
 )
 
 type CatalogItem struct {
-	ID    string  `json:"id"`
-	Name  string  `json:"name"`
-	Price float64 `json:"price"`
+	ID    string  `json:"id" db:"id"`
+	Name  string  `json:"name" db:"name"`
+	Price float64 `json:"price" db:"price"`
 }
 
 func NewCatalogItem(name string, price float64) (*CatalogItem, error) {

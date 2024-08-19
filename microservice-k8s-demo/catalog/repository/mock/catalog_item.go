@@ -37,17 +37,17 @@ func (m *MockCatalogItemRepository) EXPECT() *MockCatalogItemRepositoryMockRecor
 }
 
 // Create mocks base method.
-func (m *MockCatalogItemRepository) Create(ctx context.Context, task entity.CatalogItem) error {
+func (m *MockCatalogItemRepository) Create(ctx context.Context, item entity.CatalogItem) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Create", ctx, task)
+	ret := m.ctrl.Call(m, "Create", ctx, item)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Create indicates an expected call of Create.
-func (mr *MockCatalogItemRepositoryMockRecorder) Create(ctx, task interface{}) *gomock.Call {
+func (mr *MockCatalogItemRepositoryMockRecorder) Create(ctx, item interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockCatalogItemRepository)(nil).Create), ctx, task)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockCatalogItemRepository)(nil).Create), ctx, item)
 }
 
 // Delete mocks base method.
@@ -95,15 +95,15 @@ func (mr *MockCatalogItemRepositoryMockRecorder) List(ctx interface{}) *gomock.C
 }
 
 // Update mocks base method.
-func (m *MockCatalogItemRepository) Update(ctx context.Context, task entity.CatalogItem) error {
+func (m *MockCatalogItemRepository) Update(ctx context.Context, item entity.CatalogItem) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Update", ctx, task)
+	ret := m.ctrl.Call(m, "Update", ctx, item)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Update indicates an expected call of Update.
-func (mr *MockCatalogItemRepositoryMockRecorder) Update(ctx, task interface{}) *gomock.Call {
+func (mr *MockCatalogItemRepositoryMockRecorder) Update(ctx, item interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockCatalogItemRepository)(nil).Update), ctx, task)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockCatalogItemRepository)(nil).Update), ctx, item)
 }

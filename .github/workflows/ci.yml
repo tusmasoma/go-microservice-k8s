@@ -79,45 +79,54 @@ jobs:
   test:
     needs: build
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [catalog, customer, order]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
         with:
-          name: app
-          path: ./
+          name: app-${{ matrix.service }}
+          path: ./microservice-k8s-demo/${{ matrix.service }}/app
 
-      - name: Setup .env file
-        run: echo "${{ secrets.LOCAL_ENV_FILE }}" > ./microservice-k8s-demo/.env
-        env:
-          LOCAL_ENV_FILE: ${{ secrets.LOCAL_ENV_FILE }}
+      # - name: Setup .env file
+      #   run: echo "${{ secrets.LOCAL_ENV_FILE }}" > ./microservice-k8s-demo/.env
+      #   env:
+      #     LOCAL_ENV_FILE: ${{ secrets.LOCAL_ENV_FILE }}
 
       - name: Test
-        run: make test
+        run: make test SERVICE=${{ matrix.service }}
 
   lint:
     needs: build
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [catalog, customer, order]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
         with:
-          name: app
-          path: ./
+          name: app-${{ matrix.service }}
+          path: ./microservice-k8s-demo/${{ matrix.service }}/app
 
       - name: Lint
-        run: make lint
+        run: make lint SERVICE=${{ matrix.service }}
   generate:
     needs: build
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [catalog, customer, order]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
         with:
-          name: app
-          path: ./
+         name: app-${{ matrix.service }}
+         path: ./microservice-k8s-demo/${{ matrix.service }}/app
 
       - name: Generate and check for changes
         run: |
-          make generate
+          make generate SERVICE=${{ matrix.service }}
           git add .
           git diff --cached --quiet -- ./**/*.go

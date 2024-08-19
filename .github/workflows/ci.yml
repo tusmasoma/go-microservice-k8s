@@ -95,7 +95,8 @@ jobs:
       #     LOCAL_ENV_FILE: ${{ secrets.LOCAL_ENV_FILE }}
 
       - name: Test
-        run: make test SERVICE=${{ matrix.service }}
+        working-directory: ./microservice-k8s-demo/${{ matrix.service }}
+        run: go test -v ./...
 
   lint:
     needs: build

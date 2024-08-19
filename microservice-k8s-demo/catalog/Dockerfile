@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y default-mysql-client
 WORKDIR /app
 
 COPY go.mod ./
-# COPY go.sum ./
+COPY go.sum ./
 
 WORKDIR /app
 RUN go mod download

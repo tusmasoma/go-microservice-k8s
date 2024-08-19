@@ -54,7 +54,7 @@ jobs:
         uses: actions/setup-go@v4.1.0
         id: setup-go
         with:
-          go-version: '1.18' # 使用するGoのバージョンを指定
+          go-version-file: ./microservice-k8s-demo/${{ matrix.service }}/go.mod
           cache-dependency-path: ./microservice-k8s-demo/${{ matrix.service }}/go.sum
 
       - name: Download Go modules

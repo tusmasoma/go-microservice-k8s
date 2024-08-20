@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Item : Search</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" />
+    <style type="text/css">
+        .navbar ul { list-style: none; display: inline-block; padding: 0; }
+        .navbar ul li { display: inline-block; padding-right: .5em; }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="navbar">
+            <ul class="navbar-inner">
+                <li><a class="brand" href="/">Home</a></li>
+                <li><a class="brand" href="/catalog/list">List</a></li>
+                <li><a class="brand" href="/catalog/search">Search</a></li>
+                <li><a class="brand" href="/catalog/create">Create</a></li>
+            </ul>
+        </div>
+        <h1>Item : Search</h1>
+        <div>
+            <div class="container">
+                <form action="/catalog/search" method="POST" role="form">
+                    <div class="row">
+                        <div>
+                            <label for="name">Search for Item by Name</label>
+                        </div>
+                        <div>
+                            <input type="text" id="name" name="name" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <button type="submit" name="submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,42 +1,66 @@
-{{ define "title" }}Item : View all{{ end }}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Item : View all</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" />
+    <style type="text/css">
+        .navbar ul { list-style: none; display: inline-block; padding: 0; }
+        .navbar ul li { display: inline-block; padding-right: .5em; }
+    </style>
+</head>
 
-{{ define "header" }}Item : View all{{ end }}
-
-{{ define "content" }}
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <td>id</td>
-            <td>Name</td>
-            <td>Price</td>
-            <td></td>
-        </tr>
-    </thead>
-    <tbody>
-        {{ if eq (len .Items) 0 }}
-        <tr>
-            <td colspan="4">No items</td>
-        </tr>
-        {{ else }}
-        {{ range .Items }}
-        <tr>
-            <td><a href="{{ .ID }}.html">{{ .ID }}</a></td>
-            <td>{{ .Name }}</td>
-            <td>{{ .Price }}</td>
-            <td>
-                <form action="{{ .ID }}.html" method="post">
-                    <input type="hidden" name="_method" value="DELETE" />
-                    <input type="submit" value="delete" class="btn btn-link" />
-                </form>
-            </td>
-        </tr>
-        {{ end }}
-        {{ end }}
-    </tbody>
-</table>
-<div class="row">
-    <div class="col-md-4">
-        <a href="form.html">Add Item</a>
+<body>
+    <div class="container">
+        <div class="navbar">
+            <ul class="navbar-inner">
+                <li><a class="brand" href="/">Home</a></li>
+                <li><a class="brand" href="list.html">List</a></li>
+                <li><a class="brand" href="searchForm.html">Search</a></li>
+                <li><a class="brand" href="form.html">Form</a></li>
+            </ul>
+        </div>
+        <h1>Item : View all</h1>
+        <div>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <td>id</td>
+                        <td>Name</td>
+                        <td>Price</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{ if eq (len .Items) 0 }}
+                    <tr>
+                        <td colspan="4">No items</td>
+                    </tr>
+                    {{ else }}
+                    {{ range .Items }}
+                    <tr>
+                        <td><a href="{{ .ID }}.html">{{ .ID }}</a></td>
+                        <td>{{ .Name }}</td>
+                        <td>{{ .Price }}</td>
+                        <td>
+                            <form action="{{ .ID }}.html" method="post">
+                                <input type="hidden" name="_method" value="DELETE" />
+                                <input type="submit" value="delete" class="btn btn-link" />
+                            </form>
+                        </td>
+                    </tr>
+                    {{ end }}
+                    {{ end }}
+                </tbody>
+            </table>
+            <div class="row">
+                <div class="col-md-4">
+                    <a href="form.html">Add Item</a>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-{{ end }}
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</body>
+</html>

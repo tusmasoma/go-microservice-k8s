@@ -9,9 +9,10 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
-	"github.com/go-chi/chi"
-	"github.com/go-chi/cors"
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/tusmasoma/go-tech-dojo/pkg/log"
 
@@ -46,7 +47,7 @@ func main() {
 		return
 	}
 
-	err = container.Invoke(func(router *chi.Mux, config *config.ServerConfig) {
+	err = container.Invoke(func(router *gin.Engine, config *config.ServerConfig) {
 		srv := &http.Server{
 			Addr:         addr,
 			Handler:      router,
@@ -104,21 +105,27 @@ func BuildContainer(ctx context.Context) (*dig.Container, error) {
 		func(
 			serverConfig *config.ServerConfig,
 			catalogHandler handler.CatalogItemHandler,
-		) *chi.Mux {
-			r := chi.NewRouter()
-			r.Use(cors.Handler(cors.Options{
-				AllowedOrigins:     []string{"https://*", "http://*"},
-				AllowedMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-				AllowedHeaders:     []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token", "Origin"},
-				ExposedHeaders:     []string{"Link", "Authorization"},
-				AllowCredentials:   true,
-				MaxAge:             serverConfig.PreflightCacheDurationSec,
-				OptionsPassthrough: false,
+		) *gin.Engine {
+			r := gin.Default()
+
+			r.Use(cors.New(cors.Config{
+				AllowOrigins:     []string{"https://*", "http://*"},
+				AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+				AllowHeaders:     []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token", "Origin"},
+				ExposeHeaders:    []string{"Link", "Authorization"},
+				AllowCredentials: true,
+				MaxAge:           time.Duration(serverConfig.PreflightCacheDurationSec) * time.Second,
 			}))
 
-			r.Route("/catalog", func(r chi.Router) {
-				r.Get("/list", catalogHandler.ListCatalogItems)
-			})
+			r.LoadHTMLGlob("gateway/web/templates/*.html")
+
+			api := r.Group("/")
+			{
+				task := api.Group("/catalog")
+				{
+					task.GET("/list", catalogHandler.ListCatalogItems)
+				}
+			}
 
 			return r
 		},

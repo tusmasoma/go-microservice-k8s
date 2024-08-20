@@ -1,17 +1,17 @@
 package handler
 
 import (
-	"html/template"
 	"net/http"
 
+	"github.com/gin-gonic/gin"
 	"github.com/tusmasoma/go-tech-dojo/pkg/log"
 
-	"github.com/tusmasoma/microservice-k8s-demo/catalog/entity"
 	"github.com/tusmasoma/microservice-k8s-demo/catalog/usecase"
 )
 
 type CatalogItemHandler interface {
-	ListCatalogItems(w http.ResponseWriter, r *http.Request)
+	ListCatalogItems(c *gin.Context)
+	// CreateCatalogItem(w http.ResponseWriter, r *http.Request)
 }
 
 type catalogItemHandler struct {
@@ -24,35 +24,18 @@ func NewCatalogItemHandler(cuc usecase.CatalogItemUseCase) CatalogItemHandler {
 	}
 }
 
-func (ch *catalogItemHandler) ListCatalogItems(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
+func (ch *catalogItemHandler) ListCatalogItems(c *gin.Context) {
+	ctx := c.Request.Context()
 
 	items, err := ch.cuc.ListCatalogItems(ctx)
 	if err != nil {
 		log.Error("Failed to list catalog items", log.Ferror(err))
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		c.String(http.StatusInternalServerError, "Internal server error")
 		return
 	}
-
-	tmpl, err := template.ParseFiles(
-		"gateway/web/templates/layout.html",
-		"gateway/web/templates/list.html",
-	)
-	if err != nil {
-		log.Error("Failed to parse template", log.Ferror(err))
-		http.Error(w, "Failed to load template", http.StatusInternalServerError)
-		return
+	data := gin.H{
+		"Items": items,
 	}
 
-	data := struct {
-		Items []entity.CatalogItem
-	}{
-		Items: items,
-	}
-
-	if err = tmpl.ExecuteTemplate(w, "layout", data); err != nil {
-		log.Error("Failed to execute template", log.Ferror(err))
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
-		return
-	}
+	c.HTML(http.StatusOK, "list.html", data)
 }

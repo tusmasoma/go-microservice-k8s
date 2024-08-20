@@ -78,6 +78,80 @@ func (cr *catalogItemRepository) List(ctx context.Context) ([]entity.CatalogItem
 	return items, nil
 }
 
+func (cr *catalogItemRepository) ListByName(ctx context.Context, name string) ([]entity.CatalogItem, error) {
+	executor := cr.db
+	if tx := TxFromCtx(ctx); tx != nil {
+		executor = tx
+	}
+
+	query := `
+	SELECT id, name, price
+	FROM CatalogItems
+	WHERE name = ?
+	`
+
+	rows, err := executor.QueryContext(ctx, query, name)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var items []entity.CatalogItem
+	for rows.Next() {
+		var item entity.CatalogItem
+		if err = rows.Scan(
+			&item.ID,
+			&item.Name,
+			&item.Price,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, item)
+	}
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return items, nil
+}
+
+func (cr *catalogItemRepository) ListByNameContaining(ctx context.Context, name string) ([]entity.CatalogItem, error) {
+	executor := cr.db
+	if tx := TxFromCtx(ctx); tx != nil {
+		executor = tx
+	}
+
+	query := `
+	SELECT id, name, price
+	FROM CatalogItems
+	WHERE name LIKE ?
+	`
+
+	rows, err := executor.QueryContext(ctx, query, "%"+name+"%")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var items []entity.CatalogItem
+	for rows.Next() {
+		var item entity.CatalogItem
+		if err = rows.Scan(
+			&item.ID,
+			&item.Name,
+			&item.Price,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, item)
+	}
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return items, nil
+}
+
 func (cr *catalogItemRepository) Create(ctx context.Context, item entity.CatalogItem) error {
 	executor := cr.db
 	if tx := TxFromCtx(ctx); tx != nil {

@@ -39,8 +39,6 @@ func main() {
 	mainCtx, cancelMain := context.WithCancel(context.Background())
 	defer cancelMain()
 
-	// This is framework-agnostic and can be replaced with any HTTP framework like net/http, Gin, or Echo
-	// The following example uses net/http.
 	container, err := BuildContainer(mainCtx)
 	if err != nil {
 		log.Critical("Failed to build container", log.Ferror(err))
@@ -123,13 +121,28 @@ func BuildContainer(ctx context.Context) (*dig.Container, error) {
 			{
 				catalog := api.Group("/catalog")
 				{
+					// List all catalog items
 					catalog.GET("/list", catalogHandler.ListCatalogItems)
+
+					// Show the form to create a new catalog item
 					catalog.GET("/create", catalogHandler.CreateCatalogItemForm)
+
+					// Process the form submission to create a new catalog item
 					catalog.POST("/create", catalogHandler.CreateCatalogItem)
+
+					// Show the form to update a catalog item
 					catalog.GET("/update", catalogHandler.UpdateCatalogItemForm)
+
+					// Process the form submission to update a catalog item
 					catalog.POST("/update", catalogHandler.UpdateCatalogItem)
+
+					// Delete a catalog item
 					catalog.GET("/delete", catalogHandler.DeleteCatalogItem)
+
+					// Show the form to search for catalog items by name
 					catalog.GET("/search", catalogHandler.GetCatalogItemByNameForm)
+
+					// Process the form submission to search for catalog items by name
 					catalog.POST("/search", catalogHandler.GetCatalogItemByName)
 				}
 			}

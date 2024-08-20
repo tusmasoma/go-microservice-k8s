@@ -2,7 +2,6 @@ package handler
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/tusmasoma/go-tech-dojo/pkg/log"
@@ -51,11 +50,10 @@ func (ch *catalogItemHandler) GetCatalogItemByName(c *gin.Context) {
 		c.String(http.StatusInternalServerError, "Internal server error")
 		return
 	}
-	data := gin.H{
-		"Items": items,
-	}
 
-	c.HTML(http.StatusOK, "list.html", data)
+	c.HTML(http.StatusOK, "list.html", gin.H{
+		"Items": items,
+	})
 }
 
 func (ch *catalogItemHandler) ListCatalogItems(c *gin.Context) {
@@ -67,36 +65,51 @@ func (ch *catalogItemHandler) ListCatalogItems(c *gin.Context) {
 		c.String(http.StatusInternalServerError, "Internal server error")
 		return
 	}
-	data := gin.H{
-		"Items": items,
-	}
 
-	c.HTML(http.StatusOK, "list.html", data)
+	c.HTML(http.StatusOK, "list.html", gin.H{
+		"Items": items,
+	})
 }
 
 func (ch *catalogItemHandler) CreateCatalogItemForm(c *gin.Context) {
 	c.HTML(http.StatusOK, "create.html", nil)
 }
 
+type CreateCatalogItemRequest struct {
+	Name  string  `form:"name"`
+	Price float64 `form:"price"`
+}
+
 func (ch *catalogItemHandler) CreateCatalogItem(c *gin.Context) {
 	ctx := c.Request.Context()
 
-	name := c.PostForm("name")
-	priceStr := c.PostForm("price")
-	price, err := strconv.ParseFloat(priceStr, 64)
-	if err != nil {
-		log.Error("Failed to parse price", log.Ferror(err))
-		c.String(http.StatusBadRequest, "Invalid price format")
+	var req CreateCatalogItemRequest
+	if err := c.ShouldBind(&req); err != nil {
+		log.Error("Failed to bind request", log.Ferror(err))
+		c.String(http.StatusBadRequest, "Invalid request")
+		return
+	}
+	if !ch.isValidCreateCatalogItemRequest(&req) {
+		c.String(http.StatusBadRequest, "Invalid request")
 		return
 	}
 
-	if err = ch.cuc.CreateCatalogItem(ctx, name, price); err != nil {
+	if err := ch.cuc.CreateCatalogItem(ctx, req.Name, req.Price); err != nil {
 		log.Error("Failed to create catalog item", log.Ferror(err))
 		c.String(http.StatusInternalServerError, "Internal server error")
 		return
 	}
 
 	c.Redirect(http.StatusFound, "/catalog/list")
+}
+
+func (ch *catalogItemHandler) isValidCreateCatalogItemRequest(req *CreateCatalogItemRequest) bool {
+	if req.Name == "" ||
+		req.Price <= 0 {
+		log.Warn("Invalid request body: %v", req)
+		return false
+	}
+	return true
 }
 
 func (ch *catalogItemHandler) UpdateCatalogItemForm(c *gin.Context) {
@@ -116,33 +129,48 @@ func (ch *catalogItemHandler) UpdateCatalogItemForm(c *gin.Context) {
 		return
 	}
 
-	data := gin.H{
+	c.HTML(http.StatusOK, "update.html", gin.H{
 		"Item": item,
-	}
+	})
+}
 
-	c.HTML(http.StatusOK, "update.html", data)
+type UpdateCatalogItemRequest struct {
+	ID    string  `form:"id"`
+	Name  string  `form:"name"`
+	Price float64 `form:"price"`
 }
 
 func (ch *catalogItemHandler) UpdateCatalogItem(c *gin.Context) {
 	ctx := c.Request.Context()
 
-	id := c.PostForm("id")
-	name := c.PostForm("name")
-	priceStr := c.PostForm("price")
-	price, err := strconv.ParseFloat(priceStr, 64)
-	if err != nil {
-		log.Error("Failed to parse price", log.Ferror(err))
-		c.String(http.StatusBadRequest, "Invalid price format")
+	var req UpdateCatalogItemRequest
+	if err := c.ShouldBind(&req); err != nil {
+		log.Error("Failed to bind request", log.Ferror(err))
+		c.String(http.StatusBadRequest, "Invalid request")
+		return
+	}
+	if !ch.isValidUpdateCatalogItemRequest(&req) {
+		c.String(http.StatusBadRequest, "Invalid request")
 		return
 	}
 
-	if err = ch.cuc.UpdateCatalogItem(ctx, id, name, price); err != nil {
+	if err := ch.cuc.UpdateCatalogItem(ctx, req.ID, req.Name, req.Price); err != nil {
 		log.Error("Failed to update catalog item", log.Ferror(err))
 		c.String(http.StatusInternalServerError, "Internal server error")
 		return
 	}
 
 	c.Redirect(http.StatusFound, "/catalog/list")
+}
+
+func (ch *catalogItemHandler) isValidUpdateCatalogItemRequest(req *UpdateCatalogItemRequest) bool {
+	if req.ID == "" ||
+		req.Name == "" ||
+		req.Price <= 0 {
+		log.Warn("Invalid request body: %v", req)
+		return false
+	}
+	return true
 }
 
 func (ch *catalogItemHandler) DeleteCatalogItem(c *gin.Context) {

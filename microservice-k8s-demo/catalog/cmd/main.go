@@ -124,10 +124,10 @@ func BuildContainer(ctx context.Context) (*dig.Container, error) {
 				catalog := api.Group("/catalog")
 				{
 					catalog.GET("/list", catalogHandler.ListCatalogItems)
-					catalog.GET("/create", func(c *gin.Context) {
-						c.HTML(http.StatusOK, "create.html", nil)
-					})
+					catalog.GET("/create", catalogHandler.ShowCreateCatalogItemForm)
 					catalog.POST("/create", catalogHandler.CreateCatalogItem)
+					catalog.GET("/update", catalogHandler.ShowUpdateCatalogItemForm)
+					catalog.POST("/update", catalogHandler.UpdateCatalogItem)
 					catalog.GET("/delete", catalogHandler.DeleteCatalogItem)
 				}
 			}

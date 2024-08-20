@@ -124,11 +124,13 @@ func BuildContainer(ctx context.Context) (*dig.Container, error) {
 				catalog := api.Group("/catalog")
 				{
 					catalog.GET("/list", catalogHandler.ListCatalogItems)
-					catalog.GET("/create", catalogHandler.ShowCreateCatalogItemForm)
+					catalog.GET("/create", catalogHandler.CreateCatalogItemForm)
 					catalog.POST("/create", catalogHandler.CreateCatalogItem)
-					catalog.GET("/update", catalogHandler.ShowUpdateCatalogItemForm)
+					catalog.GET("/update", catalogHandler.UpdateCatalogItemForm)
 					catalog.POST("/update", catalogHandler.UpdateCatalogItem)
 					catalog.GET("/delete", catalogHandler.DeleteCatalogItem)
+					catalog.GET("/search", catalogHandler.GetCatalogItemByNameForm)
+					catalog.POST("/search", catalogHandler.GetCatalogItemByName)
 				}
 			}
 

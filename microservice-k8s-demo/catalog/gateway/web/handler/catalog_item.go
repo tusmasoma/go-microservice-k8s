@@ -11,10 +11,12 @@ import (
 )
 
 type CatalogItemHandler interface {
+	GetCatalogItemByNameForm(c *gin.Context)
+	GetCatalogItemByName(c *gin.Context)
 	ListCatalogItems(c *gin.Context)
-	ShowCreateCatalogItemForm(c *gin.Context)
+	CreateCatalogItemForm(c *gin.Context)
 	CreateCatalogItem(c *gin.Context)
-	ShowUpdateCatalogItemForm(c *gin.Context)
+	UpdateCatalogItemForm(c *gin.Context)
 	UpdateCatalogItem(c *gin.Context)
 	DeleteCatalogItem(c *gin.Context)
 }
@@ -27,6 +29,33 @@ func NewCatalogItemHandler(cuc usecase.CatalogItemUseCase) CatalogItemHandler {
 	return &catalogItemHandler{
 		cuc: cuc,
 	}
+}
+
+func (ch *catalogItemHandler) GetCatalogItemByNameForm(c *gin.Context) {
+	c.HTML(http.StatusOK, "search.html", nil)
+}
+
+func (ch *catalogItemHandler) GetCatalogItemByName(c *gin.Context) {
+	ctx := c.Request.Context()
+
+	name := c.PostForm("name")
+	if name == "" {
+		log.Warn("Name is required")
+		c.String(http.StatusBadRequest, "Name is required")
+		return
+	}
+
+	items, err := ch.cuc.ListCatalogItemsByNameContaining(ctx, name)
+	if err != nil {
+		log.Error("Failed to list catalog items by name", log.Ferror(err))
+		c.String(http.StatusInternalServerError, "Internal server error")
+		return
+	}
+	data := gin.H{
+		"Items": items,
+	}
+
+	c.HTML(http.StatusOK, "list.html", data)
 }
 
 func (ch *catalogItemHandler) ListCatalogItems(c *gin.Context) {
@@ -45,7 +74,7 @@ func (ch *catalogItemHandler) ListCatalogItems(c *gin.Context) {
 	c.HTML(http.StatusOK, "list.html", data)
 }
 
-func (ch *catalogItemHandler) ShowCreateCatalogItemForm(c *gin.Context) {
+func (ch *catalogItemHandler) CreateCatalogItemForm(c *gin.Context) {
 	c.HTML(http.StatusOK, "create.html", nil)
 }
 
@@ -70,7 +99,7 @@ func (ch *catalogItemHandler) CreateCatalogItem(c *gin.Context) {
 	c.Redirect(http.StatusFound, "/catalog/list")
 }
 
-func (ch *catalogItemHandler) ShowUpdateCatalogItemForm(c *gin.Context) {
+func (ch *catalogItemHandler) UpdateCatalogItemForm(c *gin.Context) {
 	ctx := c.Request.Context()
 
 	id := c.Query("id")

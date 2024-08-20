@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Item : Edit</title>
+    <title>Item : Search</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" />
     <style type="text/css">
@@ -21,21 +21,21 @@
                 <li><a class="brand" href="/catalog/create">Create</a></li>
             </ul>
         </div>
-        <h1>Item : Edit</h1>
+        <h1>Item : Search</h1>
         <div>
             <div class="container">
-                <form action="/catalog/create" method="POST" role="form">
-                    <div class="form-group">
-                        <label>Name</label>
-                        <input type="text" name="name" value="{{ .Item.Name }}" class="form-control" placeholder="name" />
+                <form action="/catalog/search" method="POST" role="form">
+                    <div class="row">
+                        <div>
+                            <label for="name">Search for Item by Name</label>
+                        </div>
+                        <div>
+                            <input type="text" id="name" name="name" />
+                        </div>
                     </div>
-
-                    <div class="form-group">
-                        <label>Price</label>
-                        <input type="text" name="price" value="{{ .Item.Price }}" class="form-control" placeholder="price" />
+                    <div class="row">
+                        <button type="submit" name="submit">Submit</button>
                     </div>
-
-                    <button type="submit" class="btn btn-default">Submit</button>
                 </form>
             </div>
         </div>

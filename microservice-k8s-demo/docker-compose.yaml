@@ -10,25 +10,25 @@ services:
       - 3306:3306
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:
-      # - ./repository/mysql/init/:/docker-entrypoint-initdb.d
-      # - ./repository/mysql/init/my.cnf:/etc/mysql/my.cnf
+      - ./mysql/:/docker-entrypoint-initdb.d # 一旦
+      - ./mysql/my.cnf:/etc/mysql/my.cnf # 一旦
       - db-data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
 
-  customer-service:
-    build:
-      context: ./customer
-      dockerfile: ./Dockerfile
-    container_name: customer-service
-    ports:
-      - "8081:8080"
-    env_file:
-      - .env
-    depends_on:
-      - mysql
-    networks:
-      - microservices-net
+  # customer-service:
+  #   build:
+  #     context: ./customer
+  #     dockerfile: ./Dockerfile
+  #   container_name: customer-service
+  #   ports:
+  #     - "8081:8080"
+  #   env_file:
+  #     - .env
+  #   depends_on:
+  #     - mysql
+  #   networks:
+  #     - microservices-net
 
   catalog-service:
     build:
@@ -36,30 +36,30 @@ services:
       dockerfile: ./Dockerfile
     container_name: catalog-service
     ports:
-      - "8082:8080"
+      - "8082:8082"
     env_file:
       - .env
     depends_on:
       - mysql
-    networks:
-      - microservices-net
+    # networks:
+    #   - microservices-net
 
-  order-service:
-    build:
-      context: ./order
-      dockerfile: ./Dockerfile
-    container_name: order-service
-    ports:
-      - "8083:8080"
-    environment:
-      - CUSTOMER_SERVICE_URL=http://customer-service:8080
-      - CATALOG_SERVICE_URL=http://catalog-service:8080
-    env_file:
-      - .env
-    depends_on:
-      - mysql
-    networks:
-      - microservices-net
+  # order-service:
+  #   build:
+  #     context: ./order
+  #     dockerfile: ./Dockerfile
+  #   container_name: order-service
+  #   ports:
+  #     - "8083:8080"
+  #   environment:
+  #     - CUSTOMER_SERVICE_URL=http://customer-service:8080
+  #     - CATALOG_SERVICE_URL=http://catalog-service:8080
+  #   env_file:
+  #     - .env
+  #   depends_on:
+  #     - mysql
+  #   networks:
+  #     - microservices-net
 
   # swagger-ui:
   #   container_name: chat_swagger_ui

@@ -1,0 +1,31 @@
+{{ define "layout" }}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ block "title" . }}Layout{{ end }}</title>
+    <link rel="stylesheet" href="./webjars/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="./webjars/bootstrap/3.3.6/css/bootstrap-theme.min.css" />
+    <style type="text/css">
+        .navbar ul { list-style: none; display: inline-block; padding: 0; }
+        .navbar ul li { display: inline-block; padding-right: .5em; }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="navbar">
+            <ul class="navbar-inner">
+                <li><a class="brand" href="/">Home</a></li>
+                <li><a class="brand" href="list.html">List</a></li>
+                <li><a class="brand" href="searchForm.html">Search</a></li>
+                <li><a class="brand" href="form.html">Form</a></li>
+            </ul>
+        </div>
+        <h1>{{ block "header" . }}Layout{{ end }}</h1>
+        <div>{{ block "content" . }}Fake content{{ end }}</div>
+    </div>
+    <script src="./webjars/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</body>
+</html>
+{{ end }}

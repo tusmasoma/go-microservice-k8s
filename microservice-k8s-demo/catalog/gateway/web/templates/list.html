@@ -1,0 +1,42 @@
+{{ define "title" }}Item : View all{{ end }}
+
+{{ define "header" }}Item : View all{{ end }}
+
+{{ define "content" }}
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <td>id</td>
+            <td>Name</td>
+            <td>Price</td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        {{ if eq (len .Items) 0 }}
+        <tr>
+            <td colspan="4">No items</td>
+        </tr>
+        {{ else }}
+        {{ range .Items }}
+        <tr>
+            <td><a href="{{ .ID }}.html">{{ .ID }}</a></td>
+            <td>{{ .Name }}</td>
+            <td>{{ .Price }}</td>
+            <td>
+                <form action="{{ .ID }}.html" method="post">
+                    <input type="hidden" name="_method" value="DELETE" />
+                    <input type="submit" value="delete" class="btn btn-link" />
+                </form>
+            </td>
+        </tr>
+        {{ end }}
+        {{ end }}
+    </tbody>
+</table>
+<div class="row">
+    <div class="col-md-4">
+        <a href="form.html">Add Item</a>
+    </div>
+</div>
+{{ end }}

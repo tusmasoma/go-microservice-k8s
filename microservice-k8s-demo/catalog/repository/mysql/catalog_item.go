@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/tusmasoma/microservice-k8s-demo/catalog/entity"
 	"github.com/tusmasoma/microservice-k8s-demo/catalog/repository"
@@ -11,7 +12,7 @@ type catalogItemRepository struct {
 	db SQLExecutor
 }
 
-func NewCatalogItemRepository(db SQLExecutor) repository.CatalogItemRepository {
+func NewCatalogItemRepository(db *sql.DB) repository.CatalogItemRepository {
 	return &catalogItemRepository{
 		db: db,
 	}

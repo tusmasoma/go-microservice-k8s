@@ -45,7 +45,7 @@ func (ch *catalogItemHandler) GetCatalogItemByName(c *gin.Context) {
 		return
 	}
 
-	items, err := ch.cuc.ListCatalogItemsByNameContaining(ctx, name)
+	items, err := ch.cuc.ListCatalogItemsByName(ctx, name)
 	if err != nil {
 		log.Error("Failed to list catalog items by name", log.Ferror(err))
 		c.String(http.StatusInternalServerError, "Internal server error")

@@ -109,21 +109,6 @@ func (mr *MockCatalogItemUseCaseMockRecorder) ListCatalogItemsByName(ctx, name i
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListCatalogItemsByName", reflect.TypeOf((*MockCatalogItemUseCase)(nil).ListCatalogItemsByName), ctx, name)
 }
 
-// ListCatalogItemsByNameContaining mocks base method.
-func (m *MockCatalogItemUseCase) ListCatalogItemsByNameContaining(ctx context.Context, name string) ([]entity.CatalogItem, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ListCatalogItemsByNameContaining", ctx, name)
-	ret0, _ := ret[0].([]entity.CatalogItem)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ListCatalogItemsByNameContaining indicates an expected call of ListCatalogItemsByNameContaining.
-func (mr *MockCatalogItemUseCaseMockRecorder) ListCatalogItemsByNameContaining(ctx, name interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListCatalogItemsByNameContaining", reflect.TypeOf((*MockCatalogItemUseCase)(nil).ListCatalogItemsByNameContaining), ctx, name)
-}
-
 // UpdateCatalogItem mocks base method.
 func (m *MockCatalogItemUseCase) UpdateCatalogItem(ctx context.Context, id, name string, price float64) error {
 	m.ctrl.T.Helper()

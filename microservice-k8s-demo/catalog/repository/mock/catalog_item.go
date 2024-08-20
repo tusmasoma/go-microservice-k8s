@@ -109,21 +109,6 @@ func (mr *MockCatalogItemRepositoryMockRecorder) ListByName(ctx, name interface{
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListByName", reflect.TypeOf((*MockCatalogItemRepository)(nil).ListByName), ctx, name)
 }
 
-// ListByNameContaining mocks base method.
-func (m *MockCatalogItemRepository) ListByNameContaining(ctx context.Context, name string) ([]entity.CatalogItem, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ListByNameContaining", ctx, name)
-	ret0, _ := ret[0].([]entity.CatalogItem)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ListByNameContaining indicates an expected call of ListByNameContaining.
-func (mr *MockCatalogItemRepositoryMockRecorder) ListByNameContaining(ctx, name interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListByNameContaining", reflect.TypeOf((*MockCatalogItemRepository)(nil).ListByNameContaining), ctx, name)
-}
-
 // Update mocks base method.
 func (m *MockCatalogItemRepository) Update(ctx context.Context, item entity.CatalogItem) error {
 	m.ctrl.T.Helper()

@@ -44,14 +44,7 @@ func Test_CatalogItemRepository(t *testing.T) {
 	}
 
 	// ListByName
-	gotItems, err = repo.ListByName(ctx, item1.Name)
-	ValidateErr(t, err, nil)
-	if len(gotItems) != 1 {
-		t.Errorf("want: 1, got: %d", len(gotItems))
-	}
-
-	// ListByNameContaining
-	gotItems, err = repo.ListByNameContaining(ctx, "item")
+	gotItems, err = repo.ListByName(ctx, "item")
 	ValidateErr(t, err, nil)
 	if len(gotItems) != 2 {
 		t.Errorf("want: 2, got: %d", len(gotItems))

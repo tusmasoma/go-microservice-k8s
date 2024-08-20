@@ -44,8 +44,8 @@
                         <td>{{ .Name }}</td>
                         <td>{{ .Price }}</td>
                         <td>
-                            <form action="{{ .ID }}.html" method="post">
-                                <input type="hidden" name="_method" value="DELETE" />
+                            <form action="/catalog/delete" method="GET">
+                                <input type="hidden" name="id" value="{{ .ID }}" />
                                 <input type="submit" value="delete" class="btn btn-link" />
                             </form>
                         </td>

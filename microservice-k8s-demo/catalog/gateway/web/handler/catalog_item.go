@@ -13,6 +13,7 @@ import (
 type CatalogItemHandler interface {
 	ListCatalogItems(c *gin.Context)
 	CreateCatalogItem(c *gin.Context)
+	DeleteCatalogItem(c *gin.Context)
 }
 
 type catalogItemHandler struct {
@@ -55,6 +56,25 @@ func (ch *catalogItemHandler) CreateCatalogItem(c *gin.Context) {
 
 	if err = ch.cuc.CreateCatalogItem(ctx, name, price); err != nil {
 		log.Error("Failed to create catalog item", log.Ferror(err))
+		c.String(http.StatusInternalServerError, "Internal server error")
+		return
+	}
+
+	c.Redirect(http.StatusFound, "/catalog/list")
+}
+
+func (ch *catalogItemHandler) DeleteCatalogItem(c *gin.Context) {
+	ctx := c.Request.Context()
+
+	id := c.Query("id")
+	if id == "" {
+		log.Warn("ID is required")
+		c.String(http.StatusBadRequest, "ID is required")
+		return
+	}
+
+	if err := ch.cuc.DeleteCatalogItem(ctx, id); err != nil {
+		log.Error("Failed to delete catalog item", log.Ferror(err))
 		c.String(http.StatusInternalServerError, "Internal server error")
 		return
 	}

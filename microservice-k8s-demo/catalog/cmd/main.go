@@ -128,6 +128,7 @@ func BuildContainer(ctx context.Context) (*dig.Container, error) {
 						c.HTML(http.StatusOK, "create.html", nil)
 					})
 					catalog.POST("/create", catalogHandler.CreateCatalogItem)
+					catalog.GET("/delete", catalogHandler.DeleteCatalogItem)
 				}
 			}
 

@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/tusmasoma/go-tech-dojo/pkg/log"
@@ -11,7 +12,7 @@ import (
 
 type CatalogItemHandler interface {
 	ListCatalogItems(c *gin.Context)
-	// CreateCatalogItem(w http.ResponseWriter, r *http.Request)
+	CreateCatalogItem(c *gin.Context)
 }
 
 type catalogItemHandler struct {
@@ -38,4 +39,25 @@ func (ch *catalogItemHandler) ListCatalogItems(c *gin.Context) {
 	}
 
 	c.HTML(http.StatusOK, "list.html", data)
+}
+
+func (ch *catalogItemHandler) CreateCatalogItem(c *gin.Context) {
+	ctx := c.Request.Context()
+
+	name := c.PostForm("name")
+	priceStr := c.PostForm("price")
+	price, err := strconv.ParseFloat(priceStr, 64)
+	if err != nil {
+		log.Error("Failed to parse price", log.Ferror(err))
+		c.String(http.StatusBadRequest, "Invalid price format")
+		return
+	}
+
+	if err = ch.cuc.CreateCatalogItem(ctx, name, price); err != nil {
+		log.Error("Failed to create catalog item", log.Ferror(err))
+		c.String(http.StatusInternalServerError, "Internal server error")
+		return
+	}
+
+	c.Redirect(http.StatusFound, "/catalog/list")
 }

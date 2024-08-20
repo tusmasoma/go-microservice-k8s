@@ -121,9 +121,13 @@ func BuildContainer(ctx context.Context) (*dig.Container, error) {
 
 			api := r.Group("/")
 			{
-				task := api.Group("/catalog")
+				catalog := api.Group("/catalog")
 				{
-					task.GET("/list", catalogHandler.ListCatalogItems)
+					catalog.GET("/list", catalogHandler.ListCatalogItems)
+					catalog.GET("/create", func(c *gin.Context) {
+						c.HTML(http.StatusOK, "create.html", nil)
+					})
+					catalog.POST("/create", catalogHandler.CreateCatalogItem)
 				}
 			}
 

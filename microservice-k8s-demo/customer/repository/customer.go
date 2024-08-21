@@ -10,7 +10,6 @@ import (
 type CustomerRepository interface {
 	Get(ctx context.Context, id string) (*entity.Customer, error)
 	List(ctx context.Context) ([]entity.Customer, error)
-	ListByName(ctx context.Context, name string) ([]entity.Customer, error)
 	Create(ctx context.Context, customer entity.Customer) error
 	Update(ctx context.Context, customer entity.Customer) error
 	Delete(ctx context.Context, id string) error

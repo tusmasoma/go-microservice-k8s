@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Customer : View all</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" />
+    <style type="text/css">
+        .navbar ul { list-style: none; display: inline-block; padding: 0; }
+        .navbar ul li { display: inline-block; padding-right: .5em; }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="navbar">
+            <ul class="navbar-inner">
+                <li><a class="brand" href="/">Home</a></li>
+                <li><a class="brand" href="/customer/list">List</a></li>
+                <li><a class="brand" href="/customer/create">Create</a></li>
+            </ul>
+        </div>
+        <h1>Customer : View all</h1>
+        <div>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <td>id</td>
+                        <td>Name</td>
+                        <td>Email</td>
+                        <td>Street</td>
+                        <td>City</td>
+                        <td>Country</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{ if eq (len .Customers) 0 }}
+                    <tr>
+                        <td colspan="4">No customers</td>
+                    </tr>
+                    {{ else }}
+                    {{ range .Customers }}
+                    <tr>
+                        <td><a href="{{ .ID }}.html">{{ .ID }}</a></td>
+                        <td>{{ .Name }}</td>
+                        <td>{{ .Email }}</td>
+                        <td>{{ .Street }}</td>
+                        <td>{{ .City }}</td>
+                        <td>{{ .Country }}</td>
+                        <td>
+                            <form action="/customer/delete" method="GET">
+                                <input type="hidden" name="id" value="{{ .ID }}" />
+                                <input type="submit" value="delete" class="btn btn-link" />
+                            </form>
+                        </td>
+                        <td>
+                            <form action="/customer/update" method="GET">
+                                <input type="hidden" name="id" value="{{ .ID }}" />
+                                <input type="submit" value="update" class="btn btn-link" />
+                            </form>
+                        </td>
+                    </tr>
+                    {{ end }}
+                    {{ end }}
+                </tbody>
+            </table>
+            <div class="row">
+                <div class="col-md-4">
+                    <a href="/customer/create">Add Customer</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</body>
+</html>

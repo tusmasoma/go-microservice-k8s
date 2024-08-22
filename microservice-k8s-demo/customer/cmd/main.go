@@ -134,14 +134,8 @@ func BuildContainer(ctx context.Context) (*dig.Container, error) {
 					// Process the form submission to update a customer
 					customer.POST("/update", customerHandler.UpdateCustomer)
 
-					// // Delete a catalog item
-					// customer.GET("/delete", customerHandler.DeleteCatalogItem)
-
-					// // Show the form to search for catalog items by name
-					// customer.GET("/search", customerHandler.GetCatalogItemByNameForm)
-
-					// // Process the form submission to search for catalog items by name
-					// customer.POST("/search", customerHandler.GetCatalogItemByName)
+					// Delete a customer
+					customer.GET("/delete", customerHandler.DeleteCustomer)
 				}
 			}
 

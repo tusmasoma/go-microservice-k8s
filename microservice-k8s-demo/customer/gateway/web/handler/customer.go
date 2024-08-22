@@ -15,6 +15,7 @@ type CustomerHandler interface {
 	CreateCustomer(c *gin.Context)
 	UpdateCustomerForm(c *gin.Context)
 	UpdateCustomer(c *gin.Context)
+	DeleteCustomer(c *gin.Context)
 }
 
 type customerHandler struct {
@@ -179,4 +180,23 @@ func (ch *customerHandler) convertUpdateCustomerReqeuestToParams(req *UpdateCust
 		City:    req.City,
 		Country: req.Country,
 	}
+}
+
+func (ch *customerHandler) DeleteCustomer(c *gin.Context) {
+	ctx := c.Request.Context()
+
+	id := c.Query("id")
+	if id == "" {
+		log.Warn("ID is required")
+		c.String(http.StatusBadRequest, "Invalid request")
+		return
+	}
+
+	if err := ch.cuc.DeleteCustomer(ctx, id); err != nil {
+		log.Error("Failed to delete customer", log.Ferror(err))
+		c.String(http.StatusInternalServerError, "Internal server error")
+		return
+	}
+
+	c.Redirect(http.StatusFound, "/customer/list")
 }

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Customer : Edit</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" />
+    <style type="text/css">
+        .navbar ul { list-style: none; display: inline-block; padding: 0; }
+        .navbar ul li { display: inline-block; padding-right: .5em; }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="navbar">
+            <ul class="navbar-inner">
+                <li><a class="brand" href="/">Home</a></li>
+                <li><a class="brand" href="/customer/list">List</a></li>
+                <li><a class="brand" href="/customer/create">Create</a></li>
+            </ul>
+        </div>
+        <h1>Customer : Edit</h1>
+        <div>
+            <div class="container">
+                <form action="/customer/update" method="POST" role="form">
+                    <input type="hidden" name="id" value="{{ .Customer.ID }}" />
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" name="name" value="{{ .Customer.Name }}" class="form-control" placeholder="name" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="text" name="email" value="{{ .Customer.Email }}" class="form-control" placeholder="email" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Street</label>
+                        <input type="text" name="street" value="{{ .Customer.Street }}" class="form-control" placeholder="street" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>City</label>
+                        <input type="text" name="city" value="{{ .Customer.City }}" class="form-control" placeholder="city" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Country</label>
+                        <input type="text" name="country" value="{{ .Customer.Country }}" class="form-control" placeholder="country" />
+                    </div>
+
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -53,6 +53,12 @@
                                 <input type="submit" value="delete" class="btn btn-link" />
                             </form>
                         </td>
+                        <td>
+                            <form action="/customer/update" method="GET">
+                                <input type="hidden" name="id" value="{{ .ID }}" />
+                                <input type="submit" value="update" class="btn btn-link" />
+                            </form>
+                        </td>
                     </tr>
                     {{ end }}
                     {{ end }}

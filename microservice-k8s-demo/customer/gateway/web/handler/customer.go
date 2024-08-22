@@ -13,6 +13,8 @@ type CustomerHandler interface {
 	ListCustomers(c *gin.Context)
 	CreateCustomerForm(c *gin.Context)
 	CreateCustomer(c *gin.Context)
+	UpdateCustomerForm(c *gin.Context)
+	UpdateCustomer(c *gin.Context)
 }
 
 type customerHandler struct {
@@ -91,6 +93,86 @@ func (ch *customerHandler) isValidCreateCustomerRequest(req *CreateCustomerReque
 
 func (ch *customerHandler) convertCreateCustomerReqeuestToParams(req *CreateCustomerRequest) *usecase.CreateCustomerParams {
 	return &usecase.CreateCustomerParams{
+		Name:    req.Name,
+		Email:   req.Email,
+		Street:  req.Street,
+		City:    req.City,
+		Country: req.Country,
+	}
+}
+
+func (ch *customerHandler) UpdateCustomerForm(c *gin.Context) {
+	ctx := c.Request.Context()
+
+	id := c.Query("id")
+	if id == "" {
+		log.Warn("ID is required")
+		c.String(http.StatusBadRequest, "Invalid request")
+		return
+	}
+
+	customer, err := ch.cuc.GetCustomer(ctx, id)
+	if err != nil {
+		log.Error("Failed to get customer", log.Ferror(err))
+		c.String(http.StatusInternalServerError, "Internal server error")
+		return
+	}
+
+	c.HTML(http.StatusOK, "update.html", gin.H{
+		"Customer": customer,
+	})
+}
+
+type UpdateCustomerRequest struct {
+	ID      string `form:"id"`
+	Name    string `form:"name"`
+	Email   string `form:"email"`
+	Street  string `form:"street"`
+	City    string `form:"city"`
+	Country string `form:"country"`
+}
+
+func (ch *customerHandler) UpdateCustomer(c *gin.Context) {
+	ctx := c.Request.Context()
+
+	var req UpdateCustomerRequest
+	if err := c.ShouldBind(&req); err != nil {
+		log.Error("Failed to bind request", log.Ferror(err))
+		c.String(http.StatusBadRequest, "Invalid request")
+		return
+	}
+
+	if !ch.isValidUpdateCustomerRequest(&req) {
+		c.String(http.StatusBadRequest, "Invalid request")
+		return
+	}
+
+	params := ch.convertUpdateCustomerReqeuestToParams(&req)
+	if err := ch.cuc.UpdateCustomer(ctx, params); err != nil {
+		log.Error("Failed to update customer", log.Ferror(err))
+		c.String(http.StatusInternalServerError, "Internal server error")
+		return
+	}
+
+	c.Redirect(http.StatusFound, "/customer/list")
+}
+
+func (ch *customerHandler) isValidUpdateCustomerRequest(req *UpdateCustomerRequest) bool {
+	if req.ID == "" ||
+		req.Name == "" ||
+		req.Email == "" ||
+		req.Street == "" ||
+		req.City == "" ||
+		req.Country == "" {
+		log.Warn("Invalid request body: %v", req)
+		return false
+	}
+	return true
+}
+
+func (ch *customerHandler) convertUpdateCustomerReqeuestToParams(req *UpdateCustomerRequest) *usecase.UpdateCustomerParams {
+	return &usecase.UpdateCustomerParams{
+		ID:      req.ID,
 		Name:    req.Name,
 		Email:   req.Email,
 		Street:  req.Street,

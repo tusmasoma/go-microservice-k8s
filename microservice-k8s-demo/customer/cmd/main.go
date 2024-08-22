@@ -128,11 +128,11 @@ func BuildContainer(ctx context.Context) (*dig.Container, error) {
 					// Process the form submission to create a new customer
 					customer.POST("/create", customerHandler.CreateCustomer)
 
-					// // Show the form to update a catalog item
-					// customer.GET("/update", customerHandler.UpdateCatalogItemForm)
+					// Show the form to update a customer
+					customer.GET("/update", customerHandler.UpdateCustomerForm)
 
-					// // Process the form submission to update a catalog item
-					// customer.POST("/update", customerHandler.UpdateCatalogItem)
+					// Process the form submission to update a customer
+					customer.POST("/update", customerHandler.UpdateCustomer)
 
 					// // Delete a catalog item
 					// customer.GET("/delete", customerHandler.DeleteCatalogItem)

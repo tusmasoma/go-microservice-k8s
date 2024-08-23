@@ -4,7 +4,7 @@ package customer;
 
 option go_package = "proto/";
 
-service CatalogService {
+service CustomerService {
   rpc ListCustomers(ListCustomersRequest) returns (ListCustomersResponse);
   rpc CreateCustomer(CreateCustomerRequest) returns (CreateCustomerResponse);
   rpc UpdateCustomer(UpdateCustomerRequest) returns (UpdateCustomerResponse);

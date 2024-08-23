@@ -22,6 +22,7 @@ type CatalogItemHandler interface {
 
 type catalogItemHandler struct {
 	cuc usecase.CatalogItemUseCase
+	pb.UnimplementedCatalogServiceServer
 }
 
 func NewCatalogItemHandler(cuc usecase.CatalogItemUseCase) CatalogItemHandler {

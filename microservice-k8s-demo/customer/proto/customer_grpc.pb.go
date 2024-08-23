@@ -20,202 +20,202 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	CatalogService_ListCustomers_FullMethodName  = "/customer.CatalogService/ListCustomers"
-	CatalogService_CreateCustomer_FullMethodName = "/customer.CatalogService/CreateCustomer"
-	CatalogService_UpdateCustomer_FullMethodName = "/customer.CatalogService/UpdateCustomer"
-	CatalogService_DeleteCustomer_FullMethodName = "/customer.CatalogService/DeleteCustomer"
+	CustomerService_ListCustomers_FullMethodName  = "/customer.CustomerService/ListCustomers"
+	CustomerService_CreateCustomer_FullMethodName = "/customer.CustomerService/CreateCustomer"
+	CustomerService_UpdateCustomer_FullMethodName = "/customer.CustomerService/UpdateCustomer"
+	CustomerService_DeleteCustomer_FullMethodName = "/customer.CustomerService/DeleteCustomer"
 )
 
-// CatalogServiceClient is the client API for CatalogService service.
+// CustomerServiceClient is the client API for CustomerService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type CatalogServiceClient interface {
+type CustomerServiceClient interface {
 	ListCustomers(ctx context.Context, in *ListCustomersRequest, opts ...grpc.CallOption) (*ListCustomersResponse, error)
 	CreateCustomer(ctx context.Context, in *CreateCustomerRequest, opts ...grpc.CallOption) (*CreateCustomerResponse, error)
 	UpdateCustomer(ctx context.Context, in *UpdateCustomerRequest, opts ...grpc.CallOption) (*UpdateCustomerResponse, error)
 	DeleteCustomer(ctx context.Context, in *DeleteCustomerRequest, opts ...grpc.CallOption) (*DeleteCustomerResponse, error)
 }
 
-type catalogServiceClient struct {
+type customerServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewCatalogServiceClient(cc grpc.ClientConnInterface) CatalogServiceClient {
-	return &catalogServiceClient{cc}
+func NewCustomerServiceClient(cc grpc.ClientConnInterface) CustomerServiceClient {
+	return &customerServiceClient{cc}
 }
 
-func (c *catalogServiceClient) ListCustomers(ctx context.Context, in *ListCustomersRequest, opts ...grpc.CallOption) (*ListCustomersResponse, error) {
+func (c *customerServiceClient) ListCustomers(ctx context.Context, in *ListCustomersRequest, opts ...grpc.CallOption) (*ListCustomersResponse, error) {
 	out := new(ListCustomersResponse)
-	err := c.cc.Invoke(ctx, CatalogService_ListCustomers_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, CustomerService_ListCustomers_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *catalogServiceClient) CreateCustomer(ctx context.Context, in *CreateCustomerRequest, opts ...grpc.CallOption) (*CreateCustomerResponse, error) {
+func (c *customerServiceClient) CreateCustomer(ctx context.Context, in *CreateCustomerRequest, opts ...grpc.CallOption) (*CreateCustomerResponse, error) {
 	out := new(CreateCustomerResponse)
-	err := c.cc.Invoke(ctx, CatalogService_CreateCustomer_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, CustomerService_CreateCustomer_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *catalogServiceClient) UpdateCustomer(ctx context.Context, in *UpdateCustomerRequest, opts ...grpc.CallOption) (*UpdateCustomerResponse, error) {
+func (c *customerServiceClient) UpdateCustomer(ctx context.Context, in *UpdateCustomerRequest, opts ...grpc.CallOption) (*UpdateCustomerResponse, error) {
 	out := new(UpdateCustomerResponse)
-	err := c.cc.Invoke(ctx, CatalogService_UpdateCustomer_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, CustomerService_UpdateCustomer_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *catalogServiceClient) DeleteCustomer(ctx context.Context, in *DeleteCustomerRequest, opts ...grpc.CallOption) (*DeleteCustomerResponse, error) {
+func (c *customerServiceClient) DeleteCustomer(ctx context.Context, in *DeleteCustomerRequest, opts ...grpc.CallOption) (*DeleteCustomerResponse, error) {
 	out := new(DeleteCustomerResponse)
-	err := c.cc.Invoke(ctx, CatalogService_DeleteCustomer_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, CustomerService_DeleteCustomer_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// CatalogServiceServer is the server API for CatalogService service.
-// All implementations must embed UnimplementedCatalogServiceServer
+// CustomerServiceServer is the server API for CustomerService service.
+// All implementations must embed UnimplementedCustomerServiceServer
 // for forward compatibility
-type CatalogServiceServer interface {
+type CustomerServiceServer interface {
 	ListCustomers(context.Context, *ListCustomersRequest) (*ListCustomersResponse, error)
 	CreateCustomer(context.Context, *CreateCustomerRequest) (*CreateCustomerResponse, error)
 	UpdateCustomer(context.Context, *UpdateCustomerRequest) (*UpdateCustomerResponse, error)
 	DeleteCustomer(context.Context, *DeleteCustomerRequest) (*DeleteCustomerResponse, error)
-	mustEmbedUnimplementedCatalogServiceServer()
+	mustEmbedUnimplementedCustomerServiceServer()
 }
 
-// UnimplementedCatalogServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedCatalogServiceServer struct{}
+// UnimplementedCustomerServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedCustomerServiceServer struct{}
 
-func (UnimplementedCatalogServiceServer) ListCustomers(context.Context, *ListCustomersRequest) (*ListCustomersResponse, error) {
+func (UnimplementedCustomerServiceServer) ListCustomers(context.Context, *ListCustomersRequest) (*ListCustomersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListCustomers not implemented")
 }
 
-func (UnimplementedCatalogServiceServer) CreateCustomer(context.Context, *CreateCustomerRequest) (*CreateCustomerResponse, error) {
+func (UnimplementedCustomerServiceServer) CreateCustomer(context.Context, *CreateCustomerRequest) (*CreateCustomerResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateCustomer not implemented")
 }
 
-func (UnimplementedCatalogServiceServer) UpdateCustomer(context.Context, *UpdateCustomerRequest) (*UpdateCustomerResponse, error) {
+func (UnimplementedCustomerServiceServer) UpdateCustomer(context.Context, *UpdateCustomerRequest) (*UpdateCustomerResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateCustomer not implemented")
 }
 
-func (UnimplementedCatalogServiceServer) DeleteCustomer(context.Context, *DeleteCustomerRequest) (*DeleteCustomerResponse, error) {
+func (UnimplementedCustomerServiceServer) DeleteCustomer(context.Context, *DeleteCustomerRequest) (*DeleteCustomerResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteCustomer not implemented")
 }
-func (UnimplementedCatalogServiceServer) mustEmbedUnimplementedCatalogServiceServer() {}
+func (UnimplementedCustomerServiceServer) mustEmbedUnimplementedCustomerServiceServer() {}
 
-// UnsafeCatalogServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to CatalogServiceServer will
+// UnsafeCustomerServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to CustomerServiceServer will
 // result in compilation errors.
-type UnsafeCatalogServiceServer interface {
-	mustEmbedUnimplementedCatalogServiceServer()
+type UnsafeCustomerServiceServer interface {
+	mustEmbedUnimplementedCustomerServiceServer()
 }
 
-func RegisterCatalogServiceServer(s grpc.ServiceRegistrar, srv CatalogServiceServer) {
-	s.RegisterService(&CatalogService_ServiceDesc, srv)
+func RegisterCustomerServiceServer(s grpc.ServiceRegistrar, srv CustomerServiceServer) {
+	s.RegisterService(&CustomerService_ServiceDesc, srv)
 }
 
-func _CatalogService_ListCustomers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CustomerService_ListCustomers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListCustomersRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CatalogServiceServer).ListCustomers(ctx, in)
+		return srv.(CustomerServiceServer).ListCustomers(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CatalogService_ListCustomers_FullMethodName,
+		FullMethod: CustomerService_ListCustomers_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CatalogServiceServer).ListCustomers(ctx, req.(*ListCustomersRequest))
+		return srv.(CustomerServiceServer).ListCustomers(ctx, req.(*ListCustomersRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CatalogService_CreateCustomer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CustomerService_CreateCustomer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateCustomerRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CatalogServiceServer).CreateCustomer(ctx, in)
+		return srv.(CustomerServiceServer).CreateCustomer(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CatalogService_CreateCustomer_FullMethodName,
+		FullMethod: CustomerService_CreateCustomer_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CatalogServiceServer).CreateCustomer(ctx, req.(*CreateCustomerRequest))
+		return srv.(CustomerServiceServer).CreateCustomer(ctx, req.(*CreateCustomerRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CatalogService_UpdateCustomer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CustomerService_UpdateCustomer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateCustomerRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CatalogServiceServer).UpdateCustomer(ctx, in)
+		return srv.(CustomerServiceServer).UpdateCustomer(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CatalogService_UpdateCustomer_FullMethodName,
+		FullMethod: CustomerService_UpdateCustomer_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CatalogServiceServer).UpdateCustomer(ctx, req.(*UpdateCustomerRequest))
+		return srv.(CustomerServiceServer).UpdateCustomer(ctx, req.(*UpdateCustomerRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CatalogService_DeleteCustomer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CustomerService_DeleteCustomer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteCustomerRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CatalogServiceServer).DeleteCustomer(ctx, in)
+		return srv.(CustomerServiceServer).DeleteCustomer(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CatalogService_DeleteCustomer_FullMethodName,
+		FullMethod: CustomerService_DeleteCustomer_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CatalogServiceServer).DeleteCustomer(ctx, req.(*DeleteCustomerRequest))
+		return srv.(CustomerServiceServer).DeleteCustomer(ctx, req.(*DeleteCustomerRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// CatalogService_ServiceDesc is the grpc.ServiceDesc for CatalogService service.
+// CustomerService_ServiceDesc is the grpc.ServiceDesc for CustomerService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var CatalogService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "customer.CatalogService",
-	HandlerType: (*CatalogServiceServer)(nil),
+var CustomerService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "customer.CustomerService",
+	HandlerType: (*CustomerServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "ListCustomers",
-			Handler:    _CatalogService_ListCustomers_Handler,
+			Handler:    _CustomerService_ListCustomers_Handler,
 		},
 		{
 			MethodName: "CreateCustomer",
-			Handler:    _CatalogService_CreateCustomer_Handler,
+			Handler:    _CustomerService_CreateCustomer_Handler,
 		},
 		{
 			MethodName: "UpdateCustomer",
-			Handler:    _CatalogService_UpdateCustomer_Handler,
+			Handler:    _CustomerService_UpdateCustomer_Handler,
 		},
 		{
 			MethodName: "DeleteCustomer",
-			Handler:    _CatalogService_DeleteCustomer_Handler,
+			Handler:    _CustomerService_DeleteCustomer_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

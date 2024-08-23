@@ -618,6 +618,7 @@ var (
 		(*DeleteCustomerResponse)(nil), // 8: customer.DeleteCustomerResponse
 	}
 )
+
 var file_proto_customer_proto_depIdxs = []int32{
 	2, // 0: customer.ListCustomersResponse.customers:type_name -> customer.Customer
 	0, // 1: customer.CatalogService.ListCustomers:input_type -> customer.ListCustomersRequest

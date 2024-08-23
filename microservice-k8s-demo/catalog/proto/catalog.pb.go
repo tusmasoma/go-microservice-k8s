@@ -646,6 +646,7 @@ var (
 		(*DeleteCatalogItemResponse)(nil),      // 10: catalog.DeleteCatalogItemResponse
 	}
 )
+
 var file_proto_catalog_proto_depIdxs = []int32{
 	4,  // 0: catalog.ListCatalogItemsResponse.items:type_name -> catalog.CatalogItem
 	4,  // 1: catalog.ListCatalogItemsByNameResponse.items:type_name -> catalog.CatalogItem

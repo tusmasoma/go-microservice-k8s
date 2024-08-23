@@ -10,7 +10,7 @@ import (
 	"github.com/tusmasoma/microservice-k8s-demo/customer/repository"
 )
 
-type CustomerUsecase interface {
+type CustomerUseCase interface {
 	GetCustomer(ctx context.Context, id string) (*entity.Customer, error)
 	ListCustomers(ctx context.Context) ([]entity.Customer, error)
 	CreateCustomer(ctx context.Context, params *CreateCustomerParams) error
@@ -22,7 +22,7 @@ type customerUseCase struct {
 	cr repository.CustomerRepository
 }
 
-func NewCustomerUsecase(cr repository.CustomerRepository) CustomerUsecase {
+func NewCustomerUsecase(cr repository.CustomerRepository) CustomerUseCase {
 	return &customerUseCase{
 		cr: cr,
 	}

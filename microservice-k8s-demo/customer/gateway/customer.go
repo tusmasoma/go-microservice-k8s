@@ -20,11 +20,11 @@ type CustomerHandler interface {
 }
 
 type customerHandler struct {
-	cuc usecase.CustomerUsecase
+	cuc usecase.CustomerUseCase
 	pb.UnimplementedCustomerServiceServer
 }
 
-func NewCustomerHandler(cuc usecase.CustomerUsecase) CustomerHandler {
+func NewCustomerHandler(cuc usecase.CustomerUseCase) *customerHandler { //nolint:revive // This function is used in the test
 	return &customerHandler{
 		cuc: cuc,
 	}

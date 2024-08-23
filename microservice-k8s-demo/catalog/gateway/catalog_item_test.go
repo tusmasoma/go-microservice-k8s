@@ -68,12 +68,12 @@ func TestHandler_ListCatalogItemsByName(t *testing.T) {
 		{
 			ID:    uuid.New().String(),
 			Name:  "item1",
-			Price: 100,
+			Price: float64(100),
 		},
 		{
 			ID:    uuid.New().String(),
 			Name:  "item2",
-			Price: 200,
+			Price: float64(200),
 		},
 	}
 
@@ -134,12 +134,12 @@ func TestHandler_ListCatalogItems(t *testing.T) {
 		{
 			ID:    uuid.New().String(),
 			Name:  "item1",
-			Price: 100,
+			Price: float64(100),
 		},
 		{
 			ID:    uuid.New().String(),
 			Name:  "item2",
-			Price: 200,
+			Price: float64(200),
 		},
 	}
 
@@ -202,12 +202,12 @@ func TestHandler_CreateCatalogItem(t *testing.T) {
 				tuc.EXPECT().CreateCatalogItem(
 					gomock.Any(),
 					"item1",
-					100,
+					float64(100),
 				).Return(nil)
 			},
 			request: &pb.CreateCatalogItemRequest{
 				Name:  "item1",
-				Price: 100,
+				Price: float64(100),
 			},
 			wantStatus: codes.OK,
 		},
@@ -215,7 +215,7 @@ func TestHandler_CreateCatalogItem(t *testing.T) {
 			name: "Fail: invalid request of name is empty",
 			request: &pb.CreateCatalogItemRequest{
 				Name:  "",
-				Price: 100,
+				Price: float64(100),
 			},
 			wantStatus: codes.InvalidArgument,
 		},
@@ -223,7 +223,7 @@ func TestHandler_CreateCatalogItem(t *testing.T) {
 			name: "Fail: invalid request of  price is less than 0",
 			request: &pb.CreateCatalogItemRequest{
 				Name:  "item1",
-				Price: -1,
+				Price: float64(-1),
 			},
 			wantStatus: codes.InvalidArgument,
 		},
@@ -271,13 +271,13 @@ func TestHandler_UpdateCatalogItem(t *testing.T) {
 					gomock.Any(),
 					itemID,
 					"updated name",
-					100,
+					float64(100),
 				).Return(nil)
 			},
 			request: &pb.UpdateCatalogItemRequest{
 				Id:    itemID,
 				Name:  "updated name",
-				Price: 100,
+				Price: float64(100),
 			},
 			wantStatus: codes.OK,
 		},
@@ -286,7 +286,7 @@ func TestHandler_UpdateCatalogItem(t *testing.T) {
 			request: &pb.UpdateCatalogItemRequest{
 				Id:    "",
 				Name:  "updated name",
-				Price: 100,
+				Price: float64(100),
 			},
 			wantStatus: codes.InvalidArgument,
 		},
@@ -295,7 +295,7 @@ func TestHandler_UpdateCatalogItem(t *testing.T) {
 			request: &pb.UpdateCatalogItemRequest{
 				Id:    itemID,
 				Name:  "",
-				Price: 100,
+				Price: float64(100),
 			},
 			wantStatus: codes.InvalidArgument,
 		},
@@ -304,7 +304,7 @@ func TestHandler_UpdateCatalogItem(t *testing.T) {
 			request: &pb.UpdateCatalogItemRequest{
 				Id:    itemID,
 				Name:  "updated name",
-				Price: -1,
+				Price: float64(-1),
 			},
 			wantStatus: codes.InvalidArgument,
 		},

@@ -4,6 +4,9 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+func main() {
+}
+
 // func main() {
 // 	if err := godotenv.Load(); err != nil {
 // 		log.Info("No .env file found", log.Ferror(err))

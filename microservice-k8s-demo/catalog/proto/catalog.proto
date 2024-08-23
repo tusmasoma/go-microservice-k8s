@@ -30,12 +30,12 @@ message ListCatalogItemsByNameResponse {
 message CatalogItem {
     string id = 1;
     string name = 2;
-    float price = 3;
+    double price = 3;
 }
 
 message CreateCatalogItemRequest {
     string name = 1;
-    float price = 2;
+    double price = 2;
 }
 
 message CreateCatalogItemResponse {}
@@ -43,7 +43,7 @@ message CreateCatalogItemResponse {}
 message UpdateCatalogItemRequest {
     string id = 1;
     string name = 2;
-    float price = 3;
+    double price = 3;
 }
 
 message UpdateCatalogItemResponse {}

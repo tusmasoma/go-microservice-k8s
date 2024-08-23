@@ -7,10 +7,11 @@
 package proto
 
 import (
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
 	sync "sync"
+
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 )
 
 const (
@@ -629,20 +630,22 @@ func file_proto_catalog_proto_rawDescGZIP() []byte {
 	return file_proto_catalog_proto_rawDescData
 }
 
-var file_proto_catalog_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
-var file_proto_catalog_proto_goTypes = []interface{}{
-	(*ListCatalogItemsRequest)(nil),        // 0: catalog.ListCatalogItemsRequest
-	(*ListCatalogItemsResponse)(nil),       // 1: catalog.ListCatalogItemsResponse
-	(*ListCatalogItemsByNameRequest)(nil),  // 2: catalog.ListCatalogItemsByNameRequest
-	(*ListCatalogItemsByNameResponse)(nil), // 3: catalog.ListCatalogItemsByNameResponse
-	(*CatalogItem)(nil),                    // 4: catalog.CatalogItem
-	(*CreateCatalogItemRequest)(nil),       // 5: catalog.CreateCatalogItemRequest
-	(*CreateCatalogItemResponse)(nil),      // 6: catalog.CreateCatalogItemResponse
-	(*UpdateCatalogItemRequest)(nil),       // 7: catalog.UpdateCatalogItemRequest
-	(*UpdateCatalogItemResponse)(nil),      // 8: catalog.UpdateCatalogItemResponse
-	(*DeleteCatalogItemRequest)(nil),       // 9: catalog.DeleteCatalogItemRequest
-	(*DeleteCatalogItemResponse)(nil),      // 10: catalog.DeleteCatalogItemResponse
-}
+var (
+	file_proto_catalog_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+	file_proto_catalog_proto_goTypes  = []interface{}{
+		(*ListCatalogItemsRequest)(nil),        // 0: catalog.ListCatalogItemsRequest
+		(*ListCatalogItemsResponse)(nil),       // 1: catalog.ListCatalogItemsResponse
+		(*ListCatalogItemsByNameRequest)(nil),  // 2: catalog.ListCatalogItemsByNameRequest
+		(*ListCatalogItemsByNameResponse)(nil), // 3: catalog.ListCatalogItemsByNameResponse
+		(*CatalogItem)(nil),                    // 4: catalog.CatalogItem
+		(*CreateCatalogItemRequest)(nil),       // 5: catalog.CreateCatalogItemRequest
+		(*CreateCatalogItemResponse)(nil),      // 6: catalog.CreateCatalogItemResponse
+		(*UpdateCatalogItemRequest)(nil),       // 7: catalog.UpdateCatalogItemRequest
+		(*UpdateCatalogItemResponse)(nil),      // 8: catalog.UpdateCatalogItemResponse
+		(*DeleteCatalogItemRequest)(nil),       // 9: catalog.DeleteCatalogItemRequest
+		(*DeleteCatalogItemResponse)(nil),      // 10: catalog.DeleteCatalogItemResponse
+	}
+)
 var file_proto_catalog_proto_depIdxs = []int32{
 	4,  // 0: catalog.ListCatalogItemsResponse.items:type_name -> catalog.CatalogItem
 	4,  // 1: catalog.ListCatalogItemsByNameResponse.items:type_name -> catalog.CatalogItem

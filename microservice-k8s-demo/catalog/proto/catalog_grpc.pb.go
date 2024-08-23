@@ -8,6 +8,7 @@ package proto
 
 import (
 	context "context"
+
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -103,21 +104,24 @@ type CatalogServiceServer interface {
 }
 
 // UnimplementedCatalogServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedCatalogServiceServer struct {
-}
+type UnimplementedCatalogServiceServer struct{}
 
 func (UnimplementedCatalogServiceServer) ListCatalogItems(context.Context, *ListCatalogItemsRequest) (*ListCatalogItemsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListCatalogItems not implemented")
 }
+
 func (UnimplementedCatalogServiceServer) ListCatalogItemsByName(context.Context, *ListCatalogItemsByNameRequest) (*ListCatalogItemsByNameResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListCatalogItemsByName not implemented")
 }
+
 func (UnimplementedCatalogServiceServer) CreateCatalogItem(context.Context, *CreateCatalogItemRequest) (*CreateCatalogItemResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateCatalogItem not implemented")
 }
+
 func (UnimplementedCatalogServiceServer) UpdateCatalogItem(context.Context, *UpdateCatalogItemRequest) (*UpdateCatalogItemResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateCatalogItem not implemented")
 }
+
 func (UnimplementedCatalogServiceServer) DeleteCatalogItem(context.Context, *DeleteCatalogItemRequest) (*DeleteCatalogItemResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteCatalogItem not implemented")
 }

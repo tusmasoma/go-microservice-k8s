@@ -7,10 +7,11 @@
 package proto
 
 import (
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
 	sync "sync"
+
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 )
 
 const (
@@ -603,18 +604,20 @@ func file_proto_customer_proto_rawDescGZIP() []byte {
 	return file_proto_customer_proto_rawDescData
 }
 
-var file_proto_customer_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
-var file_proto_customer_proto_goTypes = []interface{}{
-	(*ListCustomersRequest)(nil),   // 0: customer.ListCustomersRequest
-	(*ListCustomersResponse)(nil),  // 1: customer.ListCustomersResponse
-	(*Customer)(nil),               // 2: customer.Customer
-	(*CreateCustomerRequest)(nil),  // 3: customer.CreateCustomerRequest
-	(*CreateCustomerResponse)(nil), // 4: customer.CreateCustomerResponse
-	(*UpdateCustomerRequest)(nil),  // 5: customer.UpdateCustomerRequest
-	(*UpdateCustomerResponse)(nil), // 6: customer.UpdateCustomerResponse
-	(*DeleteCustomerRequest)(nil),  // 7: customer.DeleteCustomerRequest
-	(*DeleteCustomerResponse)(nil), // 8: customer.DeleteCustomerResponse
-}
+var (
+	file_proto_customer_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+	file_proto_customer_proto_goTypes  = []interface{}{
+		(*ListCustomersRequest)(nil),   // 0: customer.ListCustomersRequest
+		(*ListCustomersResponse)(nil),  // 1: customer.ListCustomersResponse
+		(*Customer)(nil),               // 2: customer.Customer
+		(*CreateCustomerRequest)(nil),  // 3: customer.CreateCustomerRequest
+		(*CreateCustomerResponse)(nil), // 4: customer.CreateCustomerResponse
+		(*UpdateCustomerRequest)(nil),  // 5: customer.UpdateCustomerRequest
+		(*UpdateCustomerResponse)(nil), // 6: customer.UpdateCustomerResponse
+		(*DeleteCustomerRequest)(nil),  // 7: customer.DeleteCustomerRequest
+		(*DeleteCustomerResponse)(nil), // 8: customer.DeleteCustomerResponse
+	}
+)
 var file_proto_customer_proto_depIdxs = []int32{
 	2, // 0: customer.ListCustomersResponse.customers:type_name -> customer.Customer
 	0, // 1: customer.CatalogService.ListCustomers:input_type -> customer.ListCustomersRequest

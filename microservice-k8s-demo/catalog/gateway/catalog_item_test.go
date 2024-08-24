@@ -14,10 +14,10 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/grpc/test/bufconn"
 
-	pb "github.com/tusmasoma/microservice-k8s-demo/catalog/proto"
+	pb "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/proto"
 
-	"github.com/tusmasoma/microservice-k8s-demo/catalog/entity"
-	"github.com/tusmasoma/microservice-k8s-demo/catalog/usecase/mock"
+	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/entity"
+	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/usecase/mock"
 )
 
 const bufSize = 1024 * 1024

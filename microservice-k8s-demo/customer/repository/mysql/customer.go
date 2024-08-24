@@ -4,8 +4,8 @@ import (
 	"context"
 	"database/sql"
 
-	"github.com/tusmasoma/microservice-k8s-demo/customer/entity"
-	"github.com/tusmasoma/microservice-k8s-demo/customer/repository"
+	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/customer/entity"
+	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/customer/repository"
 )
 
 type customerRepository struct {

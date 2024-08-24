@@ -4,7 +4,7 @@ package repository
 import (
 	"context"
 
-	"github.com/tusmasoma/microservice-k8s-demo/commerce-gateway/entity"
+	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/commerce-gateway/entity"
 )
 
 type CustomerRepository interface {

@@ -16,12 +16,12 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
-	"github.com/tusmasoma/microservice-k8s-demo/catalog/config"
-	"github.com/tusmasoma/microservice-k8s-demo/catalog/gateway"
-	"github.com/tusmasoma/microservice-k8s-demo/catalog/repository/mysql"
-	"github.com/tusmasoma/microservice-k8s-demo/catalog/usecase"
+	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/config"
+	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/gateway"
+	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/repository/mysql"
+	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/usecase"
 
-	pb "github.com/tusmasoma/microservice-k8s-demo/catalog/proto"
+	pb "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/proto"
 )
 
 func main() {

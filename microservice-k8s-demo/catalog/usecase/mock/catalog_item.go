@@ -9,8 +9,7 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
-
-	entity "github.com/tusmasoma/microservice-k8s-demo/catalog/entity"
+	entity "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/entity"
 )
 
 // MockCatalogItemUseCase is a mock of CatalogItemUseCase interface.

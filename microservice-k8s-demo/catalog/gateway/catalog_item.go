@@ -7,9 +7,9 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/tusmasoma/microservice-k8s-demo/catalog/usecase"
+	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/usecase"
 
-	pb "github.com/tusmasoma/microservice-k8s-demo/catalog/proto"
+	pb "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/proto"
 )
 
 type CatalogItemHandler interface {

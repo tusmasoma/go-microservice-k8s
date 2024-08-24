@@ -9,8 +9,8 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/google/uuid"
 
-	"github.com/tusmasoma/microservice-k8s-demo/catalog/entity"
-	"github.com/tusmasoma/microservice-k8s-demo/catalog/repository/mock"
+	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/entity"
+	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/repository/mock"
 )
 
 func TestUseCase_GetCatalogItem(t *testing.T) {

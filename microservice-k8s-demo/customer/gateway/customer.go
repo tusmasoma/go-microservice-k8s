@@ -7,9 +7,9 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/tusmasoma/microservice-k8s-demo/customer/usecase"
+	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/customer/usecase"
 
-	pb "github.com/tusmasoma/microservice-k8s-demo/customer/proto"
+	pb "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/customer/proto"
 )
 
 type CustomerHandler interface {

@@ -3,10 +3,10 @@ package customer
 import (
 	"context"
 
-	pb "github.com/tusmasoma/microservice-k8s-demo/customer/proto"
+	pb "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/customer/proto"
 
-	"github.com/tusmasoma/microservice-k8s-demo/commerce-gateway/entity"
-	"github.com/tusmasoma/microservice-k8s-demo/commerce-gateway/repository"
+	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/commerce-gateway/entity"
+	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/commerce-gateway/repository"
 )
 
 type customerRepository struct {

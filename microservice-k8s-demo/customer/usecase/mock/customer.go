@@ -9,9 +9,8 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
-
-	entity "github.com/tusmasoma/microservice-k8s-demo/customer/entity"
-	usecase "github.com/tusmasoma/microservice-k8s-demo/customer/usecase"
+	entity "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/customer/entity"
+	usecase "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/customer/usecase"
 )
 
 // MockCustomerUseCase is a mock of CustomerUseCase interface.

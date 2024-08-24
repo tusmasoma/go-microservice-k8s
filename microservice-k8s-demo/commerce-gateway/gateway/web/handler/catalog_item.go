@@ -6,7 +6,7 @@ package handler
 // 	"github.com/gin-gonic/gin"
 // 	"github.com/tusmasoma/go-tech-dojo/pkg/log"
 
-// 	"github.com/tusmasoma/microservice-k8s-demo/catalog/usecase"
+// 	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/usecase"
 // )
 
 // type CatalogItemHandler interface {

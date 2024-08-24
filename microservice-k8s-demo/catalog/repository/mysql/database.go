@@ -7,8 +7,8 @@ import (
 
 	"github.com/tusmasoma/go-tech-dojo/pkg/log"
 
-	"github.com/tusmasoma/microservice-k8s-demo/catalog/config"
-	"github.com/tusmasoma/microservice-k8s-demo/catalog/repository"
+	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/config"
+	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/repository"
 )
 
 type SQLExecutor interface {

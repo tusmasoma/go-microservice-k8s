@@ -71,6 +71,8 @@ github.com/stretchr/testify v1.9.0 h1:HtqpIVDClZ4nwg75+f6Lvsy/wHu+3BoSGCbBAcpTsT
 github.com/stretchr/testify v1.9.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
 github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog v0.0.0-20240824101118-ff02960e8c59 h1:Zc8jYL4SOgTpa6F2XONZOm9JwmqFD16cavrAwRJ6jXY=
 github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog v0.0.0-20240824101118-ff02960e8c59/go.mod h1:8seAuBfOGelNua1hCBT7JBFIJPaoVrrz9vz5gqsGTFg=
+github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog v0.0.0-20240824105341-16334c5e8fb3 h1:MMzk0CfR+/zmr+qlFiNRhVOlloULdOYgn3qAK2lvzuU=
+github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog v0.0.0-20240824105341-16334c5e8fb3/go.mod h1:8seAuBfOGelNua1hCBT7JBFIJPaoVrrz9vz5gqsGTFg=
 github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/customer v0.0.0-20240824101118-ff02960e8c59 h1:oxVcMa6Xpbc+BUZ7iEHQZ5RnwxRBaPBUyqhqsiQFS9k=
 github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/customer v0.0.0-20240824101118-ff02960e8c59/go.mod h1:yTR2KPXHvPGA1llU1xScrymvuH2TdqtQFXFrh0aeNN0=
 github.com/tusmasoma/go-tech-dojo v0.0.0-20240805120803-02e31d5c8a21 h1:PqS+hcn9LqAtAlT4smL+La21yitR4EUlJMwRS+sXxbM=

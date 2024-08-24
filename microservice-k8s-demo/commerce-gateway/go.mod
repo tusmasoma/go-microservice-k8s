@@ -6,7 +6,7 @@ require (
 	github.com/gin-gonic/gin v1.10.0
 	github.com/google/uuid v1.6.0
 	github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog v0.0.0-20240824105341-16334c5e8fb3
-	github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/customer v0.0.0-20240824101118-ff02960e8c59
+	github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/customer v0.0.0-20240824105955-6f1c73830b18
 	github.com/tusmasoma/go-tech-dojo v0.0.0-20240805120803-02e31d5c8a21
 )
 

@@ -1,193 +1,231 @@
 package handler
 
-// import (
-// 	"net/http"
+import (
+	"net/http"
 
-// 	"github.com/gin-gonic/gin"
-// 	"github.com/tusmasoma/go-tech-dojo/pkg/log"
+	"github.com/gin-gonic/gin"
+	"github.com/tusmasoma/go-tech-dojo/pkg/log"
 
-// 	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/usecase"
-// )
+	pb "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/proto"
+	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/commerce-gateway/entity"
+)
 
-// type CatalogItemHandler interface {
-// 	GetCatalogItemByNameForm(c *gin.Context)
-// 	GetCatalogItemByName(c *gin.Context)
-// 	ListCatalogItems(c *gin.Context)
-// 	CreateCatalogItemForm(c *gin.Context)
-// 	CreateCatalogItem(c *gin.Context)
-// 	UpdateCatalogItemForm(c *gin.Context)
-// 	UpdateCatalogItem(c *gin.Context)
-// 	DeleteCatalogItem(c *gin.Context)
-// }
+type CatalogItemHandler interface {
+	GetCatalogItemByNameForm(c *gin.Context)
+	GetCatalogItemByName(c *gin.Context)
+	ListCatalogItems(c *gin.Context)
+	CreateCatalogItemForm(c *gin.Context)
+	CreateCatalogItem(c *gin.Context)
+	UpdateCatalogItemForm(c *gin.Context)
+	UpdateCatalogItem(c *gin.Context)
+	DeleteCatalogItem(c *gin.Context)
+}
 
-// type catalogItemHandler struct {
-// 	cuc usecase.CatalogItemUseCase
-// }
+type catalogItemHandler struct {
+	client pb.CatalogServiceClient
+}
 
-// func NewCatalogItemHandler(cuc usecase.CatalogItemUseCase) CatalogItemHandler {
-// 	return &catalogItemHandler{
-// 		cuc: cuc,
-// 	}
-// }
+func NewCatalogItemHandler(client pb.CatalogServiceClient) CatalogItemHandler {
+	return &catalogItemHandler{
+		client: client,
+	}
+}
 
-// func (ch *catalogItemHandler) GetCatalogItemByNameForm(c *gin.Context) {
-// 	c.HTML(http.StatusOK, "search.html", nil)
-// }
+func (ch *catalogItemHandler) GetCatalogItemByNameForm(c *gin.Context) {
+	c.HTML(http.StatusOK, "search.html", nil)
+}
 
-// func (ch *catalogItemHandler) GetCatalogItemByName(c *gin.Context) {
-// 	ctx := c.Request.Context()
+func (ch *catalogItemHandler) GetCatalogItemByName(c *gin.Context) {
+	ctx := c.Request.Context()
 
-// 	name := c.PostForm("name")
-// 	if name == "" {
-// 		log.Warn("Name is required")
-// 		c.String(http.StatusBadRequest, "Name is required")
-// 		return
-// 	}
+	name := c.PostForm("name")
+	if name == "" {
+		log.Warn("Name is required")
+		c.String(http.StatusBadRequest, "Name is required")
+		return
+	}
 
-// 	items, err := ch.cuc.ListCatalogItemsByName(ctx, name)
-// 	if err != nil {
-// 		log.Error("Failed to list catalog items by name", log.Ferror(err))
-// 		c.String(http.StatusInternalServerError, "Internal server error")
-// 		return
-// 	}
+	resp, err := ch.client.ListCatalogItemsByName(ctx, &pb.ListCatalogItemsByNameRequest{
+		Name: name,
+	})
+	if err != nil {
+		log.Error("Failed to list catalog items by name", log.Ferror(err))
+		c.String(http.StatusInternalServerError, "Internal server error")
+		return
+	}
 
-// 	c.HTML(http.StatusOK, "list.html", gin.H{
-// 		"Items": items,
-// 	})
-// }
+	var items []entity.CatalogItem
+	for _, item := range resp.GetItems() {
+		items = append(items, entity.CatalogItem{
+			ID:    item.GetId(),
+			Name:  item.GetName(),
+			Price: item.GetPrice(),
+		})
+	}
 
-// func (ch *catalogItemHandler) ListCatalogItems(c *gin.Context) {
-// 	ctx := c.Request.Context()
+	c.HTML(http.StatusOK, "list.html", gin.H{
+		"Items": items,
+	})
+}
 
-// 	items, err := ch.cuc.ListCatalogItems(ctx)
-// 	if err != nil {
-// 		log.Error("Failed to list catalog items", log.Ferror(err))
-// 		c.String(http.StatusInternalServerError, "Internal server error")
-// 		return
-// 	}
+func (ch *catalogItemHandler) ListCatalogItems(c *gin.Context) {
+	ctx := c.Request.Context()
 
-// 	c.HTML(http.StatusOK, "list.html", gin.H{
-// 		"Items": items,
-// 	})
-// }
+	resp, err := ch.client.ListCatalogItems(ctx, &pb.ListCatalogItemsRequest{})
+	if err != nil {
+		log.Error("Failed to list catalog items", log.Ferror(err))
+		c.String(http.StatusInternalServerError, "Internal server error")
+		return
+	}
 
-// func (ch *catalogItemHandler) CreateCatalogItemForm(c *gin.Context) {
-// 	c.HTML(http.StatusOK, "create.html", nil)
-// }
+	var items []entity.CatalogItem
+	for _, item := range resp.GetItems() {
+		items = append(items, entity.CatalogItem{
+			ID:    item.GetId(),
+			Name:  item.GetName(),
+			Price: item.GetPrice(),
+		})
+	}
 
-// type CreateCatalogItemRequest struct {
-// 	Name  string  `form:"name"`
-// 	Price float64 `form:"price"`
-// }
+	c.HTML(http.StatusOK, "list.html", gin.H{
+		"Items": items,
+	})
+}
 
-// func (ch *catalogItemHandler) CreateCatalogItem(c *gin.Context) {
-// 	ctx := c.Request.Context()
+func (ch *catalogItemHandler) CreateCatalogItemForm(c *gin.Context) {
+	c.HTML(http.StatusOK, "create.html", nil)
+}
 
-// 	var req CreateCatalogItemRequest
-// 	if err := c.ShouldBind(&req); err != nil {
-// 		log.Error("Failed to bind request", log.Ferror(err))
-// 		c.String(http.StatusBadRequest, "Invalid request")
-// 		return
-// 	}
-// 	if !ch.isValidCreateCatalogItemRequest(&req) {
-// 		c.String(http.StatusBadRequest, "Invalid request")
-// 		return
-// 	}
+type CreateCatalogItemRequest struct {
+	Name  string  `form:"name"`
+	Price float64 `form:"price"`
+}
 
-// 	if err := ch.cuc.CreateCatalogItem(ctx, req.Name, req.Price); err != nil {
-// 		log.Error("Failed to create catalog item", log.Ferror(err))
-// 		c.String(http.StatusInternalServerError, "Internal server error")
-// 		return
-// 	}
+func (ch *catalogItemHandler) CreateCatalogItem(c *gin.Context) {
+	ctx := c.Request.Context()
 
-// 	c.Redirect(http.StatusFound, "/catalog/list")
-// }
+	var req CreateCatalogItemRequest
+	if err := c.ShouldBind(&req); err != nil {
+		log.Error("Failed to bind request", log.Ferror(err))
+		c.String(http.StatusBadRequest, "Invalid request")
+		return
+	}
+	if !ch.isValidCreateCatalogItemRequest(&req) {
+		c.String(http.StatusBadRequest, "Invalid request")
+		return
+	}
 
-// func (ch *catalogItemHandler) isValidCreateCatalogItemRequest(req *CreateCatalogItemRequest) bool {
-// 	if req.Name == "" ||
-// 		req.Price <= 0 {
-// 		log.Warn("Invalid request body: %v", req)
-// 		return false
-// 	}
-// 	return true
-// }
+	if _, err := ch.client.CreateCatalogItem(ctx, &pb.CreateCatalogItemRequest{
+		Name:  req.Name,
+		Price: req.Price,
+	}); err != nil {
+		log.Error("Failed to create catalog item", log.Ferror(err))
+		c.String(http.StatusInternalServerError, "Internal server error")
+		return
+	}
 
-// func (ch *catalogItemHandler) UpdateCatalogItemForm(c *gin.Context) {
-// 	ctx := c.Request.Context()
+	c.Redirect(http.StatusFound, "/catalog/list")
+}
 
-// 	id := c.Query("id")
-// 	if id == "" {
-// 		log.Warn("ID is required")
-// 		c.String(http.StatusBadRequest, "ID is required")
-// 		return
-// 	}
+func (ch *catalogItemHandler) isValidCreateCatalogItemRequest(req *CreateCatalogItemRequest) bool {
+	if req.Name == "" ||
+		req.Price <= 0 {
+		log.Warn("Invalid request body: %v", req)
+		return false
+	}
+	return true
+}
 
-// 	item, err := ch.cuc.GetCatalogItem(ctx, id)
-// 	if err != nil {
-// 		log.Error("Failed to get catalog item", log.Ferror(err))
-// 		c.String(http.StatusInternalServerError, "Internal server error")
-// 		return
-// 	}
+func (ch *catalogItemHandler) UpdateCatalogItemForm(c *gin.Context) {
+	ctx := c.Request.Context()
 
-// 	c.HTML(http.StatusOK, "update.html", gin.H{
-// 		"Item": item,
-// 	})
-// }
+	id := c.Query("id")
+	if id == "" {
+		log.Warn("ID is required")
+		c.String(http.StatusBadRequest, "ID is required")
+		return
+	}
 
-// type UpdateCatalogItemRequest struct {
-// 	ID    string  `form:"id"`
-// 	Name  string  `form:"name"`
-// 	Price float64 `form:"price"`
-// }
+	resp, err := ch.client.GetCatalogItem(ctx, &pb.GetCatalogItemRequest{
+		Id: id,
+	})
+	if err != nil {
+		log.Error("Failed to get catalog item", log.Ferror(err))
+		c.String(http.StatusInternalServerError, "Internal server error")
+		return
+	}
 
-// func (ch *catalogItemHandler) UpdateCatalogItem(c *gin.Context) {
-// 	ctx := c.Request.Context()
+	item := entity.CatalogItem{
+		ID:    resp.GetItem().GetId(),
+		Name:  resp.GetItem().GetName(),
+		Price: resp.GetItem().GetPrice(),
+	}
 
-// 	var req UpdateCatalogItemRequest
-// 	if err := c.ShouldBind(&req); err != nil {
-// 		log.Error("Failed to bind request", log.Ferror(err))
-// 		c.String(http.StatusBadRequest, "Invalid request")
-// 		return
-// 	}
-// 	if !ch.isValidUpdateCatalogItemRequest(&req) {
-// 		c.String(http.StatusBadRequest, "Invalid request")
-// 		return
-// 	}
+	c.HTML(http.StatusOK, "update.html", gin.H{
+		"Item": item,
+	})
+}
 
-// 	if err := ch.cuc.UpdateCatalogItem(ctx, req.ID, req.Name, req.Price); err != nil {
-// 		log.Error("Failed to update catalog item", log.Ferror(err))
-// 		c.String(http.StatusInternalServerError, "Internal server error")
-// 		return
-// 	}
+type UpdateCatalogItemRequest struct {
+	ID    string  `form:"id"`
+	Name  string  `form:"name"`
+	Price float64 `form:"price"`
+}
 
-// 	c.Redirect(http.StatusFound, "/catalog/list")
-// }
+func (ch *catalogItemHandler) UpdateCatalogItem(c *gin.Context) {
+	ctx := c.Request.Context()
 
-// func (ch *catalogItemHandler) isValidUpdateCatalogItemRequest(req *UpdateCatalogItemRequest) bool {
-// 	if req.ID == "" ||
-// 		req.Name == "" ||
-// 		req.Price <= 0 {
-// 		log.Warn("Invalid request body: %v", req)
-// 		return false
-// 	}
-// 	return true
-// }
+	var req UpdateCatalogItemRequest
+	if err := c.ShouldBind(&req); err != nil {
+		log.Error("Failed to bind request", log.Ferror(err))
+		c.String(http.StatusBadRequest, "Invalid request")
+		return
+	}
+	if !ch.isValidUpdateCatalogItemRequest(&req) {
+		c.String(http.StatusBadRequest, "Invalid request")
+		return
+	}
 
-// func (ch *catalogItemHandler) DeleteCatalogItem(c *gin.Context) {
-// 	ctx := c.Request.Context()
+	if _, err := ch.client.UpdateCatalogItem(ctx, &pb.UpdateCatalogItemRequest{
+		Id:    req.ID,
+		Name:  req.Name,
+		Price: req.Price,
+	}); err != nil {
+		log.Error("Failed to update catalog item", log.Ferror(err))
+		c.String(http.StatusInternalServerError, "Internal server error")
+		return
+	}
 
-// 	id := c.Query("id")
-// 	if id == "" {
-// 		log.Warn("ID is required")
-// 		c.String(http.StatusBadRequest, "ID is required")
-// 		return
-// 	}
+	c.Redirect(http.StatusFound, "/catalog/list")
+}
 
-// 	if err := ch.cuc.DeleteCatalogItem(ctx, id); err != nil {
-// 		log.Error("Failed to delete catalog item", log.Ferror(err))
-// 		c.String(http.StatusInternalServerError, "Internal server error")
-// 		return
-// 	}
+func (ch *catalogItemHandler) isValidUpdateCatalogItemRequest(req *UpdateCatalogItemRequest) bool {
+	if req.ID == "" ||
+		req.Name == "" ||
+		req.Price <= 0 {
+		log.Warn("Invalid request body: %v", req)
+		return false
+	}
+	return true
+}
 
-// 	c.Redirect(http.StatusFound, "/catalog/list")
-// }
+func (ch *catalogItemHandler) DeleteCatalogItem(c *gin.Context) {
+	ctx := c.Request.Context()
+
+	id := c.Query("id")
+	if id == "" {
+		log.Warn("ID is required")
+		c.String(http.StatusBadRequest, "ID is required")
+		return
+	}
+
+	if _, err := ch.client.DeleteCatalogItem(ctx, &pb.DeleteCatalogItemRequest{
+		Id: id,
+	}); err != nil {
+		log.Error("Failed to delete catalog item", log.Ferror(err))
+		c.String(http.StatusInternalServerError, "Internal server error")
+		return
+	}
+
+	c.Redirect(http.StatusFound, "/catalog/list")
+}

@@ -9,7 +9,8 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
-	entity "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/customer/entity"
+
+	entity "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/commerce-gateway/entity"
 )
 
 // MockCustomerRepository is a mock of CustomerRepository interface.
@@ -61,21 +62,6 @@ func (m *MockCustomerRepository) Delete(ctx context.Context, id string) error {
 func (mr *MockCustomerRepositoryMockRecorder) Delete(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockCustomerRepository)(nil).Delete), ctx, id)
-}
-
-// Get mocks base method.
-func (m *MockCustomerRepository) Get(ctx context.Context, id string) (*entity.Customer, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Get", ctx, id)
-	ret0, _ := ret[0].(*entity.Customer)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// Get indicates an expected call of Get.
-func (mr *MockCustomerRepositoryMockRecorder) Get(ctx, id interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockCustomerRepository)(nil).Get), ctx, id)
 }
 
 // List mocks base method.

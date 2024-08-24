@@ -4,11 +4,10 @@ package repository
 import (
 	"context"
 
-	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/entity"
+	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/commerce-gateway/entity"
 )
 
 type CatalogItemRepository interface {
-	Get(ctx context.Context, id string) (*entity.CatalogItem, error)
 	List(ctx context.Context) ([]entity.CatalogItem, error)
 	ListByName(ctx context.Context, name string) ([]entity.CatalogItem, error)
 	Create(ctx context.Context, item entity.CatalogItem) error

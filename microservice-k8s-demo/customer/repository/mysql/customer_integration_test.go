@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/tusmasoma/microservice-k8s-demo/customer/entity"
+	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/customer/entity"
 )
 
 func Test_CustomerRepository(t *testing.T) {

@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package catalog;
+
+option go_package = "proto/";
+
+service CatalogService {
+  rpc ListCatalogItems(ListCatalogItemsRequest) returns (ListCatalogItemsResponse);
+  rpc ListCatalogItemsByName(ListCatalogItemsByNameRequest) returns (ListCatalogItemsByNameResponse);
+  rpc CreateCatalogItem(CreateCatalogItemRequest) returns (CreateCatalogItemResponse);
+  rpc UpdateCatalogItem(UpdateCatalogItemRequest) returns (UpdateCatalogItemResponse);
+  rpc DeleteCatalogItem(DeleteCatalogItemRequest) returns (DeleteCatalogItemResponse);
+}
+
+message ListCatalogItemsRequest {}
+
+message ListCatalogItemsResponse {
+    repeated CatalogItem items = 1;
+}
+
+
+message ListCatalogItemsByNameRequest {
+    string name = 1;
+}
+
+message ListCatalogItemsByNameResponse {
+    repeated CatalogItem items = 1;
+}
+
+message CatalogItem {
+    string id = 1;
+    string name = 2;
+    double price = 3;
+}
+
+message CreateCatalogItemRequest {
+    string name = 1;
+    double price = 2;
+}
+
+message CreateCatalogItemResponse {}
+
+message UpdateCatalogItemRequest {
+    string id = 1;
+    string name = 2;
+    double price = 3;
+}
+
+message UpdateCatalogItemResponse {}
+
+message DeleteCatalogItemRequest {
+  string id = 1;
+}
+
+message DeleteCatalogItemResponse {}

@@ -2,29 +2,26 @@ package main
 
 import (
 	"context"
-	"errors"
 	"flag"
 	"fmt"
-	"net/http"
+	"net"
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
-
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
-	"github.com/tusmasoma/go-tech-dojo/pkg/log"
-
-	"github.com/tusmasoma/microservice-k8s-demo/catalog/config"
-	"github.com/tusmasoma/microservice-k8s-demo/catalog/gateway/web/handler"
-	"github.com/tusmasoma/microservice-k8s-demo/catalog/repository/mysql"
-
-	"go.uber.org/dig"
-
-	"github.com/tusmasoma/microservice-k8s-demo/catalog/usecase"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/joho/godotenv"
+	"github.com/tusmasoma/go-tech-dojo/pkg/log"
+	"go.uber.org/dig"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
+
+	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/config"
+	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/gateway"
+	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/repository/mysql"
+	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/usecase"
+
+	pb "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/proto"
 )
 
 func main() {
@@ -45,35 +42,32 @@ func main() {
 		return
 	}
 
-	err = container.Invoke(func(router *gin.Engine, config *config.ServerConfig) {
-		srv := &http.Server{
-			Addr:         addr,
-			Handler:      router,
-			ReadTimeout:  config.ReadTimeout,
-			WriteTimeout: config.WriteTimeout,
-			IdleTimeout:  config.IdleTimeout,
+	err = container.Invoke(func(grpcHandler pb.CatalogServiceServer, config *config.ServerConfig) {
+		lis, err := net.Listen("tcp", addr) //nolint:govet // This is not a mistake
+		if err != nil {
+			log.Critical("Failed to listen", log.Ferror(err))
 		}
-		log.Info("Server running...")
 
-		signalCtx, stop := signal.NotifyContext(context.Background(), syscall.SIGTERM, os.Interrupt, os.Kill)
-		defer stop()
+		srv := grpc.NewServer()
+
+		pb.RegisterCatalogServiceServer(srv, grpcHandler)
+
+		reflection.Register(srv)
+
+		log.Info("Server started", log.Fstring("addr", addr))
 
 		go func() {
-			if err = srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-				log.Error("Server failed", log.Ferror(err))
-				return
+			if err = srv.Serve(lis); err != nil {
+				log.Critical("Failed to serve", log.Ferror(err))
 			}
 		}()
 
-		<-signalCtx.Done()
+		sigs := make(chan os.Signal, 1)
+		signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+
+		<-sigs
 		log.Info("Server stopping...")
-
-		tctx, cancelShutdown := context.WithTimeout(context.Background(), config.GracefulShutdownTimeout)
-		defer cancelShutdown()
-
-		if err = srv.Shutdown(tctx); err != nil {
-			log.Error("Failed to shutdown http server", log.Ferror(err))
-		}
+		srv.GracefulStop()
 		log.Info("Server exited")
 	})
 	if err != nil {
@@ -99,56 +93,7 @@ func BuildContainer(ctx context.Context) (*dig.Container, error) {
 		mysql.NewTransactionRepository,
 		mysql.NewCatalogItemRepository,
 		usecase.NewCatalogItemUseCase,
-		handler.NewCatalogItemHandler,
-		func(
-			serverConfig *config.ServerConfig,
-			catalogHandler handler.CatalogItemHandler,
-		) *gin.Engine {
-			r := gin.Default()
-
-			r.Use(cors.New(cors.Config{
-				AllowOrigins:     []string{"https://*", "http://*"},
-				AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-				AllowHeaders:     []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token", "Origin"},
-				ExposeHeaders:    []string{"Link", "Authorization"},
-				AllowCredentials: true,
-				MaxAge:           time.Duration(serverConfig.PreflightCacheDurationSec) * time.Second,
-			}))
-
-			r.LoadHTMLGlob("gateway/web/templates/*.html")
-
-			api := r.Group("/")
-			{
-				catalog := api.Group("/catalog")
-				{
-					// List all catalog items
-					catalog.GET("/list", catalogHandler.ListCatalogItems)
-
-					// Show the form to create a new catalog item
-					catalog.GET("/create", catalogHandler.CreateCatalogItemForm)
-
-					// Process the form submission to create a new catalog item
-					catalog.POST("/create", catalogHandler.CreateCatalogItem)
-
-					// Show the form to update a catalog item
-					catalog.GET("/update", catalogHandler.UpdateCatalogItemForm)
-
-					// Process the form submission to update a catalog item
-					catalog.POST("/update", catalogHandler.UpdateCatalogItem)
-
-					// Delete a catalog item
-					catalog.GET("/delete", catalogHandler.DeleteCatalogItem)
-
-					// Show the form to search for catalog items by name
-					catalog.GET("/search", catalogHandler.GetCatalogItemByNameForm)
-
-					// Process the form submission to search for catalog items by name
-					catalog.POST("/search", catalogHandler.GetCatalogItemByName)
-				}
-			}
-
-			return r
-		},
+		gateway.NewCatalogItemHandler,
 	}
 
 	for _, provider := range providers {

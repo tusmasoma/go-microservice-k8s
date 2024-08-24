@@ -63,6 +63,68 @@ func setupTestServer(t *testing.T, setup func(m *mock.MockCustomerUseCase)) (pb.
 	return client, cleanup
 }
 
+func TestHandler_GetCustomer(t *testing.T) {
+	t.Parallel()
+
+	itemID := uuid.New().String()
+
+	customer := entity.Customer{
+		ID:      itemID,
+		Name:    "John Doe",
+		Email:   "john.doe@example.com",
+		Street:  "123 Maple Street",
+		City:    "Springfield",
+		Country: "USA",
+	}
+
+	patterns := []struct {
+		name  string
+		setup func(
+			m *mock.MockCustomerUseCase,
+		)
+		request    *pb.GetCustomerRequest
+		wantStatus codes.Code
+	}{
+		{
+			name: "success",
+			setup: func(tuc *mock.MockCustomerUseCase) {
+				tuc.EXPECT().GetCustomer(
+					gomock.Any(),
+					itemID,
+				).Return(&customer, nil)
+			},
+			request:    &pb.GetCustomerRequest{Id: itemID},
+			wantStatus: codes.OK,
+		},
+		{
+			name:       "Fail: invalid request of id is empty",
+			request:    &pb.GetCustomerRequest{Id: ""},
+			wantStatus: codes.InvalidArgument,
+		},
+	}
+
+	for _, tt := range patterns {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			client, cleanup := setupTestServer(t, tt.setup)
+			defer cleanup()
+
+			resp, err := client.GetCustomer(context.Background(), tt.request)
+			if status.Code(err) != tt.wantStatus {
+				t.Fatalf("handler returned wrong status code: got %v want %v", status.Code(err), tt.wantStatus)
+			}
+
+			if tt.wantStatus == codes.OK {
+				if resp.GetCustomer().GetId() != customer.ID {
+					t.Fatalf("handler returned wrong item data")
+				}
+			}
+		})
+	}
+}
+
 func TestHandler_ListCustomers(t *testing.T) {
 	t.Parallel()
 

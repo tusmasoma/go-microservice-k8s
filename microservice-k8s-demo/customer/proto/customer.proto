@@ -5,10 +5,19 @@ package customer;
 option go_package = "proto/";
 
 service CustomerService {
+  rpc GetCustomer(GetCustomerRequest) returns (GetCustomerResponse);
   rpc ListCustomers(ListCustomersRequest) returns (ListCustomersResponse);
   rpc CreateCustomer(CreateCustomerRequest) returns (CreateCustomerResponse);
   rpc UpdateCustomer(UpdateCustomerRequest) returns (UpdateCustomerResponse);
   rpc DeleteCustomer(DeleteCustomerRequest) returns (DeleteCustomerResponse);
+}
+
+message GetCustomerRequest {
+    string id = 1;
+}
+
+message GetCustomerResponse {
+    Customer customer = 1;
 }
 
 message ListCustomersRequest {}

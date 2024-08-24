@@ -13,6 +13,7 @@ import (
 )
 
 type CustomerHandler interface {
+	GetCustomer(ctx context.Context, req *pb.GetCustomerRequest) (*pb.GetCustomerResponse, error)
 	ListCustomers(ctx context.Context, req *pb.ListCustomersRequest) (*pb.ListCustomersResponse, error)
 	CreateCustomer(ctx context.Context, req *pb.CreateCustomerRequest) (*pb.CreateCustomerResponse, error)
 	UpdateCustomer(ctx context.Context, req *pb.UpdateCustomerRequest) (*pb.UpdateCustomerResponse, error)
@@ -28,6 +29,31 @@ func NewCustomerHandler(cuc usecase.CustomerUseCase) *customerHandler { //nolint
 	return &customerHandler{
 		cuc: cuc,
 	}
+}
+
+func (ch *customerHandler) GetCustomer(ctx context.Context, req *pb.GetCustomerRequest) (*pb.GetCustomerResponse, error) {
+	id := req.GetId()
+	if id == "" {
+		log.Warn("ID is required")
+		return nil, status.Errorf(codes.InvalidArgument, "ID is required")
+	}
+
+	customer, err := ch.cuc.GetCustomer(ctx, id)
+	if err != nil {
+		log.Error("Failed to get customer", log.Ferror(err))
+		return nil, status.Errorf(codes.Internal, "Failed to get customer")
+	}
+
+	return &pb.GetCustomerResponse{
+		Customer: &pb.Customer{
+			Id:      customer.ID,
+			Name:    customer.Name,
+			Email:   customer.Email,
+			Street:  customer.Street,
+			City:    customer.City,
+			Country: customer.Country,
+		},
+	}, nil
 }
 
 func (ch *customerHandler) ListCustomers(ctx context.Context, _ *pb.ListCustomersRequest) (*pb.ListCustomersResponse, error) {

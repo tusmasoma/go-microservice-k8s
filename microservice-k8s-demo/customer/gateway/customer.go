@@ -25,7 +25,7 @@ type customerHandler struct {
 	pb.UnimplementedCustomerServiceServer
 }
 
-func NewCustomerHandler(cuc usecase.CustomerUseCase) *customerHandler { //nolint:revive // This function is used in the test
+func NewCustomerHandler(cuc usecase.CustomerUseCase) pb.CustomerServiceServer { //nolint:revive // This function is used in the test
 	return &customerHandler{
 		cuc: cuc,
 	}

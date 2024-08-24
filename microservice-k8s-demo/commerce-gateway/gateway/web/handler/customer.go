@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/commerce-gateway/entity"
 	"github.com/tusmasoma/go-tech-dojo/pkg/log"
 
 	pb "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/customer/proto"
@@ -29,6 +28,15 @@ func NewCustomerHandler(client pb.CustomerServiceClient) CustomerHandler {
 	}
 }
 
+type CustomerData struct {
+	ID      string
+	Name    string
+	Email   string
+	Street  string
+	City    string
+	Country string
+}
+
 func (ch *customerHandler) ListCustomers(c *gin.Context) {
 	ctx := c.Request.Context()
 
@@ -39,9 +47,9 @@ func (ch *customerHandler) ListCustomers(c *gin.Context) {
 		return
 	}
 
-	var customers []entity.Customer
+	var customers []CustomerData
 	for _, c := range resp.GetCustomers() {
-		customers = append(customers, entity.Customer{
+		customers = append(customers, CustomerData{
 			ID:      c.GetId(),
 			Name:    c.GetName(),
 			Email:   c.GetEmail(),
@@ -127,7 +135,7 @@ func (ch *customerHandler) UpdateCustomerForm(c *gin.Context) {
 		return
 	}
 
-	customer := entity.Customer{
+	customer := CustomerData{
 		ID:      resp.GetCustomer().GetId(),
 		Name:    resp.GetCustomer().GetName(),
 		Email:   resp.GetCustomer().GetEmail(),

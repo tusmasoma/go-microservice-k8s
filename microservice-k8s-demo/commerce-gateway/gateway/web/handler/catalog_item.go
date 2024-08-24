@@ -7,7 +7,6 @@ import (
 	"github.com/tusmasoma/go-tech-dojo/pkg/log"
 
 	pb "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/proto"
-	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/commerce-gateway/entity"
 )
 
 type CatalogItemHandler interface {
@@ -29,6 +28,12 @@ func NewCatalogItemHandler(client pb.CatalogServiceClient) CatalogItemHandler {
 	return &catalogItemHandler{
 		client: client,
 	}
+}
+
+type CatalogItemData struct {
+	ID    string
+	Name  string
+	Price float64
 }
 
 func (ch *catalogItemHandler) GetCatalogItemByNameForm(c *gin.Context) {
@@ -54,9 +59,9 @@ func (ch *catalogItemHandler) GetCatalogItemByName(c *gin.Context) {
 		return
 	}
 
-	var items []entity.CatalogItem
+	var items []CatalogItemData
 	for _, item := range resp.GetItems() {
-		items = append(items, entity.CatalogItem{
+		items = append(items, CatalogItemData{
 			ID:    item.GetId(),
 			Name:  item.GetName(),
 			Price: item.GetPrice(),
@@ -78,9 +83,9 @@ func (ch *catalogItemHandler) ListCatalogItems(c *gin.Context) {
 		return
 	}
 
-	var items []entity.CatalogItem
+	var items []CatalogItemData
 	for _, item := range resp.GetItems() {
-		items = append(items, entity.CatalogItem{
+		items = append(items, CatalogItemData{
 			ID:    item.GetId(),
 			Name:  item.GetName(),
 			Price: item.GetPrice(),
@@ -155,7 +160,7 @@ func (ch *catalogItemHandler) UpdateCatalogItemForm(c *gin.Context) {
 		return
 	}
 
-	item := entity.CatalogItem{
+	item := CatalogItemData{
 		ID:    resp.GetItem().GetId(),
 		Name:  resp.GetItem().GetName(),
 		Price: resp.GetItem().GetPrice(),

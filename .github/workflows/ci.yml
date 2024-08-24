@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [catalog, customer, order] # サービス名のリスト
+        service: [catalog, customer, order, commerce-gateway] # サービス名のリスト
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3.5.2
@@ -81,7 +81,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [catalog, customer, order]
+        service: [catalog, customer, order, commerce-gateway]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
@@ -103,7 +103,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [catalog, customer, order]
+        service: [catalog, customer, order, commerce-gateway]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
@@ -118,7 +118,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [catalog, customer, order]
+        service: [catalog, customer, order, commerce-gateway]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/download-artifact@v3

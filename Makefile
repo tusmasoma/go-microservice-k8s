@@ -7,7 +7,7 @@ BIN := $(abspath ./bin/$(GOOS)_$(GOARCH))
 GO_ENV ?= GOPRIVATE=github.com/tusmasoma GOBIN=$(BIN)
 
 # maicroservices
-SERVICES := catalog customer order
+SERVICES := catalog customer order commerce-gateway
 SERVICE_PATH_PREFIX := microservice-k8s-demo
 
 # tools

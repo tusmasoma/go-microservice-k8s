@@ -26,7 +26,7 @@ type catalogItemHandler struct {
 	pb.UnimplementedCatalogServiceServer
 }
 
-func NewCatalogItemHandler(cuc usecase.CatalogItemUseCase) pb.CatalogServiceServer { //nolint:revive // This function is used in the test
+func NewCatalogItemHandler(cuc usecase.CatalogItemUseCase) pb.CatalogServiceServer {
 	return &catalogItemHandler{
 		cuc: cuc,
 	}

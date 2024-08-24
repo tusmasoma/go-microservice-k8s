@@ -54,7 +54,7 @@ func main() {
 	<-signalCtx.Done()
 	log.Info("Server stopping...")
 
-	tctx, cancelShutdown := context.WithTimeout(context.Background(), 5*time.Second)
+	tctx, cancelShutdown := context.WithTimeout(context.Background(), 5*time.Second) //nolint:gomnd // 5 is reasonable
 	defer cancelShutdown()
 
 	if err = srv.Shutdown(tctx); err != nil {
@@ -70,13 +70,13 @@ func BuildContainer(ctx context.Context, addr string) (*http.Server, error) {
 		return nil, err
 	}
 
-	catalogConn, err := grpc.Dial("catalog-service:8082", grpc.WithInsecure())
+	catalogConn, err := grpc.Dial("catalog-service:8082", grpc.WithInsecure()) //nolint:staticcheck // ignore deprecation
 	if err != nil {
 		log.Critical("Failed to connect to catalog service", log.Ferror(err))
 		return nil, err
 	}
 
-	customerConn, err := grpc.Dial("customer-service:8081", grpc.WithInsecure())
+	customerConn, err := grpc.Dial("customer-service:8081", grpc.WithInsecure()) //nolint:staticcheck // ignore deprecation
 	if err != nil {
 		log.Critical("Failed to connect to customer service", log.Ferror(err))
 		return nil, err

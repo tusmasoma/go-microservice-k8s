@@ -20,6 +20,7 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
+	CatalogService_GetCatalogItem_FullMethodName         = "/catalog.CatalogService/GetCatalogItem"
 	CatalogService_ListCatalogItems_FullMethodName       = "/catalog.CatalogService/ListCatalogItems"
 	CatalogService_ListCatalogItemsByName_FullMethodName = "/catalog.CatalogService/ListCatalogItemsByName"
 	CatalogService_CreateCatalogItem_FullMethodName      = "/catalog.CatalogService/CreateCatalogItem"
@@ -31,6 +32,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CatalogServiceClient interface {
+	GetCatalogItem(ctx context.Context, in *GetCatalogItemRequest, opts ...grpc.CallOption) (*GetCatalogItemResponse, error)
 	ListCatalogItems(ctx context.Context, in *ListCatalogItemsRequest, opts ...grpc.CallOption) (*ListCatalogItemsResponse, error)
 	ListCatalogItemsByName(ctx context.Context, in *ListCatalogItemsByNameRequest, opts ...grpc.CallOption) (*ListCatalogItemsByNameResponse, error)
 	CreateCatalogItem(ctx context.Context, in *CreateCatalogItemRequest, opts ...grpc.CallOption) (*CreateCatalogItemResponse, error)
@@ -44,6 +46,15 @@ type catalogServiceClient struct {
 
 func NewCatalogServiceClient(cc grpc.ClientConnInterface) CatalogServiceClient {
 	return &catalogServiceClient{cc}
+}
+
+func (c *catalogServiceClient) GetCatalogItem(ctx context.Context, in *GetCatalogItemRequest, opts ...grpc.CallOption) (*GetCatalogItemResponse, error) {
+	out := new(GetCatalogItemResponse)
+	err := c.cc.Invoke(ctx, CatalogService_GetCatalogItem_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *catalogServiceClient) ListCatalogItems(ctx context.Context, in *ListCatalogItemsRequest, opts ...grpc.CallOption) (*ListCatalogItemsResponse, error) {
@@ -95,6 +106,7 @@ func (c *catalogServiceClient) DeleteCatalogItem(ctx context.Context, in *Delete
 // All implementations must embed UnimplementedCatalogServiceServer
 // for forward compatibility
 type CatalogServiceServer interface {
+	GetCatalogItem(context.Context, *GetCatalogItemRequest) (*GetCatalogItemResponse, error)
 	ListCatalogItems(context.Context, *ListCatalogItemsRequest) (*ListCatalogItemsResponse, error)
 	ListCatalogItemsByName(context.Context, *ListCatalogItemsByNameRequest) (*ListCatalogItemsByNameResponse, error)
 	CreateCatalogItem(context.Context, *CreateCatalogItemRequest) (*CreateCatalogItemResponse, error)
@@ -105,6 +117,10 @@ type CatalogServiceServer interface {
 
 // UnimplementedCatalogServiceServer must be embedded to have forward compatible implementations.
 type UnimplementedCatalogServiceServer struct{}
+
+func (UnimplementedCatalogServiceServer) GetCatalogItem(context.Context, *GetCatalogItemRequest) (*GetCatalogItemResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCatalogItem not implemented")
+}
 
 func (UnimplementedCatalogServiceServer) ListCatalogItems(context.Context, *ListCatalogItemsRequest) (*ListCatalogItemsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListCatalogItems not implemented")
@@ -136,6 +152,24 @@ type UnsafeCatalogServiceServer interface {
 
 func RegisterCatalogServiceServer(s grpc.ServiceRegistrar, srv CatalogServiceServer) {
 	s.RegisterService(&CatalogService_ServiceDesc, srv)
+}
+
+func _CatalogService_GetCatalogItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCatalogItemRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CatalogServiceServer).GetCatalogItem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CatalogService_GetCatalogItem_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CatalogServiceServer).GetCatalogItem(ctx, req.(*GetCatalogItemRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _CatalogService_ListCatalogItems_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -235,6 +269,10 @@ var CatalogService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "catalog.CatalogService",
 	HandlerType: (*CatalogServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetCatalogItem",
+			Handler:    _CatalogService_GetCatalogItem_Handler,
+		},
 		{
 			MethodName: "ListCatalogItems",
 			Handler:    _CatalogService_ListCatalogItems_Handler,

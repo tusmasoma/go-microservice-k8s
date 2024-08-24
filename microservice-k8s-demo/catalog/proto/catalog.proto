@@ -5,11 +5,20 @@ package catalog;
 option go_package = "proto/";
 
 service CatalogService {
+  rpc GetCatalogItem(GetCatalogItemRequest) returns (GetCatalogItemResponse);
   rpc ListCatalogItems(ListCatalogItemsRequest) returns (ListCatalogItemsResponse);
   rpc ListCatalogItemsByName(ListCatalogItemsByNameRequest) returns (ListCatalogItemsByNameResponse);
   rpc CreateCatalogItem(CreateCatalogItemRequest) returns (CreateCatalogItemResponse);
   rpc UpdateCatalogItem(UpdateCatalogItemRequest) returns (UpdateCatalogItemResponse);
   rpc DeleteCatalogItem(DeleteCatalogItemRequest) returns (DeleteCatalogItemResponse);
+}
+
+message GetCatalogItemRequest {
+    string id = 1;
+}
+
+message GetCatalogItemResponse {
+    CatalogItem item = 1;
 }
 
 message ListCatalogItemsRequest {}

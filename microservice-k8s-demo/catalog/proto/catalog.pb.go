@@ -21,6 +21,100 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type GetCatalogItemRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (x *GetCatalogItemRequest) Reset() {
+	*x = GetCatalogItemRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_catalog_proto_msgTypes[0]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetCatalogItemRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetCatalogItemRequest) ProtoMessage() {}
+
+func (x *GetCatalogItemRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_catalog_proto_msgTypes[0]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetCatalogItemRequest.ProtoReflect.Descriptor instead.
+func (*GetCatalogItemRequest) Descriptor() ([]byte, []int) {
+	return file_proto_catalog_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *GetCatalogItemRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+type GetCatalogItemResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Item *CatalogItem `protobuf:"bytes,1,opt,name=item,proto3" json:"item,omitempty"`
+}
+
+func (x *GetCatalogItemResponse) Reset() {
+	*x = GetCatalogItemResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_catalog_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetCatalogItemResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetCatalogItemResponse) ProtoMessage() {}
+
+func (x *GetCatalogItemResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_catalog_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetCatalogItemResponse.ProtoReflect.Descriptor instead.
+func (*GetCatalogItemResponse) Descriptor() ([]byte, []int) {
+	return file_proto_catalog_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *GetCatalogItemResponse) GetItem() *CatalogItem {
+	if x != nil {
+		return x.Item
+	}
+	return nil
+}
+
 type ListCatalogItemsRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -30,7 +124,7 @@ type ListCatalogItemsRequest struct {
 func (x *ListCatalogItemsRequest) Reset() {
 	*x = ListCatalogItemsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_catalog_proto_msgTypes[0]
+		mi := &file_proto_catalog_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -43,7 +137,7 @@ func (x *ListCatalogItemsRequest) String() string {
 func (*ListCatalogItemsRequest) ProtoMessage() {}
 
 func (x *ListCatalogItemsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_catalog_proto_msgTypes[0]
+	mi := &file_proto_catalog_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -56,7 +150,7 @@ func (x *ListCatalogItemsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCatalogItemsRequest.ProtoReflect.Descriptor instead.
 func (*ListCatalogItemsRequest) Descriptor() ([]byte, []int) {
-	return file_proto_catalog_proto_rawDescGZIP(), []int{0}
+	return file_proto_catalog_proto_rawDescGZIP(), []int{2}
 }
 
 type ListCatalogItemsResponse struct {
@@ -70,7 +164,7 @@ type ListCatalogItemsResponse struct {
 func (x *ListCatalogItemsResponse) Reset() {
 	*x = ListCatalogItemsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_catalog_proto_msgTypes[1]
+		mi := &file_proto_catalog_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -83,7 +177,7 @@ func (x *ListCatalogItemsResponse) String() string {
 func (*ListCatalogItemsResponse) ProtoMessage() {}
 
 func (x *ListCatalogItemsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_catalog_proto_msgTypes[1]
+	mi := &file_proto_catalog_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -96,7 +190,7 @@ func (x *ListCatalogItemsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCatalogItemsResponse.ProtoReflect.Descriptor instead.
 func (*ListCatalogItemsResponse) Descriptor() ([]byte, []int) {
-	return file_proto_catalog_proto_rawDescGZIP(), []int{1}
+	return file_proto_catalog_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *ListCatalogItemsResponse) GetItems() []*CatalogItem {
@@ -117,7 +211,7 @@ type ListCatalogItemsByNameRequest struct {
 func (x *ListCatalogItemsByNameRequest) Reset() {
 	*x = ListCatalogItemsByNameRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_catalog_proto_msgTypes[2]
+		mi := &file_proto_catalog_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -130,7 +224,7 @@ func (x *ListCatalogItemsByNameRequest) String() string {
 func (*ListCatalogItemsByNameRequest) ProtoMessage() {}
 
 func (x *ListCatalogItemsByNameRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_catalog_proto_msgTypes[2]
+	mi := &file_proto_catalog_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -143,7 +237,7 @@ func (x *ListCatalogItemsByNameRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCatalogItemsByNameRequest.ProtoReflect.Descriptor instead.
 func (*ListCatalogItemsByNameRequest) Descriptor() ([]byte, []int) {
-	return file_proto_catalog_proto_rawDescGZIP(), []int{2}
+	return file_proto_catalog_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *ListCatalogItemsByNameRequest) GetName() string {
@@ -164,7 +258,7 @@ type ListCatalogItemsByNameResponse struct {
 func (x *ListCatalogItemsByNameResponse) Reset() {
 	*x = ListCatalogItemsByNameResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_catalog_proto_msgTypes[3]
+		mi := &file_proto_catalog_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -177,7 +271,7 @@ func (x *ListCatalogItemsByNameResponse) String() string {
 func (*ListCatalogItemsByNameResponse) ProtoMessage() {}
 
 func (x *ListCatalogItemsByNameResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_catalog_proto_msgTypes[3]
+	mi := &file_proto_catalog_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -190,7 +284,7 @@ func (x *ListCatalogItemsByNameResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCatalogItemsByNameResponse.ProtoReflect.Descriptor instead.
 func (*ListCatalogItemsByNameResponse) Descriptor() ([]byte, []int) {
-	return file_proto_catalog_proto_rawDescGZIP(), []int{3}
+	return file_proto_catalog_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *ListCatalogItemsByNameResponse) GetItems() []*CatalogItem {
@@ -213,7 +307,7 @@ type CatalogItem struct {
 func (x *CatalogItem) Reset() {
 	*x = CatalogItem{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_catalog_proto_msgTypes[4]
+		mi := &file_proto_catalog_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -226,7 +320,7 @@ func (x *CatalogItem) String() string {
 func (*CatalogItem) ProtoMessage() {}
 
 func (x *CatalogItem) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_catalog_proto_msgTypes[4]
+	mi := &file_proto_catalog_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -239,7 +333,7 @@ func (x *CatalogItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CatalogItem.ProtoReflect.Descriptor instead.
 func (*CatalogItem) Descriptor() ([]byte, []int) {
-	return file_proto_catalog_proto_rawDescGZIP(), []int{4}
+	return file_proto_catalog_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *CatalogItem) GetId() string {
@@ -275,7 +369,7 @@ type CreateCatalogItemRequest struct {
 func (x *CreateCatalogItemRequest) Reset() {
 	*x = CreateCatalogItemRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_catalog_proto_msgTypes[5]
+		mi := &file_proto_catalog_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -288,7 +382,7 @@ func (x *CreateCatalogItemRequest) String() string {
 func (*CreateCatalogItemRequest) ProtoMessage() {}
 
 func (x *CreateCatalogItemRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_catalog_proto_msgTypes[5]
+	mi := &file_proto_catalog_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -301,7 +395,7 @@ func (x *CreateCatalogItemRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateCatalogItemRequest.ProtoReflect.Descriptor instead.
 func (*CreateCatalogItemRequest) Descriptor() ([]byte, []int) {
-	return file_proto_catalog_proto_rawDescGZIP(), []int{5}
+	return file_proto_catalog_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *CreateCatalogItemRequest) GetName() string {
@@ -327,7 +421,7 @@ type CreateCatalogItemResponse struct {
 func (x *CreateCatalogItemResponse) Reset() {
 	*x = CreateCatalogItemResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_catalog_proto_msgTypes[6]
+		mi := &file_proto_catalog_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -340,7 +434,7 @@ func (x *CreateCatalogItemResponse) String() string {
 func (*CreateCatalogItemResponse) ProtoMessage() {}
 
 func (x *CreateCatalogItemResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_catalog_proto_msgTypes[6]
+	mi := &file_proto_catalog_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -353,7 +447,7 @@ func (x *CreateCatalogItemResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateCatalogItemResponse.ProtoReflect.Descriptor instead.
 func (*CreateCatalogItemResponse) Descriptor() ([]byte, []int) {
-	return file_proto_catalog_proto_rawDescGZIP(), []int{6}
+	return file_proto_catalog_proto_rawDescGZIP(), []int{8}
 }
 
 type UpdateCatalogItemRequest struct {
@@ -369,7 +463,7 @@ type UpdateCatalogItemRequest struct {
 func (x *UpdateCatalogItemRequest) Reset() {
 	*x = UpdateCatalogItemRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_catalog_proto_msgTypes[7]
+		mi := &file_proto_catalog_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -382,7 +476,7 @@ func (x *UpdateCatalogItemRequest) String() string {
 func (*UpdateCatalogItemRequest) ProtoMessage() {}
 
 func (x *UpdateCatalogItemRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_catalog_proto_msgTypes[7]
+	mi := &file_proto_catalog_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -395,7 +489,7 @@ func (x *UpdateCatalogItemRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateCatalogItemRequest.ProtoReflect.Descriptor instead.
 func (*UpdateCatalogItemRequest) Descriptor() ([]byte, []int) {
-	return file_proto_catalog_proto_rawDescGZIP(), []int{7}
+	return file_proto_catalog_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *UpdateCatalogItemRequest) GetId() string {
@@ -428,7 +522,7 @@ type UpdateCatalogItemResponse struct {
 func (x *UpdateCatalogItemResponse) Reset() {
 	*x = UpdateCatalogItemResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_catalog_proto_msgTypes[8]
+		mi := &file_proto_catalog_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -441,7 +535,7 @@ func (x *UpdateCatalogItemResponse) String() string {
 func (*UpdateCatalogItemResponse) ProtoMessage() {}
 
 func (x *UpdateCatalogItemResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_catalog_proto_msgTypes[8]
+	mi := &file_proto_catalog_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -454,7 +548,7 @@ func (x *UpdateCatalogItemResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateCatalogItemResponse.ProtoReflect.Descriptor instead.
 func (*UpdateCatalogItemResponse) Descriptor() ([]byte, []int) {
-	return file_proto_catalog_proto_rawDescGZIP(), []int{8}
+	return file_proto_catalog_proto_rawDescGZIP(), []int{10}
 }
 
 type DeleteCatalogItemRequest struct {
@@ -468,7 +562,7 @@ type DeleteCatalogItemRequest struct {
 func (x *DeleteCatalogItemRequest) Reset() {
 	*x = DeleteCatalogItemRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_catalog_proto_msgTypes[9]
+		mi := &file_proto_catalog_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -481,7 +575,7 @@ func (x *DeleteCatalogItemRequest) String() string {
 func (*DeleteCatalogItemRequest) ProtoMessage() {}
 
 func (x *DeleteCatalogItemRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_catalog_proto_msgTypes[9]
+	mi := &file_proto_catalog_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -494,7 +588,7 @@ func (x *DeleteCatalogItemRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteCatalogItemRequest.ProtoReflect.Descriptor instead.
 func (*DeleteCatalogItemRequest) Descriptor() ([]byte, []int) {
-	return file_proto_catalog_proto_rawDescGZIP(), []int{9}
+	return file_proto_catalog_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *DeleteCatalogItemRequest) GetId() string {
@@ -513,7 +607,7 @@ type DeleteCatalogItemResponse struct {
 func (x *DeleteCatalogItemResponse) Reset() {
 	*x = DeleteCatalogItemResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_catalog_proto_msgTypes[10]
+		mi := &file_proto_catalog_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -526,7 +620,7 @@ func (x *DeleteCatalogItemResponse) String() string {
 func (*DeleteCatalogItemResponse) ProtoMessage() {}
 
 func (x *DeleteCatalogItemResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_catalog_proto_msgTypes[10]
+	mi := &file_proto_catalog_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -539,52 +633,64 @@ func (x *DeleteCatalogItemResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteCatalogItemResponse.ProtoReflect.Descriptor instead.
 func (*DeleteCatalogItemResponse) Descriptor() ([]byte, []int) {
-	return file_proto_catalog_proto_rawDescGZIP(), []int{10}
+	return file_proto_catalog_proto_rawDescGZIP(), []int{12}
 }
 
 var File_proto_catalog_proto protoreflect.FileDescriptor
 
 var file_proto_catalog_proto_rawDesc = []byte{
 	0x0a, 0x13, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x63, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x2e,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x07, 0x63, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x22, 0x19,
-	0x0a, 0x17, 0x4c, 0x69, 0x73, 0x74, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x49, 0x74, 0x65,
-	0x6d, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x46, 0x0a, 0x18, 0x4c, 0x69, 0x73,
-	0x74, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x49, 0x74, 0x65, 0x6d, 0x73, 0x52, 0x65, 0x73,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x07, 0x63, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x22, 0x27,
+	0x0a, 0x15, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x49, 0x74, 0x65, 0x6d,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x22, 0x42, 0x0a, 0x16, 0x47, 0x65, 0x74, 0x43, 0x61,
+	0x74, 0x61, 0x6c, 0x6f, 0x67, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x12, 0x28, 0x0a, 0x04, 0x69, 0x74, 0x65, 0x6d, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x14, 0x2e, 0x63, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x2e, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f,
+	0x67, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x04, 0x69, 0x74, 0x65, 0x6d, 0x22, 0x19, 0x0a, 0x17, 0x4c,
+	0x69, 0x73, 0x74, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x49, 0x74, 0x65, 0x6d, 0x73, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x46, 0x0a, 0x18, 0x4c, 0x69, 0x73, 0x74, 0x43, 0x61,
+	0x74, 0x61, 0x6c, 0x6f, 0x67, 0x49, 0x74, 0x65, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x12, 0x2a, 0x0a, 0x05, 0x69, 0x74, 0x65, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28,
+	0x0b, 0x32, 0x14, 0x2e, 0x63, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x2e, 0x43, 0x61, 0x74, 0x61,
+	0x6c, 0x6f, 0x67, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x05, 0x69, 0x74, 0x65, 0x6d, 0x73, 0x22, 0x33,
+	0x0a, 0x1d, 0x4c, 0x69, 0x73, 0x74, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x49, 0x74, 0x65,
+	0x6d, 0x73, 0x42, 0x79, 0x4e, 0x61, 0x6d, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12,
+	0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e,
+	0x61, 0x6d, 0x65, 0x22, 0x4c, 0x0a, 0x1e, 0x4c, 0x69, 0x73, 0x74, 0x43, 0x61, 0x74, 0x61, 0x6c,
+	0x6f, 0x67, 0x49, 0x74, 0x65, 0x6d, 0x73, 0x42, 0x79, 0x4e, 0x61, 0x6d, 0x65, 0x52, 0x65, 0x73,
 	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2a, 0x0a, 0x05, 0x69, 0x74, 0x65, 0x6d, 0x73, 0x18, 0x01,
 	0x20, 0x03, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x63, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x2e, 0x43,
 	0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x05, 0x69, 0x74, 0x65, 0x6d,
-	0x73, 0x22, 0x33, 0x0a, 0x1d, 0x4c, 0x69, 0x73, 0x74, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67,
-	0x49, 0x74, 0x65, 0x6d, 0x73, 0x42, 0x79, 0x4e, 0x61, 0x6d, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x22, 0x4c, 0x0a, 0x1e, 0x4c, 0x69, 0x73, 0x74, 0x43, 0x61,
-	0x74, 0x61, 0x6c, 0x6f, 0x67, 0x49, 0x74, 0x65, 0x6d, 0x73, 0x42, 0x79, 0x4e, 0x61, 0x6d, 0x65,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2a, 0x0a, 0x05, 0x69, 0x74, 0x65, 0x6d,
-	0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x63, 0x61, 0x74, 0x61, 0x6c, 0x6f,
-	0x67, 0x2e, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x05, 0x69,
-	0x74, 0x65, 0x6d, 0x73, 0x22, 0x47, 0x0a, 0x0b, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x49,
-	0x74, 0x65, 0x6d, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x70, 0x72, 0x69, 0x63, 0x65,
-	0x18, 0x03, 0x20, 0x01, 0x28, 0x01, 0x52, 0x05, 0x70, 0x72, 0x69, 0x63, 0x65, 0x22, 0x44, 0x0a,
-	0x18, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x49, 0x74,
-	0x65, 0x6d, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d,
-	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x14, 0x0a,
-	0x05, 0x70, 0x72, 0x69, 0x63, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x01, 0x52, 0x05, 0x70, 0x72,
-	0x69, 0x63, 0x65, 0x22, 0x1b, 0x0a, 0x19, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x61, 0x74,
+	0x73, 0x22, 0x47, 0x0a, 0x0b, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x49, 0x74, 0x65, 0x6d,
+	0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64,
+	0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04,
+	0x6e, 0x61, 0x6d, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x70, 0x72, 0x69, 0x63, 0x65, 0x18, 0x03, 0x20,
+	0x01, 0x28, 0x01, 0x52, 0x05, 0x70, 0x72, 0x69, 0x63, 0x65, 0x22, 0x44, 0x0a, 0x18, 0x43, 0x72,
+	0x65, 0x61, 0x74, 0x65, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x49, 0x74, 0x65, 0x6d, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x70, 0x72,
+	0x69, 0x63, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x01, 0x52, 0x05, 0x70, 0x72, 0x69, 0x63, 0x65,
+	0x22, 0x1b, 0x0a, 0x19, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f,
+	0x67, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x54, 0x0a,
+	0x18, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x49, 0x74,
+	0x65, 0x6d, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d,
+	0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x14, 0x0a,
+	0x05, 0x70, 0x72, 0x69, 0x63, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x01, 0x52, 0x05, 0x70, 0x72,
+	0x69, 0x63, 0x65, 0x22, 0x1b, 0x0a, 0x19, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x43, 0x61, 0x74,
 	0x61, 0x6c, 0x6f, 0x67, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x22, 0x54, 0x0a, 0x18, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f,
+	0x22, 0x2a, 0x0a, 0x18, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f,
 	0x67, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02,
-	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04,
-	0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65,
-	0x12, 0x14, 0x0a, 0x05, 0x70, 0x72, 0x69, 0x63, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x01, 0x52,
-	0x05, 0x70, 0x72, 0x69, 0x63, 0x65, 0x22, 0x1b, 0x0a, 0x19, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65,
-	0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x22, 0x2a, 0x0a, 0x18, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x43, 0x61, 0x74,
-	0x61, 0x6c, 0x6f, 0x67, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12,
-	0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x22,
-	0x1b, 0x0a, 0x19, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67,
-	0x49, 0x74, 0x65, 0x6d, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0xe8, 0x03, 0x0a,
-	0x0e, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12,
+	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x22, 0x1b, 0x0a, 0x19,
+	0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x49, 0x74, 0x65,
+	0x6d, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0xbb, 0x04, 0x0a, 0x0e, 0x43, 0x61,
+	0x74, 0x61, 0x6c, 0x6f, 0x67, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x51, 0x0a, 0x0e,
+	0x47, 0x65, 0x74, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x49, 0x74, 0x65, 0x6d, 0x12, 0x1e,
+	0x2e, 0x63, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74, 0x61,
+	0x6c, 0x6f, 0x67, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1f,
+	0x2e, 0x63, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74, 0x61,
+	0x6c, 0x6f, 0x67, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
 	0x57, 0x0a, 0x10, 0x4c, 0x69, 0x73, 0x74, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x49, 0x74,
 	0x65, 0x6d, 0x73, 0x12, 0x20, 0x2e, 0x63, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x2e, 0x4c, 0x69,
 	0x73, 0x74, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x49, 0x74, 0x65, 0x6d, 0x73, 0x52, 0x65,
@@ -631,40 +737,45 @@ func file_proto_catalog_proto_rawDescGZIP() []byte {
 }
 
 var (
-	file_proto_catalog_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+	file_proto_catalog_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 	file_proto_catalog_proto_goTypes  = []interface{}{
-		(*ListCatalogItemsRequest)(nil),        // 0: catalog.ListCatalogItemsRequest
-		(*ListCatalogItemsResponse)(nil),       // 1: catalog.ListCatalogItemsResponse
-		(*ListCatalogItemsByNameRequest)(nil),  // 2: catalog.ListCatalogItemsByNameRequest
-		(*ListCatalogItemsByNameResponse)(nil), // 3: catalog.ListCatalogItemsByNameResponse
-		(*CatalogItem)(nil),                    // 4: catalog.CatalogItem
-		(*CreateCatalogItemRequest)(nil),       // 5: catalog.CreateCatalogItemRequest
-		(*CreateCatalogItemResponse)(nil),      // 6: catalog.CreateCatalogItemResponse
-		(*UpdateCatalogItemRequest)(nil),       // 7: catalog.UpdateCatalogItemRequest
-		(*UpdateCatalogItemResponse)(nil),      // 8: catalog.UpdateCatalogItemResponse
-		(*DeleteCatalogItemRequest)(nil),       // 9: catalog.DeleteCatalogItemRequest
-		(*DeleteCatalogItemResponse)(nil),      // 10: catalog.DeleteCatalogItemResponse
+		(*GetCatalogItemRequest)(nil),          // 0: catalog.GetCatalogItemRequest
+		(*GetCatalogItemResponse)(nil),         // 1: catalog.GetCatalogItemResponse
+		(*ListCatalogItemsRequest)(nil),        // 2: catalog.ListCatalogItemsRequest
+		(*ListCatalogItemsResponse)(nil),       // 3: catalog.ListCatalogItemsResponse
+		(*ListCatalogItemsByNameRequest)(nil),  // 4: catalog.ListCatalogItemsByNameRequest
+		(*ListCatalogItemsByNameResponse)(nil), // 5: catalog.ListCatalogItemsByNameResponse
+		(*CatalogItem)(nil),                    // 6: catalog.CatalogItem
+		(*CreateCatalogItemRequest)(nil),       // 7: catalog.CreateCatalogItemRequest
+		(*CreateCatalogItemResponse)(nil),      // 8: catalog.CreateCatalogItemResponse
+		(*UpdateCatalogItemRequest)(nil),       // 9: catalog.UpdateCatalogItemRequest
+		(*UpdateCatalogItemResponse)(nil),      // 10: catalog.UpdateCatalogItemResponse
+		(*DeleteCatalogItemRequest)(nil),       // 11: catalog.DeleteCatalogItemRequest
+		(*DeleteCatalogItemResponse)(nil),      // 12: catalog.DeleteCatalogItemResponse
 	}
 )
 
 var file_proto_catalog_proto_depIdxs = []int32{
-	4,  // 0: catalog.ListCatalogItemsResponse.items:type_name -> catalog.CatalogItem
-	4,  // 1: catalog.ListCatalogItemsByNameResponse.items:type_name -> catalog.CatalogItem
-	0,  // 2: catalog.CatalogService.ListCatalogItems:input_type -> catalog.ListCatalogItemsRequest
-	2,  // 3: catalog.CatalogService.ListCatalogItemsByName:input_type -> catalog.ListCatalogItemsByNameRequest
-	5,  // 4: catalog.CatalogService.CreateCatalogItem:input_type -> catalog.CreateCatalogItemRequest
-	7,  // 5: catalog.CatalogService.UpdateCatalogItem:input_type -> catalog.UpdateCatalogItemRequest
-	9,  // 6: catalog.CatalogService.DeleteCatalogItem:input_type -> catalog.DeleteCatalogItemRequest
-	1,  // 7: catalog.CatalogService.ListCatalogItems:output_type -> catalog.ListCatalogItemsResponse
-	3,  // 8: catalog.CatalogService.ListCatalogItemsByName:output_type -> catalog.ListCatalogItemsByNameResponse
-	6,  // 9: catalog.CatalogService.CreateCatalogItem:output_type -> catalog.CreateCatalogItemResponse
-	8,  // 10: catalog.CatalogService.UpdateCatalogItem:output_type -> catalog.UpdateCatalogItemResponse
-	10, // 11: catalog.CatalogService.DeleteCatalogItem:output_type -> catalog.DeleteCatalogItemResponse
-	7,  // [7:12] is the sub-list for method output_type
-	2,  // [2:7] is the sub-list for method input_type
-	2,  // [2:2] is the sub-list for extension type_name
-	2,  // [2:2] is the sub-list for extension extendee
-	0,  // [0:2] is the sub-list for field type_name
+	6,  // 0: catalog.GetCatalogItemResponse.item:type_name -> catalog.CatalogItem
+	6,  // 1: catalog.ListCatalogItemsResponse.items:type_name -> catalog.CatalogItem
+	6,  // 2: catalog.ListCatalogItemsByNameResponse.items:type_name -> catalog.CatalogItem
+	0,  // 3: catalog.CatalogService.GetCatalogItem:input_type -> catalog.GetCatalogItemRequest
+	2,  // 4: catalog.CatalogService.ListCatalogItems:input_type -> catalog.ListCatalogItemsRequest
+	4,  // 5: catalog.CatalogService.ListCatalogItemsByName:input_type -> catalog.ListCatalogItemsByNameRequest
+	7,  // 6: catalog.CatalogService.CreateCatalogItem:input_type -> catalog.CreateCatalogItemRequest
+	9,  // 7: catalog.CatalogService.UpdateCatalogItem:input_type -> catalog.UpdateCatalogItemRequest
+	11, // 8: catalog.CatalogService.DeleteCatalogItem:input_type -> catalog.DeleteCatalogItemRequest
+	1,  // 9: catalog.CatalogService.GetCatalogItem:output_type -> catalog.GetCatalogItemResponse
+	3,  // 10: catalog.CatalogService.ListCatalogItems:output_type -> catalog.ListCatalogItemsResponse
+	5,  // 11: catalog.CatalogService.ListCatalogItemsByName:output_type -> catalog.ListCatalogItemsByNameResponse
+	8,  // 12: catalog.CatalogService.CreateCatalogItem:output_type -> catalog.CreateCatalogItemResponse
+	10, // 13: catalog.CatalogService.UpdateCatalogItem:output_type -> catalog.UpdateCatalogItemResponse
+	12, // 14: catalog.CatalogService.DeleteCatalogItem:output_type -> catalog.DeleteCatalogItemResponse
+	9,  // [9:15] is the sub-list for method output_type
+	3,  // [3:9] is the sub-list for method input_type
+	3,  // [3:3] is the sub-list for extension type_name
+	3,  // [3:3] is the sub-list for extension extendee
+	0,  // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_proto_catalog_proto_init() }
@@ -674,7 +785,7 @@ func file_proto_catalog_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_proto_catalog_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListCatalogItemsRequest); i {
+			switch v := v.(*GetCatalogItemRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -686,7 +797,7 @@ func file_proto_catalog_proto_init() {
 			}
 		}
 		file_proto_catalog_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListCatalogItemsResponse); i {
+			switch v := v.(*GetCatalogItemResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -698,7 +809,7 @@ func file_proto_catalog_proto_init() {
 			}
 		}
 		file_proto_catalog_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListCatalogItemsByNameRequest); i {
+			switch v := v.(*ListCatalogItemsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -710,7 +821,7 @@ func file_proto_catalog_proto_init() {
 			}
 		}
 		file_proto_catalog_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListCatalogItemsByNameResponse); i {
+			switch v := v.(*ListCatalogItemsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -722,7 +833,7 @@ func file_proto_catalog_proto_init() {
 			}
 		}
 		file_proto_catalog_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CatalogItem); i {
+			switch v := v.(*ListCatalogItemsByNameRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -734,7 +845,7 @@ func file_proto_catalog_proto_init() {
 			}
 		}
 		file_proto_catalog_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateCatalogItemRequest); i {
+			switch v := v.(*ListCatalogItemsByNameResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -746,7 +857,7 @@ func file_proto_catalog_proto_init() {
 			}
 		}
 		file_proto_catalog_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateCatalogItemResponse); i {
+			switch v := v.(*CatalogItem); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -758,7 +869,7 @@ func file_proto_catalog_proto_init() {
 			}
 		}
 		file_proto_catalog_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateCatalogItemRequest); i {
+			switch v := v.(*CreateCatalogItemRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -770,7 +881,7 @@ func file_proto_catalog_proto_init() {
 			}
 		}
 		file_proto_catalog_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateCatalogItemResponse); i {
+			switch v := v.(*CreateCatalogItemResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -782,7 +893,7 @@ func file_proto_catalog_proto_init() {
 			}
 		}
 		file_proto_catalog_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteCatalogItemRequest); i {
+			switch v := v.(*UpdateCatalogItemRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -794,6 +905,30 @@ func file_proto_catalog_proto_init() {
 			}
 		}
 		file_proto_catalog_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpdateCatalogItemResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_catalog_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DeleteCatalogItemRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_catalog_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*DeleteCatalogItemResponse); i {
 			case 0:
 				return &v.state
@@ -812,7 +947,7 @@ func file_proto_catalog_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_proto_catalog_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   11,
+			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

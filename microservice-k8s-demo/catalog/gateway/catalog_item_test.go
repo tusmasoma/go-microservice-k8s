@@ -61,6 +61,67 @@ func setupTestServer(t *testing.T, setup func(m *mock.MockCatalogItemUseCase)) (
 	return client, cleanup
 }
 
+func TestHandler_GetCatalogItem(t *testing.T) {
+	t.Parallel()
+
+	itemID := uuid.New().String()
+
+	item := entity.CatalogItem{
+		ID:    itemID,
+		Name:  "item1",
+		Price: float64(100),
+	}
+
+	patterns := []struct {
+		name  string
+		setup func(
+			m *mock.MockCatalogItemUseCase,
+		)
+		request    *pb.GetCatalogItemRequest
+		wantStatus codes.Code
+	}{
+		{
+			name: "success",
+			setup: func(cuc *mock.MockCatalogItemUseCase) {
+				cuc.EXPECT().GetCatalogItem(
+					gomock.Any(),
+					itemID,
+				).Return(&item, nil)
+			},
+			request: &pb.GetCatalogItemRequest{
+				Id: itemID,
+			},
+			wantStatus: codes.OK,
+		},
+		{
+			name:       "Fail: invalid request of id is empty",
+			request:    &pb.GetCatalogItemRequest{Id: ""},
+			wantStatus: codes.InvalidArgument,
+		},
+	}
+
+	for _, tt := range patterns {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			client, cleanup := setupTestServer(t, tt.setup)
+			defer cleanup()
+
+			resp, err := client.GetCatalogItem(context.Background(), tt.request)
+			if status.Code(err) != tt.wantStatus {
+				t.Fatalf("handler returned wrong status code: got %v want %v", status.Code(err), tt.wantStatus)
+			}
+
+			if tt.wantStatus == codes.OK {
+				if resp.GetItem().GetId() != item.ID {
+					t.Fatalf("handler returned wrong item data")
+				}
+			}
+		})
+	}
+}
+
 func TestHandler_ListCatalogItemsByName(t *testing.T) {
 	t.Parallel()
 

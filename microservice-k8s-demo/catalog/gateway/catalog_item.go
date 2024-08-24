@@ -13,6 +13,7 @@ import (
 )
 
 type CatalogItemHandler interface {
+	GetCatalogItem(ctx context.Context, req *pb.GetCatalogItemRequest) (*pb.GetCatalogItemResponse, error)
 	ListCatalogItemsByName(ctx context.Context, req *pb.ListCatalogItemsByNameRequest) (*pb.ListCatalogItemsByNameResponse, error)
 	ListCatalogItems(ctx context.Context, req *pb.ListCatalogItemsRequest) (*pb.ListCatalogItemsResponse, error)
 	CreateCatalogItem(ctx context.Context, req *pb.CreateCatalogItemRequest) (*pb.CreateCatalogItemResponse, error)
@@ -29,6 +30,28 @@ func NewCatalogItemHandler(cuc usecase.CatalogItemUseCase) *catalogItemHandler {
 	return &catalogItemHandler{
 		cuc: cuc,
 	}
+}
+
+func (ch *catalogItemHandler) GetCatalogItem(ctx context.Context, req *pb.GetCatalogItemRequest) (*pb.GetCatalogItemResponse, error) {
+	id := req.GetId()
+	if id == "" {
+		log.Warn("ID is required")
+		return nil, status.Errorf(codes.InvalidArgument, "ID is required")
+	}
+
+	item, err := ch.cuc.GetCatalogItem(ctx, id)
+	if err != nil {
+		log.Error("Failed to get catalog item", log.Ferror(err))
+		return nil, status.Errorf(codes.Internal, "Failed to get catalog item")
+	}
+
+	return &pb.GetCatalogItemResponse{
+		Item: &pb.CatalogItem{
+			Id:    item.ID,
+			Name:  item.Name,
+			Price: item.Price,
+		},
+	}, nil
 }
 
 func (ch *catalogItemHandler) ListCatalogItemsByName(ctx context.Context, req *pb.ListCatalogItemsByNameRequest) (*pb.ListCatalogItemsByNameResponse, error) {

@@ -51,13 +51,13 @@ func (ch *customerHandler) ListCustomers(c *gin.Context) {
 		})
 	}
 
-	c.HTML(http.StatusOK, "list.html", gin.H{
+	c.HTML(http.StatusOK, "customer/list.html", gin.H{
 		"Customers": customers,
 	})
 }
 
 func (ch *customerHandler) CreateCustomerForm(c *gin.Context) {
-	c.HTML(http.StatusOK, "create.html", nil)
+	c.HTML(http.StatusOK, "customer/create.html", nil)
 }
 
 type CreateCustomerRequest struct {
@@ -136,7 +136,7 @@ func (ch *customerHandler) UpdateCustomerForm(c *gin.Context) {
 		Country: resp.GetCustomer().GetCountry(),
 	}
 
-	c.HTML(http.StatusOK, "update.html", gin.H{
+	c.HTML(http.StatusOK, "customer/update.html", gin.H{
 		"Customer": customer,
 	})
 }

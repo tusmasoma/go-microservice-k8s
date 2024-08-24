@@ -16,6 +16,21 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
 
+  commerce-gateway:
+    build:
+      context: ./commerce-gateway
+      dockerfile: ./Dockerfile
+    container_name: commerce-gateway
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    depends_on:
+      - customer-service
+      - catalog-service
+    networks:
+      - microservices-net
+
   customer-service:
     build:
       context: ./customer
@@ -27,22 +42,22 @@ services:
       - .env
     depends_on:
       - mysql
-    # networks:
-    #   - microservices-net
+    networks:
+      - microservices-net
 
-  # catalog-service:
-  #   build:
-  #     context: ./catalog
-  #     dockerfile: ./Dockerfile
-  #   container_name: catalog-service
-  #   ports:
-  #     - "8082:8082"
-  #   env_file:
-  #     - .env
-  #   depends_on:
-  #     - mysql
-  #   networks:
-  #     - microservices-net
+  catalog-service:
+    build:
+      context: ./catalog
+      dockerfile: ./Dockerfile
+    container_name: catalog-service
+    ports:
+      - "8082:8082"
+    env_file:
+      - .env
+    depends_on:
+      - mysql
+    networks:
+      - microservices-net
 
   # order-service:
   #   build:

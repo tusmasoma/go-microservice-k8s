@@ -32,7 +32,7 @@ func NewCatalogItemHandler(client pb.CatalogServiceClient) CatalogItemHandler {
 }
 
 func (ch *catalogItemHandler) GetCatalogItemByNameForm(c *gin.Context) {
-	c.HTML(http.StatusOK, "search.html", nil)
+	c.HTML(http.StatusOK, "catalog/search.html", nil)
 }
 
 func (ch *catalogItemHandler) GetCatalogItemByName(c *gin.Context) {
@@ -63,7 +63,7 @@ func (ch *catalogItemHandler) GetCatalogItemByName(c *gin.Context) {
 		})
 	}
 
-	c.HTML(http.StatusOK, "list.html", gin.H{
+	c.HTML(http.StatusOK, "catalog/list.html", gin.H{
 		"Items": items,
 	})
 }
@@ -87,13 +87,13 @@ func (ch *catalogItemHandler) ListCatalogItems(c *gin.Context) {
 		})
 	}
 
-	c.HTML(http.StatusOK, "list.html", gin.H{
+	c.HTML(http.StatusOK, "catalog/list.html", gin.H{
 		"Items": items,
 	})
 }
 
 func (ch *catalogItemHandler) CreateCatalogItemForm(c *gin.Context) {
-	c.HTML(http.StatusOK, "create.html", nil)
+	c.HTML(http.StatusOK, "catalog/create.html", nil)
 }
 
 type CreateCatalogItemRequest struct {
@@ -161,7 +161,7 @@ func (ch *catalogItemHandler) UpdateCatalogItemForm(c *gin.Context) {
 		Price: resp.GetItem().GetPrice(),
 	}
 
-	c.HTML(http.StatusOK, "update.html", gin.H{
+	c.HTML(http.StatusOK, "catalog/update.html", gin.H{
 		"Item": item,
 	})
 }

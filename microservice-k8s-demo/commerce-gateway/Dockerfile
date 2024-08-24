@@ -13,9 +13,4 @@ COPY . .
 
 RUN go build -o main ./cmd/main.go
 
-COPY entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/entrypoint.sh
-
-ENTRYPOINT ["entrypoint.sh"]
-
 CMD ["/app/main"]

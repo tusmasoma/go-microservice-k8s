@@ -3,6 +3,7 @@ module github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order
 go 1.21.3
 
 require (
+	github.com/golang/mock v1.6.0
 	github.com/google/go-cmp v0.6.0
 	github.com/google/uuid v1.6.0
 	github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog v0.0.0-20240824175103-2d74f731488d

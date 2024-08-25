@@ -3,6 +3,8 @@ USE `microservice-k8s-demo-db`;
 
 DROP TABLE IF EXISTS CatalogItems;
 DROP TABLE IF EXISTS Customers;
+DROP TABLE IF EXISTS Orders;
+DROP TABLE IF EXISTS OrderLines;
 
 -- CatalogItems Table
 CREATE TABLE CatalogItems (

@@ -1,9 +1,12 @@
 package entity
 
+import "time"
+
 type Order struct {
 	ID         string      `json:"id" db:"id"`
 	CustomerID string      `json:"customer_id" db:"customer_id"`
-	OrderLines []OrderLine `json:"order_lines" db:"order_lines"`
+	OrderDate  time.Time   `json:"order_date" db:"date"`
+	OrderLines []OrderLine `json:"order_lines"`
 }
 
 type OrderLine struct {

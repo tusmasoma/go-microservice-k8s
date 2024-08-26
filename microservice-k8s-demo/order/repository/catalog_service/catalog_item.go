@@ -1,4 +1,4 @@
-package catalog
+package catalogservice
 
 import (
 	"context"

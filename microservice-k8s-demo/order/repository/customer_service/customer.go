@@ -1,4 +1,4 @@
-package customer
+package customerservice
 
 import (
 	"context"

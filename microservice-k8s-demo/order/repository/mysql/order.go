@@ -9,6 +9,15 @@ import (
 	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order/repository"
 )
 
+// As an alternative approach, both the Order and OrderLine tables could be managed within separate repositories,
+// with CRUD operations for each table implemented independently. In this scenario, the service layer (or another coordinating layer)
+// would be responsible for ensuring consistency across operations that affect both tables.
+// This approach can improve modularity and make the codebase easier to maintain, but requires careful coordination at the service level.
+
+// In this case, we are implementing both the Order and OrderLine tables within the same repository.
+// This approach simplifies the management of related data and ensures consistency within the repository itself.
+// While this can reduce the complexity at the service layer, it may result in a larger, more tightly coupled repository.
+
 type orderRepository struct {
 	db *sql.DB
 }

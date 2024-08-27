@@ -20,6 +20,7 @@ import (
 
 	catalog_pb "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/proto"
 	cusotmer_pb "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/customer/proto"
+	order_pb "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order/proto"
 )
 
 func main() {
@@ -81,12 +82,19 @@ func BuildContainer(ctx context.Context, addr string) (*http.Server, error) {
 		log.Critical("Failed to connect to customer service", log.Ferror(err))
 		return nil, err
 	}
+	orderConn, err := grpc.Dial("order-service:8083", grpc.WithInsecure()) //nolint:staticcheck // ignore deprecation
+	if err != nil {
+		log.Critical("Failed to connect to order service", log.Ferror(err))
+		return nil, err
+	}
 
 	catalogClient := catalog_pb.NewCatalogServiceClient(catalogConn)
 	customerClient := cusotmer_pb.NewCustomerServiceClient(customerConn)
+	orderClient := order_pb.NewOrderServiceClient(orderConn)
 
 	catalogHandler := handler.NewCatalogItemHandler(catalogClient)
 	customerHandler := handler.NewCustomerHandler(customerClient)
+	orderHandler := handler.NewOrderHandler(orderClient)
 
 	r := gin.Default()
 
@@ -150,6 +158,13 @@ func BuildContainer(ctx context.Context, addr string) (*http.Server, error) {
 
 			// Delete a customer
 			customer.GET("/delete", customerHandler.DeleteCustomer)
+		}
+	}
+	{
+		order := api.Group("/order")
+		{
+			// Show the form to create a new order
+			order.GET("/create", orderHandler.CreateOrderForm)
 		}
 	}
 

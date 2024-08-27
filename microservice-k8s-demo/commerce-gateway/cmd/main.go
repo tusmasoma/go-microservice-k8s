@@ -165,6 +165,9 @@ func BuildContainer(ctx context.Context, addr string) (*http.Server, error) {
 		{
 			// Show the form to create a new order
 			order.GET("/create", orderHandler.CreateOrderForm)
+			order.POST("/create", func(c *gin.Context) {
+				c.HTML(http.StatusOK, "customer/create.html", nil)
+			})
 		}
 	}
 

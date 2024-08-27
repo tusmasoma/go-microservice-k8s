@@ -32,8 +32,29 @@ func (oh *orderHandler) CreateOrderForm(c *gin.Context) {
 		return
 	}
 
+	customers := make([]CustomerData, 0, len(resp.GetCustomers()))
+	for _, c := range resp.GetCustomers() {
+		customers = append(customers, CustomerData{
+			ID:      c.GetId(),
+			Name:    c.GetName(),
+			Email:   c.GetEmail(),
+			Street:  c.GetStreet(),
+			City:    c.GetCity(),
+			Country: c.GetCountry(),
+		})
+	}
+
+	items := make([]CatalogItemData, 0, len(resp.GetItems()))
+	for _, i := range resp.GetItems() {
+		items = append(items, CatalogItemData{
+			ID:    i.GetId(),
+			Name:  i.GetName(),
+			Price: i.GetPrice(),
+		})
+	}
+
 	c.HTML(http.StatusOK, "order/create.html", gin.H{
-		"Customers": resp.GetCustomers(),
-		"Items":     resp.GetItems(),
+		"Customers": customers,
+		"Items":     items,
 	})
 }

@@ -16,9 +16,13 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
+	catalog_pb "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/proto"
+	cusotmer_pb "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/customer/proto"
 	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order/config"
 	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order/gateway"
 	pb "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order/proto"
+	catalogservice "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order/repository/catalog_service"
+	customerservice "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order/repository/customer_service"
 	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order/repository/mysql"
 	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order/usecase"
 )
@@ -90,6 +94,10 @@ func BuildContainer(ctx context.Context) (*dig.Container, error) {
 		config.NewDBConfig,
 		mysql.NewMySQLDB,
 		mysql.NewOrderRepository,
+		NewCustomerServiceClient,
+		NewCatalogServiceClient,
+		customerservice.NewCustomerRepository,
+		catalogservice.NewCatalogItemRepository,
 		usecase.NewOrderUseCase,
 		gateway.NewOrderHandler,
 	}
@@ -103,4 +111,14 @@ func BuildContainer(ctx context.Context) (*dig.Container, error) {
 
 	log.Info("Container built successfully")
 	return container, nil
+}
+
+func NewCatalogServiceClient() catalog_pb.CatalogServiceClient {
+	conn, _ := grpc.Dial("catalog-service:8082", grpc.WithInsecure()) //nolint:staticcheck // ignore deprecation
+	return catalog_pb.NewCatalogServiceClient(conn)
+}
+
+func NewCustomerServiceClient() cusotmer_pb.CustomerServiceClient {
+	conn, _ := grpc.Dial("customer-service:8081", grpc.WithInsecure()) //nolint:staticcheck // ignore deprecation
+	return cusotmer_pb.NewCustomerServiceClient(conn)
 }

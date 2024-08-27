@@ -25,7 +25,7 @@
             <form action="." method="post" role="form">
                 <div class="form-group">
                     <label for="selectCustomer">Customer</label>
-                    <select name="customerID">
+                    <select name="customer_id">
                         {{range .Customers}}
                         <option value="{{.ID}}">{{ .Name }}</option>
                         {{end}}
@@ -44,7 +44,7 @@
                         <input type="text" name="count" value="1" />
                     </div>
                     <div class="col-xs-2">
-                        <select name="itemId">
+                        <select name="item_id">
                             {{range $.Items}}
                             <option value="{{.ID}}">{{.Name}}</option>
                             {{end}}

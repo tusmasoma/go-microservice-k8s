@@ -11,6 +11,7 @@ import (
 
 type OrderUseCase interface {
 	GetOrderPageData(ctx context.Context) ([]entity.Customer, []entity.CatalogItem, error)
+	CreateOrder(ctx context.Context, params *CreateOrderParams) error
 }
 
 type orderUseCase struct {
@@ -39,4 +40,22 @@ func (ouc *orderUseCase) GetOrderPageData(ctx context.Context) ([]entity.Custome
 		return nil, nil, err
 	}
 	return customers, items, nil
+}
+
+type CreateOrderParams struct {
+	CustomerID string
+	OrderLine  []entity.OrderLine
+}
+
+func (ouc *orderUseCase) CreateOrder(ctx context.Context, params *CreateOrderParams) error {
+	order, err := entity.NewOrder(params.CustomerID, params.OrderLine)
+	if err != nil {
+		log.Error("Failed to create order", log.Ferror(err))
+		return err
+	}
+	if err = ouc.or.Create(ctx, *order); err != nil {
+		log.Error("Failed to create order", log.Ferror(err))
+		return err
+	}
+	return nil
 }

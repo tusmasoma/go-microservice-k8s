@@ -10,6 +10,7 @@ import (
 
 type OrderHandler interface {
 	CreateOrderForm(c *gin.Context)
+	CreateOrder(c *gin.Context)
 }
 
 type orderHandler struct {
@@ -57,4 +58,41 @@ func (oh *orderHandler) CreateOrderForm(c *gin.Context) {
 		"Customers": customers,
 		"Items":     items,
 	})
+}
+
+type CreateOrderRequest struct {
+	CustomerID string `form:"customer_id"`
+	Count      int    `form:"count"`
+	ItemID     string `form:"item_id"`
+}
+
+func (oh *orderHandler) CreateOrder(c *gin.Context) {
+	ctx := c.Request.Context()
+
+	var req CreateOrderRequest
+	if err := c.ShouldBind(&req); err != nil {
+		log.Error("Failed to bind request", log.Ferror(err))
+		c.String(http.StatusBadRequest, "Invalid request")
+		return
+	}
+
+	// 実装を簡単にする為に、一旦、一回のorder作成では一つの商品の注文しかできないようにする
+	// 上記の制約を受けるのはこの関数のみで、実際のorder作成のロジックには影響しない
+	orderLines := []*pb.OrderLine{
+		{
+			Count:  int32(req.Count),
+			ItemId: req.ItemID,
+		},
+	}
+
+	if _, err := oh.client.CreateOrder(ctx, &pb.CreateOrderRequest{
+		CustomerId: req.CustomerID,
+		OrderLines: orderLines,
+	}); err != nil {
+		log.Error("Failed to create order", log.Ferror(err))
+		c.String(http.StatusInternalServerError, "Internal server error")
+		return
+	}
+
+	c.Redirect(http.StatusFound, "/order/list")
 }

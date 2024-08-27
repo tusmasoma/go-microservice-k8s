@@ -10,6 +10,7 @@ import (
 
 	gomock "github.com/golang/mock/gomock"
 	entity "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order/entity"
+	usecase "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order/usecase"
 )
 
 // MockOrderUseCase is a mock of OrderUseCase interface.
@@ -33,6 +34,20 @@ func NewMockOrderUseCase(ctrl *gomock.Controller) *MockOrderUseCase {
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockOrderUseCase) EXPECT() *MockOrderUseCaseMockRecorder {
 	return m.recorder
+}
+
+// CreateOrder mocks base method.
+func (m *MockOrderUseCase) CreateOrder(ctx context.Context, params *usecase.CreateOrderParams) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateOrder", ctx, params)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateOrder indicates an expected call of CreateOrder.
+func (mr *MockOrderUseCaseMockRecorder) CreateOrder(ctx, params interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateOrder", reflect.TypeOf((*MockOrderUseCase)(nil).CreateOrder), ctx, params)
 }
 
 // GetOrderPageData mocks base method.

@@ -36,7 +36,7 @@ func (m *MockOrderRepository) EXPECT() *MockOrderRepositoryMockRecorder {
 }
 
 // Create mocks base method.
-func (m *MockOrderRepository) Create(ctx context.Context, order entity.Order) error {
+func (m *MockOrderRepository) Create(ctx context.Context, order entity.OrderModel) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", ctx, order)
 	ret0, _ := ret[0].(error)
@@ -64,10 +64,10 @@ func (mr *MockOrderRepositoryMockRecorder) Delete(ctx, id interface{}) *gomock.C
 }
 
 // Get mocks base method.
-func (m *MockOrderRepository) Get(ctx context.Context, id string) (*entity.Order, error) {
+func (m *MockOrderRepository) Get(ctx context.Context, id string) (*entity.OrderModel, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Get", ctx, id)
-	ret0, _ := ret[0].(*entity.Order)
+	ret0, _ := ret[0].(*entity.OrderModel)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -79,10 +79,10 @@ func (mr *MockOrderRepositoryMockRecorder) Get(ctx, id interface{}) *gomock.Call
 }
 
 // List mocks base method.
-func (m *MockOrderRepository) List(ctx context.Context) ([]entity.Order, error) {
+func (m *MockOrderRepository) List(ctx context.Context) ([]entity.OrderModel, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", ctx)
-	ret0, _ := ret[0].([]entity.Order)
+	ret0, _ := ret[0].([]entity.OrderModel)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -91,4 +91,98 @@ func (m *MockOrderRepository) List(ctx context.Context) ([]entity.Order, error) 
 func (mr *MockOrderRepositoryMockRecorder) List(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockOrderRepository)(nil).List), ctx)
+}
+
+// MockOrderLineRepository is a mock of OrderLineRepository interface.
+type MockOrderLineRepository struct {
+	ctrl     *gomock.Controller
+	recorder *MockOrderLineRepositoryMockRecorder
+}
+
+// MockOrderLineRepositoryMockRecorder is the mock recorder for MockOrderLineRepository.
+type MockOrderLineRepositoryMockRecorder struct {
+	mock *MockOrderLineRepository
+}
+
+// NewMockOrderLineRepository creates a new mock instance.
+func NewMockOrderLineRepository(ctrl *gomock.Controller) *MockOrderLineRepository {
+	mock := &MockOrderLineRepository{ctrl: ctrl}
+	mock.recorder = &MockOrderLineRepositoryMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockOrderLineRepository) EXPECT() *MockOrderLineRepositoryMockRecorder {
+	return m.recorder
+}
+
+// BatchCreate mocks base method.
+func (m *MockOrderLineRepository) BatchCreate(ctx context.Context, orderLines []entity.OrderLineModel) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "BatchCreate", ctx, orderLines)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// BatchCreate indicates an expected call of BatchCreate.
+func (mr *MockOrderLineRepositoryMockRecorder) BatchCreate(ctx, orderLines interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BatchCreate", reflect.TypeOf((*MockOrderLineRepository)(nil).BatchCreate), ctx, orderLines)
+}
+
+// BatchDelete mocks base method.
+func (m *MockOrderLineRepository) BatchDelete(ctx context.Context, orderID string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "BatchDelete", ctx, orderID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// BatchDelete indicates an expected call of BatchDelete.
+func (mr *MockOrderLineRepositoryMockRecorder) BatchDelete(ctx, orderID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BatchDelete", reflect.TypeOf((*MockOrderLineRepository)(nil).BatchDelete), ctx, orderID)
+}
+
+// Create mocks base method.
+func (m *MockOrderLineRepository) Create(ctx context.Context, orderLine entity.OrderLineModel) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Create", ctx, orderLine)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Create indicates an expected call of Create.
+func (mr *MockOrderLineRepositoryMockRecorder) Create(ctx, orderLine interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockOrderLineRepository)(nil).Create), ctx, orderLine)
+}
+
+// Delete mocks base method.
+func (m *MockOrderLineRepository) Delete(ctx context.Context, orderID, catalogItemID string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Delete", ctx, orderID, catalogItemID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Delete indicates an expected call of Delete.
+func (mr *MockOrderLineRepositoryMockRecorder) Delete(ctx, orderID, catalogItemID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockOrderLineRepository)(nil).Delete), ctx, orderID, catalogItemID)
+}
+
+// List mocks base method.
+func (m *MockOrderLineRepository) List(ctx context.Context, orderID string) ([]entity.OrderLineModel, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "List", ctx, orderID)
+	ret0, _ := ret[0].([]entity.OrderLineModel)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// List indicates an expected call of List.
+func (mr *MockOrderLineRepositoryMockRecorder) List(ctx, orderID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockOrderLineRepository)(nil).List), ctx, orderID)
 }

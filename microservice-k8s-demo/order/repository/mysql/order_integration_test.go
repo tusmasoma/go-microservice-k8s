@@ -14,7 +14,7 @@ import (
 func Test_OrderRepository(t *testing.T) {
 	ctx := context.Background()
 	orderRepo := NewOrderRepository(db)
-	orderLienRepo := NewOrderLineRepository(db)
+	orderLineRepo := NewOrderLineRepository(db)
 
 	order1ID := uuid.New().String()
 	order2ID := uuid.New().String()
@@ -53,10 +53,10 @@ func Test_OrderRepository(t *testing.T) {
 	err = orderRepo.Create(ctx, order2)
 	ValidateErr(t, err, nil)
 
-	err = orderLienRepo.Create(ctx, orderLine3)
+	err = orderLineRepo.Create(ctx, orderLine3)
 	ValidateErr(t, err, nil)
 
-	err = orderLienRepo.BatchCreate(ctx, []entity.OrderLineModel{orderLine1, orderLine2})
+	err = orderLineRepo.BatchCreate(ctx, []entity.OrderLineModel{orderLine1, orderLine2})
 	ValidateErr(t, err, nil)
 
 	// Get
@@ -73,17 +73,17 @@ func Test_OrderRepository(t *testing.T) {
 		t.Errorf("want: 2, got: %d", len(gotOrders))
 	}
 
-	gotOrderLines, err := orderLienRepo.List(ctx, order1.ID)
+	gotOrderLines, err := orderLineRepo.List(ctx, order1.ID)
 	ValidateErr(t, err, nil)
 	if len(gotOrderLines) != 2 {
 		t.Errorf("want: 2, got: %d", len(gotOrderLines))
 	}
 
 	// Delete
-	err = orderLienRepo.Delete(ctx, orderLine3.OrderID, orderLine3.CatalogItemID)
+	err = orderLineRepo.Delete(ctx, orderLine3.OrderID, orderLine3.CatalogItemID)
 	ValidateErr(t, err, nil)
 
-	err = orderLienRepo.BatchDelete(ctx, order1.ID)
+	err = orderLineRepo.BatchDelete(ctx, order1.ID)
 	ValidateErr(t, err, nil)
 
 	err = orderRepo.Delete(ctx, order1.ID)

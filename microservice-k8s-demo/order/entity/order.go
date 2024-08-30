@@ -17,7 +17,7 @@ type Order struct {
 }
 
 type OrderLine struct {
-	Count       int         `json:"count" db:"count"`
+	Count       int         `json:"count"`
 	CatalogItem CatalogItem `json:"catalog_item"`
 }
 

@@ -3,8 +3,8 @@ USE `microservice-k8s-demo-db`;
 
 DROP TABLE IF EXISTS CatalogItems;
 DROP TABLE IF EXISTS Customers;
-DROP TABLE IF EXISTS Orders;
 DROP TABLE IF EXISTS OrderLines;
+DROP TABLE IF EXISTS Orders;
 
 -- CatalogItems Table
 CREATE TABLE CatalogItems (
@@ -27,8 +27,7 @@ CREATE TABLE Customers (
 CREATE TABLE Orders (
     id CHAR(36) PRIMARY KEY,
     customer_id CHAR(36) NOT NULL,
-    order_date TIMESTAMP NOT NULL,
-    FOREIGN KEY (customer_id) REFERENCES Customers(id)
+    order_date TIMESTAMP NOT NULL
 );
 
 -- OrderLines Table

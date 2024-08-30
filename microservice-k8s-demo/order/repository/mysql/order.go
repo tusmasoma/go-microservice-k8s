@@ -34,7 +34,7 @@ func (or *orderRepository) Get(ctx context.Context, id string) (*entity.OrderMod
 	}
 
 	query := `
-	SELECT id, customer_id, date
+	SELECT id, customer_id, order_date
 	FROM Orders
 	WHERE id = ?
 	LIMIT 1
@@ -61,7 +61,7 @@ func (or *orderRepository) List(ctx context.Context) ([]entity.OrderModel, error
 	}
 
 	query := `
-	SELECT id, customer_id, date
+	SELECT id, customer_id, order_date
 	FROM Orders
 	`
 
@@ -97,7 +97,7 @@ func (or *orderRepository) Create(ctx context.Context, order entity.OrderModel) 
 	}
 
 	query := `
-	INSERT INTO Orders (id, customer_id, date)
+	INSERT INTO Orders (id, customer_id, order_date)
 	VALUES (?, ?, ?)
 	`
 	_, err := executor.ExecContext(

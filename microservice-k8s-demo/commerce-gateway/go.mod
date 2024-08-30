@@ -9,7 +9,7 @@ require (
 	github.com/sethvargo/go-envconfig v0.9.0
 	github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog v0.0.0-20240824175103-2d74f731488d
 	github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/customer v0.0.0-20240824175103-2d74f731488d
-	github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order v0.0.0-20240827100013-bc99d75cf2f2
+	github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order v0.0.0-20240830071751-e03793e79b2f
 	github.com/tusmasoma/go-tech-dojo v0.0.0-20240805120803-02e31d5c8a21
 	google.golang.org/grpc v1.65.0
 )

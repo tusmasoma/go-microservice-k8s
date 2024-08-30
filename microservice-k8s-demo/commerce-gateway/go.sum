@@ -84,8 +84,8 @@ github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog v0.0.0-20
 github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog v0.0.0-20240824175103-2d74f731488d/go.mod h1:8seAuBfOGelNua1hCBT7JBFIJPaoVrrz9vz5gqsGTFg=
 github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/customer v0.0.0-20240824175103-2d74f731488d h1:V7pkn7iKr+s3OKSMbr5D6xakuetQRLI+Mnj29u2bxYs=
 github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/customer v0.0.0-20240824175103-2d74f731488d/go.mod h1:yTR2KPXHvPGA1llU1xScrymvuH2TdqtQFXFrh0aeNN0=
-github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order v0.0.0-20240827100013-bc99d75cf2f2 h1:RMXDQ19qkdGtZfJSN3FCO1FUj5MSW1K3huehL4tN/wE=
-github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order v0.0.0-20240827100013-bc99d75cf2f2/go.mod h1:P3+7SoVQrSRoF/iJ4+QgzqowTDTTZjoM1CYtMaLf2lY=
+github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order v0.0.0-20240830071751-e03793e79b2f h1:nk8GCEVYAdBELyzBu+4HDK5X5MWC8IUiNxDDc9WGJwc=
+github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order v0.0.0-20240830071751-e03793e79b2f/go.mod h1:P3+7SoVQrSRoF/iJ4+QgzqowTDTTZjoM1CYtMaLf2lY=
 github.com/tusmasoma/go-tech-dojo v0.0.0-20240805120803-02e31d5c8a21 h1:PqS+hcn9LqAtAlT4smL+La21yitR4EUlJMwRS+sXxbM=
 github.com/tusmasoma/go-tech-dojo v0.0.0-20240805120803-02e31d5c8a21/go.mod h1:mH89EpPULPVXGy2COeSKz3GXGwRmUvqHj7rm24MXjIo=
 github.com/twitchyliquid64/golang-asm v0.15.1 h1:SU5vSMR7hnwNxj24w34ZyCi/FmDZTkS4MhqMhdFk5YI=

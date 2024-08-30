@@ -4,7 +4,9 @@ import (
 	"context"
 	"errors"
 	"net"
+	"reflect"
 	"testing"
+	"time"
 
 	"github.com/golang/mock/gomock"
 	"github.com/google/uuid"
@@ -13,6 +15,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/status"
 	"google.golang.org/grpc/test/bufconn"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order/entity"
 	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order/usecase"
@@ -61,6 +64,114 @@ func setupTestServer(t *testing.T, setup func(m *mock.MockOrderUseCase)) (pb.Ord
 	}
 
 	return client, cleanup
+}
+
+func TestHandler_ListOrders(t *testing.T) {
+	t.Parallel()
+
+	orderID := uuid.New().String()
+	customerID := uuid.New().String()
+	itemID := uuid.New().String()
+
+	date := time.Now()
+
+	customer := entity.Customer{
+		ID:      customerID,
+		Name:    "John Doe",
+		Email:   "john.doe@example.com",
+		Street:  "123 Maple Street",
+		City:    "Springfield",
+		Country: "USA",
+	}
+
+	item := entity.CatalogItem{
+		ID:    itemID,
+		Name:  "item",
+		Price: 1000,
+	}
+
+	order := entity.Order{
+		ID:        orderID,
+		Customer:  customer,
+		OrderDate: date,
+		OrderLines: []entity.OrderLine{
+			{
+				Count:       1,
+				CatalogItem: item,
+			},
+		},
+		TotalPrice: 1000,
+	}
+
+	patterns := []struct {
+		name  string
+		setup func(
+			m *mock.MockOrderUseCase,
+		)
+		request    *pb.ListOrdersRequest
+		wantStatus codes.Code
+		want       []*pb.Order
+	}{
+		{
+			name: "success",
+			setup: func(ouc *mock.MockOrderUseCase) {
+				ouc.EXPECT().ListOrders(
+					gomock.Any(),
+				).Return(
+					[]entity.Order{order},
+					nil,
+				)
+			},
+			request:    &pb.ListOrdersRequest{},
+			wantStatus: codes.OK,
+			want: []*pb.Order{
+				{
+					Id: orderID,
+					Customer: &pb.Customer{
+						Id:      customerID,
+						Name:    "John Doe",
+						Email:   "john.doe@example.com",
+						Street:  "123 Maple Street",
+						City:    "Springfield",
+						Country: "USA",
+					},
+					OrderDate: timestamppb.New(date),
+					OrderLines: []*pb.OrderLine{
+						{
+							Item: &pb.CatalogItem{
+								Id:    itemID,
+								Name:  "item",
+								Price: 1000,
+							},
+							Count: 1,
+						},
+					},
+					TotalPrice: 1000,
+				},
+			},
+		},
+	}
+
+	for _, tt := range patterns {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			client, cleanup := setupTestServer(t, tt.setup)
+			defer cleanup()
+
+			resp, err := client.ListOrders(context.Background(), tt.request)
+			if status.Code(err) != tt.wantStatus {
+				t.Fatalf("handler returned wrong status code: got %v want %v", status.Code(err), tt.wantStatus)
+			}
+
+			if tt.wantStatus == codes.OK {
+				if !reflect.DeepEqual(resp.GetOrders(), tt.want) {
+					t.Errorf("handler returned wrong orders: got %v want %v", resp.GetOrders(), tt.want)
+				}
+			}
+		})
+	}
 }
 
 func TestHandler_GetOrderCreationResources(t *testing.T) {
@@ -170,8 +281,10 @@ func TestHandler_CreateOrder(t *testing.T) {
 				CustomerId: customerID,
 				OrderLines: []*pb.OrderLine{
 					{
-						ItemId: itemID,
-						Count:  1,
+						Item: &pb.CatalogItem{
+							Id: itemID,
+						},
+						Count: 1,
 					},
 				},
 			},

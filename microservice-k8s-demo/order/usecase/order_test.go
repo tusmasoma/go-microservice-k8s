@@ -364,7 +364,7 @@ func TestOrderUseCase_ListOrder(t *testing.T) {
 
 			ouc := NewOrderUseCase(cr, cir, or, olr, os)
 
-			gotOrders, err := ouc.ListOrder(tt.arg.ctx)
+			gotOrders, err := ouc.ListOrders(tt.arg.ctx)
 			if (err != nil) != (tt.want.err != nil) {
 				t.Errorf("ListOrder() error = %v, wantErr %v", err, tt.want.err)
 			} else if err != nil && tt.want.err != nil && err.Error() != tt.want.err.Error() {

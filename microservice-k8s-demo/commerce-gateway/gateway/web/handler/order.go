@@ -80,8 +80,10 @@ func (oh *orderHandler) CreateOrder(c *gin.Context) {
 	// 上記の制約を受けるのはこの関数のみで、実際のorder作成のロジックには影響しない
 	orderLines := []*pb.OrderLine{
 		{
-			Count:  int32(req.Count),
-			ItemId: req.ItemID,
+			Count: int32(req.Count),
+			Item: &pb.CatalogItem{
+				Id: req.ItemID,
+			},
 		},
 	}
 

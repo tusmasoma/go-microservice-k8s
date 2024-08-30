@@ -20,6 +20,7 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
+	OrderService_ListOrders_FullMethodName                = "/order.OrderService/ListOrders"
 	OrderService_GetOrderCreationResources_FullMethodName = "/order.OrderService/GetOrderCreationResources"
 	OrderService_CreateOrder_FullMethodName               = "/order.OrderService/CreateOrder"
 )
@@ -28,6 +29,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type OrderServiceClient interface {
+	ListOrders(ctx context.Context, in *ListOrdersRequest, opts ...grpc.CallOption) (*ListOrdersResponse, error)
 	GetOrderCreationResources(ctx context.Context, in *GetOrderCreationResourcesRequest, opts ...grpc.CallOption) (*GetOrderCreationResourcesResponse, error)
 	CreateOrder(ctx context.Context, in *CreateOrderRequest, opts ...grpc.CallOption) (*CreateOrderResponse, error)
 }
@@ -38,6 +40,15 @@ type orderServiceClient struct {
 
 func NewOrderServiceClient(cc grpc.ClientConnInterface) OrderServiceClient {
 	return &orderServiceClient{cc}
+}
+
+func (c *orderServiceClient) ListOrders(ctx context.Context, in *ListOrdersRequest, opts ...grpc.CallOption) (*ListOrdersResponse, error) {
+	out := new(ListOrdersResponse)
+	err := c.cc.Invoke(ctx, OrderService_ListOrders_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *orderServiceClient) GetOrderCreationResources(ctx context.Context, in *GetOrderCreationResourcesRequest, opts ...grpc.CallOption) (*GetOrderCreationResourcesResponse, error) {
@@ -62,6 +73,7 @@ func (c *orderServiceClient) CreateOrder(ctx context.Context, in *CreateOrderReq
 // All implementations must embed UnimplementedOrderServiceServer
 // for forward compatibility
 type OrderServiceServer interface {
+	ListOrders(context.Context, *ListOrdersRequest) (*ListOrdersResponse, error)
 	GetOrderCreationResources(context.Context, *GetOrderCreationResourcesRequest) (*GetOrderCreationResourcesResponse, error)
 	CreateOrder(context.Context, *CreateOrderRequest) (*CreateOrderResponse, error)
 	mustEmbedUnimplementedOrderServiceServer()
@@ -69,6 +81,10 @@ type OrderServiceServer interface {
 
 // UnimplementedOrderServiceServer must be embedded to have forward compatible implementations.
 type UnimplementedOrderServiceServer struct{}
+
+func (UnimplementedOrderServiceServer) ListOrders(context.Context, *ListOrdersRequest) (*ListOrdersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListOrders not implemented")
+}
 
 func (UnimplementedOrderServiceServer) GetOrderCreationResources(context.Context, *GetOrderCreationResourcesRequest) (*GetOrderCreationResourcesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetOrderCreationResources not implemented")
@@ -88,6 +104,24 @@ type UnsafeOrderServiceServer interface {
 
 func RegisterOrderServiceServer(s grpc.ServiceRegistrar, srv OrderServiceServer) {
 	s.RegisterService(&OrderService_ServiceDesc, srv)
+}
+
+func _OrderService_ListOrders_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListOrdersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrderServiceServer).ListOrders(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: OrderService_ListOrders_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrderServiceServer).ListOrders(ctx, req.(*ListOrdersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _OrderService_GetOrderCreationResources_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -133,6 +167,10 @@ var OrderService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "order.OrderService",
 	HandlerType: (*OrderServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "ListOrders",
+			Handler:    _OrderService_ListOrders_Handler,
+		},
 		{
 			MethodName: "GetOrderCreationResources",
 			Handler:    _OrderService_GetOrderCreationResources_Handler,

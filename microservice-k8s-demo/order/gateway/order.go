@@ -5,9 +5,11 @@ import (
 
 	pb "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order/proto"
 	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order/usecase"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type OrderHandler interface {
+	ListOrders(ctx context.Context, req *pb.ListOrdersRequest) (*pb.ListOrdersResponse, error)
 	GetOrderCreationResources(ctx context.Context, req *pb.GetOrderCreationResourcesRequest) (*pb.GetOrderCreationResourcesResponse, error)
 	CreateOrder(ctx context.Context, req *pb.CreateOrderRequest) (*pb.CreateOrderResponse, error)
 }
@@ -21,6 +23,45 @@ func NewOrderHandler(ouc usecase.OrderUseCase) pb.OrderServiceServer {
 	return &orderHandler{
 		ouc: ouc,
 	}
+}
+
+func (oh *orderHandler) ListOrders(ctx context.Context, _ *pb.ListOrdersRequest) (*pb.ListOrdersResponse, error) {
+	orders, err := oh.ouc.ListOrders(ctx)
+	if err != nil {
+		return nil, err
+	}
+	orderResponses := make([]*pb.Order, 0, len(orders))
+	for _, order := range orders {
+		orderLines := make([]*pb.OrderLine, 0, len(order.OrderLines))
+		for _, ol := range order.OrderLines {
+			orderLines = append(orderLines, &pb.OrderLine{
+				Item: &pb.CatalogItem{
+					Id:    ol.CatalogItem.ID,
+					Name:  ol.CatalogItem.Name,
+					Price: ol.CatalogItem.Price,
+				},
+				Count: int32(ol.Count),
+			})
+		}
+
+		orderResponses = append(orderResponses, &pb.Order{
+			Id: order.ID,
+			Customer: &pb.Customer{
+				Id:      order.Customer.ID,
+				Name:    order.Customer.Name,
+				Email:   order.Customer.Email,
+				Street:  order.Customer.Street,
+				City:    order.Customer.City,
+				Country: order.Customer.Country,
+			},
+			OrderDate:  timestamppb.New(order.OrderDate),
+			OrderLines: orderLines,
+			TotalPrice: order.TotalPrice,
+		})
+	}
+	return &pb.ListOrdersResponse{
+		Orders: orderResponses,
+	}, nil
 }
 
 func (oh *orderHandler) GetOrderCreationResources(ctx context.Context, _ *pb.GetOrderCreationResourcesRequest) (*pb.GetOrderCreationResourcesResponse, error) {
@@ -60,7 +101,7 @@ func (oh *orderHandler) CreateOrder(ctx context.Context, req *pb.CreateOrderRequ
 			CatalogItemID string
 			Count         int
 		}{
-			CatalogItemID: ol.GetItemId(),
+			CatalogItemID: ol.GetItem().GetId(),
 			Count:         int(ol.GetCount()),
 		})
 	}

@@ -13,7 +13,7 @@ import (
 type OrderUseCase interface {
 	GetOrderCreationResources(ctx context.Context) ([]entity.Customer, []entity.CatalogItem, error)
 	GetOrder(ctx context.Context, id string) (*entity.Order, error)
-	ListOrder(ctx context.Context) ([]entity.Order, error)
+	ListOrders(ctx context.Context) ([]entity.Order, error)
 	CreateOrder(ctx context.Context, params *CreateOrderParams) error
 }
 
@@ -97,7 +97,7 @@ func (ouc *orderUseCase) GetOrder(ctx context.Context, id string) (*entity.Order
 	return &order, nil
 }
 
-func (ouc *orderUseCase) ListOrder(ctx context.Context) ([]entity.Order, error) {
+func (ouc *orderUseCase) ListOrders(ctx context.Context) ([]entity.Order, error) {
 	orderModels, err := ouc.or.List(ctx)
 	if err != nil {
 		log.Error("Failed to get orders", log.Ferror(err))

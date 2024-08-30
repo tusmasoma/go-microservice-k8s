@@ -12,6 +12,7 @@ type OrderHandler interface {
 	ListOrders(c *gin.Context)
 	CreateOrderForm(c *gin.Context)
 	CreateOrder(c *gin.Context)
+	DeleteOrder(c *gin.Context)
 }
 
 type orderHandler struct {
@@ -108,6 +109,26 @@ func (oh *orderHandler) CreateOrder(c *gin.Context) {
 		OrderLines: orderLines,
 	}); err != nil {
 		log.Error("Failed to create order", log.Ferror(err))
+		c.String(http.StatusInternalServerError, "Internal server error")
+		return
+	}
+
+	c.Redirect(http.StatusFound, "/order/list")
+}
+
+func (oh *orderHandler) DeleteOrder(c *gin.Context) {
+	ctx := c.Request.Context()
+	id := c.Query("id")
+	if id == "" {
+		log.Warn("ID is required")
+		c.String(http.StatusBadRequest, "Invalid request")
+		return
+	}
+
+	if _, err := oh.client.DeleteOrder(ctx, &pb.DeleteOrderRequest{
+		OrderId: id,
+	}); err != nil {
+		log.Error("Failed to delete order", log.Ferror(err))
 		c.String(http.StatusInternalServerError, "Internal server error")
 		return
 	}

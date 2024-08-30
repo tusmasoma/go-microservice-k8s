@@ -10,6 +10,7 @@ service OrderService {
   rpc ListOrders(ListOrdersRequest) returns (ListOrdersResponse);
   rpc GetOrderCreationResources(GetOrderCreationResourcesRequest) returns (GetOrderCreationResourcesResponse);
   rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
+  rpc DeleteOrder(DeleteOrderRequest) returns (DeleteOrderResponse);
 }
 
 message ListOrdersRequest {}
@@ -31,6 +32,12 @@ message CreateOrderRequest {
 }
 
 message CreateOrderResponse {}
+
+message DeleteOrderRequest {
+    string orderId = 1;
+}
+
+message DeleteOrderResponse {}
 
 message Order {
     string id = 1;

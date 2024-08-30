@@ -483,3 +483,73 @@ func TestOrderUseCase_CreateOrder(t *testing.T) {
 		})
 	}
 }
+
+func TestOrderUseCase_DeleteOrder(t *testing.T) {
+	t.Parallel()
+
+	orderID := uuid.New().String()
+
+	patterns := []struct {
+		name  string
+		setup func(
+			m *repo_mock.MockCustomerRepository,
+			m1 *repo_mock.MockCatalogItemRepository,
+			m2 *repo_mock.MockOrderRepository,
+			m3 *repo_mock.MockOrderLineRepository,
+			m4 *service_mock.MockOrderService,
+		)
+		arg struct {
+			ctx context.Context
+			id  string
+		}
+		wantErr error
+	}{
+		{
+			name: "success",
+			setup: func(
+				cr *repo_mock.MockCustomerRepository,
+				cir *repo_mock.MockCatalogItemRepository,
+				or *repo_mock.MockOrderRepository,
+				olr *repo_mock.MockOrderLineRepository,
+				os *service_mock.MockOrderService,
+			) {
+				os.EXPECT().DeleteOrder(gomock.Any(), orderID).Return(nil)
+			},
+			arg: struct {
+				ctx context.Context
+				id  string
+			}{
+				ctx: context.Background(),
+				id:  orderID,
+			},
+			wantErr: nil,
+		},
+	}
+
+	for _, tt := range patterns {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			ctrl := gomock.NewController(t)
+			cr := repo_mock.NewMockCustomerRepository(ctrl)
+			cir := repo_mock.NewMockCatalogItemRepository(ctrl)
+			or := repo_mock.NewMockOrderRepository(ctrl)
+			olr := repo_mock.NewMockOrderLineRepository(ctrl)
+			os := service_mock.NewMockOrderService(ctrl)
+
+			if tt.setup != nil {
+				tt.setup(cr, cir, or, olr, os)
+			}
+
+			ouc := NewOrderUseCase(cr, cir, or, olr, os)
+
+			err := ouc.DeleteOrder(tt.arg.ctx, tt.arg.id)
+			if (err != nil) != (tt.wantErr != nil) {
+				t.Errorf("DeleteOrder() error = %v, wantErr %v", err, tt.wantErr)
+			} else if err != nil && tt.wantErr != nil && err.Error() != tt.wantErr.Error() {
+				t.Errorf("DeleteOrder() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}

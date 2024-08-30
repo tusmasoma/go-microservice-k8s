@@ -12,6 +12,7 @@ type OrderHandler interface {
 	ListOrders(ctx context.Context, req *pb.ListOrdersRequest) (*pb.ListOrdersResponse, error)
 	GetOrderCreationResources(ctx context.Context, req *pb.GetOrderCreationResourcesRequest) (*pb.GetOrderCreationResourcesResponse, error)
 	CreateOrder(ctx context.Context, req *pb.CreateOrderRequest) (*pb.CreateOrderResponse, error)
+	DeleteOrder(ctx context.Context, req *pb.DeleteOrderRequest) (*pb.DeleteOrderResponse, error)
 }
 
 type orderHandler struct {
@@ -112,4 +113,11 @@ func (oh *orderHandler) CreateOrder(ctx context.Context, req *pb.CreateOrderRequ
 		return nil, err
 	}
 	return &pb.CreateOrderResponse{}, nil
+}
+
+func (oh *orderHandler) DeleteOrder(ctx context.Context, req *pb.DeleteOrderRequest) (*pb.DeleteOrderResponse, error) {
+	if err := oh.ouc.DeleteOrder(ctx, req.GetOrderId()); err != nil {
+		return nil, err
+	}
+	return &pb.DeleteOrderResponse{}, nil
 }

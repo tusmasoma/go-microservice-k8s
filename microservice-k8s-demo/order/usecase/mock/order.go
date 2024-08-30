@@ -50,6 +50,20 @@ func (mr *MockOrderUseCaseMockRecorder) CreateOrder(ctx, params interface{}) *go
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateOrder", reflect.TypeOf((*MockOrderUseCase)(nil).CreateOrder), ctx, params)
 }
 
+// DeleteOrder mocks base method.
+func (m *MockOrderUseCase) DeleteOrder(ctx context.Context, id string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteOrder", ctx, id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteOrder indicates an expected call of DeleteOrder.
+func (mr *MockOrderUseCaseMockRecorder) DeleteOrder(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteOrder", reflect.TypeOf((*MockOrderUseCase)(nil).DeleteOrder), ctx, id)
+}
+
 // GetOrder mocks base method.
 func (m *MockOrderUseCase) GetOrder(ctx context.Context, id string) (*entity.Order, error) {
 	m.ctrl.T.Helper()

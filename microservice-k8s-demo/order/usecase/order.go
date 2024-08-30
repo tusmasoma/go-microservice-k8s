@@ -15,6 +15,7 @@ type OrderUseCase interface {
 	GetOrder(ctx context.Context, id string) (*entity.Order, error)
 	ListOrders(ctx context.Context) ([]entity.Order, error)
 	CreateOrder(ctx context.Context, params *CreateOrderParams) error
+	DeleteOrder(ctx context.Context, id string) error
 }
 
 type orderUseCase struct {
@@ -182,6 +183,14 @@ func (ouc *orderUseCase) CreateOrder(ctx context.Context, params *CreateOrderPar
 	}
 	if err = ouc.os.CreateOrder(ctx, *order); err != nil {
 		log.Error("Failed to create order", log.Ferror(err))
+		return err
+	}
+	return nil
+}
+
+func (ouc *orderUseCase) DeleteOrder(ctx context.Context, id string) error {
+	if err := ouc.os.DeleteOrder(ctx, id); err != nil {
+		log.Error("Failed to delete order", log.Ferror(err))
 		return err
 	}
 	return nil

@@ -42,8 +42,8 @@
                                 <td>{{.Customer.Name}}</td>
                                 <td>{{.TotalPrice}}</td>
                                 <td>
-                                    <form action="/order/{{.Id}}" method="post">
-                                        <input type="hidden" name="_method" value="delete">
+                                    <form action="/order/delete" method="GET">
+                                        <input type="hidden" name="id" value="{{ .Id }}" />
                                         <input type="submit" value="delete" class="btn btn-link" />
                                     </form>
                                 </td>

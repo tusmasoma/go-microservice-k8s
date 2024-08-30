@@ -171,6 +171,9 @@ func BuildContainer(ctx context.Context, addr string) (*http.Server, error) {
 
 			// Process the form submission to create a new order
 			order.POST("/create", orderHandler.CreateOrder)
+
+			// Delete an order
+			order.GET("/delete", orderHandler.DeleteOrder)
 		}
 	}
 

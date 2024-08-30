@@ -307,3 +307,47 @@ func TestHandler_CreateOrder(t *testing.T) {
 		})
 	}
 }
+
+func TestHandler_DeleteOrder(t *testing.T) {
+	t.Parallel()
+
+	orderID := uuid.New().String()
+
+	patterns := []struct {
+		name  string
+		setup func(
+			m *mock.MockOrderUseCase,
+		)
+		request    *pb.DeleteOrderRequest
+		wantStatus codes.Code
+	}{
+		{
+			name: "success",
+			setup: func(ouc *mock.MockOrderUseCase) {
+				ouc.EXPECT().DeleteOrder(
+					gomock.Any(),
+					orderID,
+				).Return(nil)
+			},
+			request: &pb.DeleteOrderRequest{
+				OrderId: orderID,
+			},
+			wantStatus: codes.OK,
+		},
+	}
+
+	for _, tt := range patterns {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			client, cleanup := setupTestServer(t, tt.setup)
+			defer cleanup()
+
+			_, err := client.DeleteOrder(context.Background(), tt.request)
+			if status.Code(err) != tt.wantStatus {
+				t.Fatalf("handler returned wrong status code: got %v want %v", status.Code(err), tt.wantStatus)
+			}
+		})
+	}
+}

@@ -782,6 +782,7 @@ var (
 		(*timestamppb.Timestamp)(nil),             // 12: google.protobuf.Timestamp
 	}
 )
+
 var file_proto_order_proto_depIdxs = []int32{
 	8,  // 0: order.ListOrdersResponse.orders:type_name -> order.Order
 	10, // 1: order.GetOrderCreationResourcesResponse.customers:type_name -> order.Customer

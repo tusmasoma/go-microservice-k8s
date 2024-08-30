@@ -9,6 +9,7 @@ import (
 )
 
 type OrderHandler interface {
+	ListOrders(c *gin.Context)
 	CreateOrderForm(c *gin.Context)
 	CreateOrder(c *gin.Context)
 }
@@ -21,6 +22,21 @@ func NewOrderHandler(client pb.OrderServiceClient) OrderHandler {
 	return &orderHandler{
 		client: client,
 	}
+}
+
+func (oh *orderHandler) ListOrders(c *gin.Context) {
+	ctx := c.Request.Context()
+
+	resp, err := oh.client.ListOrders(ctx, &pb.ListOrdersRequest{})
+	if err != nil {
+		log.Error("Failed to get order list", log.Ferror(err))
+		c.String(http.StatusInternalServerError, "Internal server error")
+		return
+	}
+
+	c.HTML(http.StatusOK, "order/list.html", gin.H{
+		"Orders": resp.GetOrders(),
+	})
 }
 
 func (oh *orderHandler) CreateOrderForm(c *gin.Context) {

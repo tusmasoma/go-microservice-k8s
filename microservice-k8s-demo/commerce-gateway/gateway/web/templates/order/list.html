@@ -1,0 +1,64 @@
+{{ define "order/list.html" }}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Order : Add</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" />
+    <style type="text/css">
+        .navbar ul { list-style: none; display: inline-block; padding: 0; }
+        .navbar ul li { display: inline-block; padding-right: .5em; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="navbar">
+            <ul class="navbar-inner">
+                <li><a class="brand" href="/">Home</a></li>
+                <li><a class="brand" href="/order/list">List</a></li>
+            </ul>
+        </div>
+        <h1>Order : View all</h1>
+        <div class="container">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <td>ID</td>
+                        <td>Customer</td>
+                        <td>Total Price</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{if not .Orders}}
+                        <tr>
+                            <td colspan="4">No orders</td>
+                        </tr>
+                    {{else}}
+                        {{range .Orders}}
+                            <tr>
+                                <td><a href="/order/{{.Id}}">{{.Id}}</a></td>
+                                <td>{{.Customer.Name}}</td>
+                                <td>{{.TotalPrice}}</td>
+                                <td>
+                                    <form action="/order/{{.Id}}" method="post">
+                                        <input type="hidden" name="_method" value="delete">
+                                        <input type="submit" value="delete" class="btn btn-link" />
+                                    </form>
+                                </td>
+                            </tr>
+                        {{end}}
+                    {{end}}
+                </tbody>
+            </table>
+            <div class="row">
+                <div class="col-md-4">
+                    <a href="/order/create">Add Order</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+{{end}}

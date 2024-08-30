@@ -163,11 +163,14 @@ func BuildContainer(ctx context.Context, addr string) (*http.Server, error) {
 	{
 		order := api.Group("/order")
 		{
+			// List all orders
+			order.GET("/list", orderHandler.ListOrders)
+
 			// Show the form to create a new order
 			order.GET("/create", orderHandler.CreateOrderForm)
-			order.POST("/create", func(c *gin.Context) {
-				c.HTML(http.StatusOK, "customer/create.html", nil)
-			})
+
+			// Process the form submission to create a new order
+			order.POST("/create", orderHandler.CreateOrder)
 		}
 	}
 

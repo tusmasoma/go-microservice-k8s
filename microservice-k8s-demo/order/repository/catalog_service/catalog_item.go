@@ -19,6 +19,21 @@ func NewCatalogItemRepository(client pb.CatalogServiceClient) repository.Catalog
 	}
 }
 
+func (r *catalogItemRepository) Get(ctx context.Context, id string) (*entity.CatalogItem, error) {
+	resp, err := r.client.GetCatalogItem(ctx, &pb.GetCatalogItemRequest{Id: id})
+	if err != nil {
+		return nil, err
+	}
+
+	item := entity.CatalogItem{
+		ID:    resp.GetItem().GetId(),
+		Name:  resp.GetItem().GetName(),
+		Price: resp.GetItem().GetPrice(),
+	}
+
+	return &item, err
+}
+
 func (r *catalogItemRepository) List(ctx context.Context) ([]entity.CatalogItem, error) {
 	resp, err := r.client.ListCatalogItems(ctx, &pb.ListCatalogItemsRequest{})
 	if err != nil {

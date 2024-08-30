@@ -63,6 +63,21 @@ func (mr *MockCustomerRepositoryMockRecorder) Delete(ctx, id interface{}) *gomoc
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockCustomerRepository)(nil).Delete), ctx, id)
 }
 
+// Get mocks base method.
+func (m *MockCustomerRepository) Get(ctx context.Context, id string) (*entity.Customer, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Get", ctx, id)
+	ret0, _ := ret[0].(*entity.Customer)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Get indicates an expected call of Get.
+func (mr *MockCustomerRepositoryMockRecorder) Get(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockCustomerRepository)(nil).Get), ctx, id)
+}
+
 // List mocks base method.
 func (m *MockCustomerRepository) List(ctx context.Context) ([]entity.Customer, error) {
 	m.ctrl.T.Helper()

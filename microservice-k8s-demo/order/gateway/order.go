@@ -3,13 +3,12 @@ package gateway
 import (
 	"context"
 
-	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order/entity"
 	pb "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order/proto"
 	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order/usecase"
 )
 
 type OrderHandler interface {
-	GetOrderPageData(ctx context.Context, req *pb.GetOrderPageDataRequest) (*pb.GetOrderPageDataResponse, error)
+	GetOrderCreationResources(ctx context.Context, req *pb.GetOrderCreationResourcesRequest) (*pb.GetOrderCreationResourcesResponse, error)
 	CreateOrder(ctx context.Context, req *pb.CreateOrderRequest) (*pb.CreateOrderResponse, error)
 }
 
@@ -24,8 +23,8 @@ func NewOrderHandler(ouc usecase.OrderUseCase) pb.OrderServiceServer {
 	}
 }
 
-func (oh *orderHandler) GetOrderPageData(ctx context.Context, _ *pb.GetOrderPageDataRequest) (*pb.GetOrderPageDataResponse, error) {
-	customers, items, err := oh.ouc.GetOrderPageData(ctx)
+func (oh *orderHandler) GetOrderCreationResources(ctx context.Context, _ *pb.GetOrderCreationResourcesRequest) (*pb.GetOrderCreationResourcesResponse, error) {
+	customers, items, err := oh.ouc.GetOrderCreationResources(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -44,18 +43,25 @@ func (oh *orderHandler) GetOrderPageData(ctx context.Context, _ *pb.GetOrderPage
 			Price: item.Price,
 		})
 	}
-	return &pb.GetOrderPageDataResponse{
+	return &pb.GetOrderCreationResourcesResponse{
 		Customers: customerResponses,
 		Items:     itemResponses,
 	}, nil
 }
 
 func (oh *orderHandler) CreateOrder(ctx context.Context, req *pb.CreateOrderRequest) (*pb.CreateOrderResponse, error) {
-	orderLines := make([]entity.OrderLine, 0, len(req.GetOrderLines()))
+	orderLines := make([]struct {
+		CatalogItemID string
+		Count         int
+	}, 0, len(req.GetOrderLines()))
+
 	for _, ol := range req.GetOrderLines() {
-		orderLines = append(orderLines, entity.OrderLine{
-			Count:         int(ol.GetCount()),
+		orderLines = append(orderLines, struct {
+			CatalogItemID string
+			Count         int
+		}{
 			CatalogItemID: ol.GetItemId(),
+			Count:         int(ol.GetCount()),
 		})
 	}
 	if err := oh.ouc.CreateOrder(ctx, &usecase.CreateOrderParams{

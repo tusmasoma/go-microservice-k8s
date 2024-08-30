@@ -50,18 +50,48 @@ func (mr *MockOrderUseCaseMockRecorder) CreateOrder(ctx, params interface{}) *go
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateOrder", reflect.TypeOf((*MockOrderUseCase)(nil).CreateOrder), ctx, params)
 }
 
-// GetOrderPageData mocks base method.
-func (m *MockOrderUseCase) GetOrderPageData(ctx context.Context) ([]entity.Customer, []entity.CatalogItem, error) {
+// GetOrder mocks base method.
+func (m *MockOrderUseCase) GetOrder(ctx context.Context, id string) (*entity.Order, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetOrderPageData", ctx)
+	ret := m.ctrl.Call(m, "GetOrder", ctx, id)
+	ret0, _ := ret[0].(*entity.Order)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetOrder indicates an expected call of GetOrder.
+func (mr *MockOrderUseCaseMockRecorder) GetOrder(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetOrder", reflect.TypeOf((*MockOrderUseCase)(nil).GetOrder), ctx, id)
+}
+
+// GetOrderCreationResources mocks base method.
+func (m *MockOrderUseCase) GetOrderCreationResources(ctx context.Context) ([]entity.Customer, []entity.CatalogItem, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetOrderCreationResources", ctx)
 	ret0, _ := ret[0].([]entity.Customer)
 	ret1, _ := ret[1].([]entity.CatalogItem)
 	ret2, _ := ret[2].(error)
 	return ret0, ret1, ret2
 }
 
-// GetOrderPageData indicates an expected call of GetOrderPageData.
-func (mr *MockOrderUseCaseMockRecorder) GetOrderPageData(ctx interface{}) *gomock.Call {
+// GetOrderCreationResources indicates an expected call of GetOrderCreationResources.
+func (mr *MockOrderUseCaseMockRecorder) GetOrderCreationResources(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetOrderPageData", reflect.TypeOf((*MockOrderUseCase)(nil).GetOrderPageData), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetOrderCreationResources", reflect.TypeOf((*MockOrderUseCase)(nil).GetOrderCreationResources), ctx)
+}
+
+// ListOrder mocks base method.
+func (m *MockOrderUseCase) ListOrder(ctx context.Context) ([]entity.Order, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListOrder", ctx)
+	ret0, _ := ret[0].([]entity.Order)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListOrder indicates an expected call of ListOrder.
+func (mr *MockOrderUseCaseMockRecorder) ListOrder(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListOrder", reflect.TypeOf((*MockOrderUseCase)(nil).ListOrder), ctx)
 }

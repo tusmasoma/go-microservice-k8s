@@ -20,15 +20,15 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	OrderService_GetOrderPageData_FullMethodName = "/order.OrderService/GetOrderPageData"
-	OrderService_CreateOrder_FullMethodName      = "/order.OrderService/CreateOrder"
+	OrderService_GetOrderCreationResources_FullMethodName = "/order.OrderService/GetOrderCreationResources"
+	OrderService_CreateOrder_FullMethodName               = "/order.OrderService/CreateOrder"
 )
 
 // OrderServiceClient is the client API for OrderService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type OrderServiceClient interface {
-	GetOrderPageData(ctx context.Context, in *GetOrderPageDataRequest, opts ...grpc.CallOption) (*GetOrderPageDataResponse, error)
+	GetOrderCreationResources(ctx context.Context, in *GetOrderCreationResourcesRequest, opts ...grpc.CallOption) (*GetOrderCreationResourcesResponse, error)
 	CreateOrder(ctx context.Context, in *CreateOrderRequest, opts ...grpc.CallOption) (*CreateOrderResponse, error)
 }
 
@@ -40,9 +40,9 @@ func NewOrderServiceClient(cc grpc.ClientConnInterface) OrderServiceClient {
 	return &orderServiceClient{cc}
 }
 
-func (c *orderServiceClient) GetOrderPageData(ctx context.Context, in *GetOrderPageDataRequest, opts ...grpc.CallOption) (*GetOrderPageDataResponse, error) {
-	out := new(GetOrderPageDataResponse)
-	err := c.cc.Invoke(ctx, OrderService_GetOrderPageData_FullMethodName, in, out, opts...)
+func (c *orderServiceClient) GetOrderCreationResources(ctx context.Context, in *GetOrderCreationResourcesRequest, opts ...grpc.CallOption) (*GetOrderCreationResourcesResponse, error) {
+	out := new(GetOrderCreationResourcesResponse)
+	err := c.cc.Invoke(ctx, OrderService_GetOrderCreationResources_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +62,7 @@ func (c *orderServiceClient) CreateOrder(ctx context.Context, in *CreateOrderReq
 // All implementations must embed UnimplementedOrderServiceServer
 // for forward compatibility
 type OrderServiceServer interface {
-	GetOrderPageData(context.Context, *GetOrderPageDataRequest) (*GetOrderPageDataResponse, error)
+	GetOrderCreationResources(context.Context, *GetOrderCreationResourcesRequest) (*GetOrderCreationResourcesResponse, error)
 	CreateOrder(context.Context, *CreateOrderRequest) (*CreateOrderResponse, error)
 	mustEmbedUnimplementedOrderServiceServer()
 }
@@ -70,8 +70,8 @@ type OrderServiceServer interface {
 // UnimplementedOrderServiceServer must be embedded to have forward compatible implementations.
 type UnimplementedOrderServiceServer struct{}
 
-func (UnimplementedOrderServiceServer) GetOrderPageData(context.Context, *GetOrderPageDataRequest) (*GetOrderPageDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetOrderPageData not implemented")
+func (UnimplementedOrderServiceServer) GetOrderCreationResources(context.Context, *GetOrderCreationResourcesRequest) (*GetOrderCreationResourcesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetOrderCreationResources not implemented")
 }
 
 func (UnimplementedOrderServiceServer) CreateOrder(context.Context, *CreateOrderRequest) (*CreateOrderResponse, error) {
@@ -90,20 +90,20 @@ func RegisterOrderServiceServer(s grpc.ServiceRegistrar, srv OrderServiceServer)
 	s.RegisterService(&OrderService_ServiceDesc, srv)
 }
 
-func _OrderService_GetOrderPageData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetOrderPageDataRequest)
+func _OrderService_GetOrderCreationResources_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetOrderCreationResourcesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(OrderServiceServer).GetOrderPageData(ctx, in)
+		return srv.(OrderServiceServer).GetOrderCreationResources(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: OrderService_GetOrderPageData_FullMethodName,
+		FullMethod: OrderService_GetOrderCreationResources_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OrderServiceServer).GetOrderPageData(ctx, req.(*GetOrderPageDataRequest))
+		return srv.(OrderServiceServer).GetOrderCreationResources(ctx, req.(*GetOrderCreationResourcesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -134,8 +134,8 @@ var OrderService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*OrderServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetOrderPageData",
-			Handler:    _OrderService_GetOrderPageData_Handler,
+			MethodName: "GetOrderCreationResources",
+			Handler:    _OrderService_GetOrderCreationResources_Handler,
 		},
 		{
 			MethodName: "CreateOrder",

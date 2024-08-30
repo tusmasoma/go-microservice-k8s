@@ -5,13 +5,13 @@ package order;
 option go_package = "proto/";
 
 service OrderService {
-  rpc GetOrderPageData(GetOrderPageDataRequest) returns (GetOrderPageDataResponse);
+  rpc GetOrderCreationResources(GetOrderCreationResourcesRequest) returns (GetOrderCreationResourcesResponse);
   rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
 }
 
-message GetOrderPageDataRequest {}
+message GetOrderCreationResourcesRequest {}
 
-message GetOrderPageDataResponse {
+message GetOrderCreationResourcesResponse {
     repeated Customer customers = 1;
     repeated CatalogItem items = 2;
 }

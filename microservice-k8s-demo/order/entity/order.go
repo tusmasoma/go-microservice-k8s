@@ -1,7 +1,10 @@
 package entity
 
 import (
+	"errors"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 // domain model
@@ -10,6 +13,7 @@ type Order struct {
 	Customer   Customer    `json:"customer"`
 	OrderDate  time.Time   `json:"order_date" db:"date"`
 	OrderLines []OrderLine `json:"order_lines"`
+	TotalPrice float64     `json:"total_price"`
 }
 
 type OrderLine struct {
@@ -30,31 +34,39 @@ type OrderLineModel struct {
 	Count         int    `json:"count" db:"count"`
 }
 
-// func NewOrder(customerID string, orderLines []OrderLine) (*Order, error) {
-// 	if customerID == "" {
-// 		return nil, errors.New("customerID is required")
-// 	}
-// 	if len(orderLines) == 0 {
-// 		return nil, errors.New("orderLines is required")
-// 	}
-// 	for _, ol := range orderLines {
-// 		if ol.Count <= 0 {
-// 			return nil, errors.New("count must be greater than 0")
-// 		}
-// 		if ol.CatalogItemID == "" {
-// 			return nil, errors.New("catalogItemID is required")
-// 		}
-// 	}
-// 	return &Order{
-// 		ID:         uuid.New().String(),
-// 		CustomerID: customerID,
-// 		OrderDate:  time.Now(),
-// 		OrderLines: orderLines,
-// 	}, nil
-// }
+func NewOrder(customer Customer, orderLines []OrderLine) (*Order, error) {
+	if customer.ID == "" {
+		return nil, errors.New("customerID is required")
+	}
+	if len(orderLines) == 0 {
+		return nil, errors.New("orderLines is required")
+	}
+	order := &Order{
+		ID:         uuid.New().String(),
+		Customer:   customer,
+		OrderDate:  time.Now(),
+		OrderLines: orderLines,
+	}
 
-func (o *Order) TotalPrice() float64 {
-	var total float64 = 0
+	order.TotalPrice = order.GetTotalPrice()
+	return order, nil
+}
+
+func NewOrderLine(count int, item CatalogItem) (*OrderLine, error) {
+	if count <= 0 {
+		return nil, errors.New("count must be greater than 0")
+	}
+	if item.ID == "" {
+		return nil, errors.New("catalogItemID is required")
+	}
+	return &OrderLine{
+		Count:       count,
+		CatalogItem: item,
+	}, nil
+}
+
+func (o *Order) GetTotalPrice() float64 {
+	var total float64
 	for _, ol := range o.OrderLines {
 		total += ol.CatalogItem.Price * float64(ol.Count)
 	}

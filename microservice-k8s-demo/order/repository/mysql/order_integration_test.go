@@ -19,8 +19,6 @@ func Test_OrderRepository(t *testing.T) {
 	order1ID := uuid.New().String()
 	order2ID := uuid.New().String()
 
-	t.Skip()
-
 	orderLine1 := entity.OrderLineModel{
 		OrderID:       order1ID,
 		CatalogItemID: uuid.New().String(),

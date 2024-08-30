@@ -63,6 +63,21 @@ func (mr *MockCatalogItemRepositoryMockRecorder) Delete(ctx, id interface{}) *go
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockCatalogItemRepository)(nil).Delete), ctx, id)
 }
 
+// Get mocks base method.
+func (m *MockCatalogItemRepository) Get(ctx context.Context, id string) (*entity.CatalogItem, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Get", ctx, id)
+	ret0, _ := ret[0].(*entity.CatalogItem)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Get indicates an expected call of Get.
+func (mr *MockCatalogItemRepositoryMockRecorder) Get(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockCatalogItemRepository)(nil).Get), ctx, id)
+}
+
 // List mocks base method.
 func (m *MockCatalogItemRepository) List(ctx context.Context) ([]entity.CatalogItem, error) {
 	m.ctrl.T.Helper()

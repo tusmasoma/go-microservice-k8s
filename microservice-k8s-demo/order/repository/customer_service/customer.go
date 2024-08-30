@@ -19,6 +19,24 @@ func NewCustomerRepository(client pb.CustomerServiceClient) repository.CustomerR
 	}
 }
 
+func (r *customerRepository) Get(ctx context.Context, id string) (*entity.Customer, error) {
+	resp, err := r.client.GetCustomer(ctx, &pb.GetCustomerRequest{Id: id})
+	if err != nil {
+		return nil, err
+	}
+
+	customer := entity.Customer{
+		ID:      resp.GetCustomer().GetId(),
+		Name:    resp.GetCustomer().GetName(),
+		Email:   resp.GetCustomer().GetEmail(),
+		Street:  resp.GetCustomer().GetStreet(),
+		City:    resp.GetCustomer().GetCity(),
+		Country: resp.GetCustomer().GetCountry(),
+	}
+
+	return &customer, err
+}
+
 func (r *customerRepository) List(ctx context.Context) ([]entity.Customer, error) {
 	resp, err := r.client.ListCustomers(ctx, &pb.ListCustomersRequest{})
 	if err != nil {

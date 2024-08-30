@@ -232,7 +232,7 @@ func (olr *orderLineRepository) Delete(ctx context.Context, orderID, catalogItem
 	DELETE FROM OrderLines WHERE order_id = ? AND catalog_item_id = ?
 	`
 
-	if _, err := executor.ExecContext(ctx, query, orderID); err != nil {
+	if _, err := executor.ExecContext(ctx, query, orderID, catalogItemID); err != nil {
 		return err
 	}
 	return nil

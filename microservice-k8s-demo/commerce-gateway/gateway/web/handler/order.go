@@ -26,7 +26,7 @@ func NewOrderHandler(client pb.OrderServiceClient) OrderHandler {
 func (oh *orderHandler) CreateOrderForm(c *gin.Context) {
 	ctx := c.Request.Context()
 
-	resp, err := oh.client.GetOrderPageData(ctx, &pb.GetOrderPageDataRequest{})
+	resp, err := oh.client.GetOrderCreationResources(ctx, &pb.GetOrderCreationResourcesRequest{})
 	if err != nil {
 		log.Error("Failed to get order page data", log.Ferror(err))
 		c.String(http.StatusInternalServerError, "Internal server error")

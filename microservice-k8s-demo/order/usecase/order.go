@@ -162,7 +162,7 @@ func (ouc *orderUseCase) CreateOrder(ctx context.Context, params *CreateOrderPar
 
 	var orderLiens []entity.OrderLine
 	for _, ol := range params.OrderLine {
-		item, err := ouc.cir.Get(ctx, ol.CatalogItemID)
+		item, err := ouc.cir.Get(ctx, ol.CatalogItemID) //nolint:govet // err shadow
 		if err != nil {
 			log.Error("Failed to get catalog item", log.Ferror(err))
 			return err

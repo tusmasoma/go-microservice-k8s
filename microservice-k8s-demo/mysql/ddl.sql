@@ -37,6 +37,5 @@ CREATE TABLE OrderLines (
     catalog_item_id CHAR(36) NOT NULL,
     count INT NOT NULL,
     PRIMARY KEY (order_id, catalog_item_id),
-    FOREIGN KEY (order_id) REFERENCES Orders(id),
-    FOREIGN KEY (catalog_item_id) REFERENCES CatalogItems(id)
+    FOREIGN KEY (order_id) REFERENCES Orders(id)
 );

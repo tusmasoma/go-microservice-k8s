@@ -9,9 +9,9 @@ import (
 
 // domain model
 type Order struct {
-	ID         string      `json:"id" db:"id"`
+	ID         string      `json:"id"`
 	Customer   Customer    `json:"customer"`
-	OrderDate  time.Time   `json:"order_date" db:"date"`
+	OrderDate  time.Time   `json:"order_date"`
 	OrderLines []OrderLine `json:"order_lines"`
 	TotalPrice float64     `json:"total_price"`
 }
@@ -25,7 +25,7 @@ type OrderLine struct {
 type OrderModel struct {
 	ID         string    `json:"id" db:"id"`
 	CustomerID string    `json:"customer_id" db:"customer_id"`
-	OrderDate  time.Time `json:"order_date" db:"date"`
+	OrderDate  time.Time `json:"order_date" db:"order_date"`
 }
 
 type OrderLineModel struct {

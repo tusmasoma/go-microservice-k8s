@@ -1,3 +1,4 @@
+//go:generate mockgen -source=$GOFILE -package=mock -destination=./mock/$GOFILE
 package service
 
 import (
@@ -15,23 +16,17 @@ type OrderService interface {
 type orderService struct {
 	or  repository.OrderRepository
 	olr repository.OrderLineRepository
-	cir repository.CatalogItemRepository
-	cr  repository.CustomerRepository
 	tr  repository.TransactionRepository
 }
 
 func NewOrderService(
 	or repository.OrderRepository,
 	olr repository.OrderLineRepository,
-	cir repository.CatalogItemRepository,
-	cr repository.CustomerRepository,
 	tr repository.TransactionRepository,
 ) OrderService {
 	return &orderService{
 		or:  or,
 		olr: olr,
-		cir: cir,
-		cr:  cr,
 		tr:  tr,
 	}
 }

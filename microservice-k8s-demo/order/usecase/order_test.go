@@ -10,7 +10,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order/entity"
 	repo_mock "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order/repository/mock"
-	service_mock "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order/service/mock"
 )
 
 func TestOrderUseCase_GetOrderCreationResources(t *testing.T) {
@@ -37,8 +36,6 @@ func TestOrderUseCase_GetOrderCreationResources(t *testing.T) {
 			m *repo_mock.MockCustomerRepository,
 			m1 *repo_mock.MockCatalogItemRepository,
 			m2 *repo_mock.MockOrderRepository,
-			m3 *repo_mock.MockOrderLineRepository,
-			m4 *service_mock.MockOrderService,
 		)
 		arg struct {
 			ctx context.Context
@@ -55,8 +52,6 @@ func TestOrderUseCase_GetOrderCreationResources(t *testing.T) {
 				cr *repo_mock.MockCustomerRepository,
 				cir *repo_mock.MockCatalogItemRepository,
 				or *repo_mock.MockOrderRepository,
-				olr *repo_mock.MockOrderLineRepository,
-				os *service_mock.MockOrderService,
 			) {
 				cr.EXPECT().List(gomock.Any()).Return(customers, nil)
 				cir.EXPECT().List(gomock.Any()).Return(items, nil)
@@ -87,14 +82,12 @@ func TestOrderUseCase_GetOrderCreationResources(t *testing.T) {
 			cr := repo_mock.NewMockCustomerRepository(ctrl)
 			cir := repo_mock.NewMockCatalogItemRepository(ctrl)
 			or := repo_mock.NewMockOrderRepository(ctrl)
-			olr := repo_mock.NewMockOrderLineRepository(ctrl)
-			os := service_mock.NewMockOrderService(ctrl)
 
 			if tt.setup != nil {
-				tt.setup(cr, cir, or, olr, os)
+				tt.setup(cr, cir, or)
 			}
 
-			ouc := NewOrderUseCase(cr, cir, or, olr, os)
+			ouc := NewOrderUseCase(cr, cir, or)
 
 			gotCustomers, gotItems, err := ouc.GetOrderCreationResources(tt.arg.ctx)
 			if (err != nil) != (tt.want.err != nil) {
@@ -147,8 +140,6 @@ func TestOrderUseCase_GetOrder(t *testing.T) {
 			m *repo_mock.MockCustomerRepository,
 			m1 *repo_mock.MockCatalogItemRepository,
 			m2 *repo_mock.MockOrderRepository,
-			m3 *repo_mock.MockOrderLineRepository,
-			m4 *service_mock.MockOrderService,
 		)
 		arg struct {
 			ctx context.Context
@@ -165,25 +156,21 @@ func TestOrderUseCase_GetOrder(t *testing.T) {
 				cr *repo_mock.MockCustomerRepository,
 				cir *repo_mock.MockCatalogItemRepository,
 				or *repo_mock.MockOrderRepository,
-				olr *repo_mock.MockOrderLineRepository,
-				os *service_mock.MockOrderService,
 			) {
 				or.EXPECT().Get(gomock.Any(), orderID).Return(
-					&entity.OrderModel{
-						ID:         orderID,
-						CustomerID: customerID,
-						OrderDate:  orderDate,
+					&entity.Order{
+						ID:        orderID,
+						Customer:  entity.Customer{ID: customerID},
+						OrderDate: orderDate,
+						OrderLines: []entity.OrderLine{
+							{
+								CatalogItem: entity.CatalogItem{ID: catalogItemID},
+								Count:       1,
+							},
+						},
 					},
 					nil,
 				)
-				olr.EXPECT().List(gomock.Any(), orderID).Return(
-					[]entity.OrderLineModel{
-						{
-							OrderID:       orderID,
-							CatalogItemID: catalogItemID,
-							Count:         1,
-						},
-					}, nil)
 				cr.EXPECT().Get(gomock.Any(), customerID).Return(
 					&entity.Customer{
 						ID:   customerID,
@@ -222,14 +209,12 @@ func TestOrderUseCase_GetOrder(t *testing.T) {
 			cr := repo_mock.NewMockCustomerRepository(ctrl)
 			cir := repo_mock.NewMockCatalogItemRepository(ctrl)
 			or := repo_mock.NewMockOrderRepository(ctrl)
-			olr := repo_mock.NewMockOrderLineRepository(ctrl)
-			os := service_mock.NewMockOrderService(ctrl)
 
 			if tt.setup != nil {
-				tt.setup(cr, cir, or, olr, os)
+				tt.setup(cr, cir, or)
 			}
 
-			ouc := NewOrderUseCase(cr, cir, or, olr, os)
+			ouc := NewOrderUseCase(cr, cir, or)
 
 			gotOrder, err := ouc.GetOrder(tt.arg.ctx, tt.arg.id)
 			if (err != nil) != (tt.want.err != nil) {
@@ -253,7 +238,7 @@ func TestOrderUseCase_ListOrder(t *testing.T) {
 	catalogItemID := uuid.New().String()
 	orderDate := time.Now()
 
-	orders := []entity.Order{
+	orders := []*entity.Order{
 		{
 			ID: orderID,
 			Customer: entity.Customer{
@@ -281,14 +266,12 @@ func TestOrderUseCase_ListOrder(t *testing.T) {
 			m *repo_mock.MockCustomerRepository,
 			m1 *repo_mock.MockCatalogItemRepository,
 			m2 *repo_mock.MockOrderRepository,
-			m3 *repo_mock.MockOrderLineRepository,
-			m4 *service_mock.MockOrderService,
 		)
 		arg struct {
 			ctx context.Context
 		}
 		want struct {
-			orders []entity.Order
+			orders []*entity.Order
 			err    error
 		}
 	}{
@@ -298,27 +281,23 @@ func TestOrderUseCase_ListOrder(t *testing.T) {
 				cr *repo_mock.MockCustomerRepository,
 				cir *repo_mock.MockCatalogItemRepository,
 				or *repo_mock.MockOrderRepository,
-				olr *repo_mock.MockOrderLineRepository,
-				os *service_mock.MockOrderService,
 			) {
 				or.EXPECT().List(gomock.Any()).Return(
-					[]entity.OrderModel{
+					[]*entity.Order{
 						{
-							ID:         orderID,
-							CustomerID: customerID,
-							OrderDate:  orderDate,
+							ID:        orderID,
+							Customer:  entity.Customer{ID: customerID},
+							OrderDate: orderDate,
+							OrderLines: []entity.OrderLine{
+								{
+									CatalogItem: entity.CatalogItem{ID: catalogItemID},
+									Count:       1,
+								},
+							},
 						},
 					},
 					nil,
 				)
-				olr.EXPECT().List(gomock.Any(), orderID).Return(
-					[]entity.OrderLineModel{
-						{
-							OrderID:       orderID,
-							CatalogItemID: catalogItemID,
-							Count:         1,
-						},
-					}, nil)
 				cr.EXPECT().Get(gomock.Any(), customerID).Return(
 					&entity.Customer{
 						ID:   customerID,
@@ -337,7 +316,7 @@ func TestOrderUseCase_ListOrder(t *testing.T) {
 				ctx: context.Background(),
 			},
 			want: struct {
-				orders []entity.Order
+				orders []*entity.Order
 				err    error
 			}{
 				orders: orders,
@@ -355,14 +334,12 @@ func TestOrderUseCase_ListOrder(t *testing.T) {
 			cr := repo_mock.NewMockCustomerRepository(ctrl)
 			cir := repo_mock.NewMockCatalogItemRepository(ctrl)
 			or := repo_mock.NewMockOrderRepository(ctrl)
-			olr := repo_mock.NewMockOrderLineRepository(ctrl)
-			os := service_mock.NewMockOrderService(ctrl)
 
 			if tt.setup != nil {
-				tt.setup(cr, cir, or, olr, os)
+				tt.setup(cr, cir, or)
 			}
 
-			ouc := NewOrderUseCase(cr, cir, or, olr, os)
+			ouc := NewOrderUseCase(cr, cir, or)
 
 			gotOrders, err := ouc.ListOrders(tt.arg.ctx)
 			if (err != nil) != (tt.want.err != nil) {
@@ -390,8 +367,6 @@ func TestOrderUseCase_CreateOrder(t *testing.T) {
 			m *repo_mock.MockCustomerRepository,
 			m1 *repo_mock.MockCatalogItemRepository,
 			m2 *repo_mock.MockOrderRepository,
-			m3 *repo_mock.MockOrderLineRepository,
-			m4 *service_mock.MockOrderService,
 		)
 		arg struct {
 			ctx    context.Context
@@ -405,8 +380,6 @@ func TestOrderUseCase_CreateOrder(t *testing.T) {
 				cr *repo_mock.MockCustomerRepository,
 				cir *repo_mock.MockCatalogItemRepository,
 				or *repo_mock.MockOrderRepository,
-				olr *repo_mock.MockOrderLineRepository,
-				os *service_mock.MockOrderService,
 			) {
 				cr.EXPECT().Get(gomock.Any(), customerID).Return(
 					&entity.Customer{
@@ -419,7 +392,7 @@ func TestOrderUseCase_CreateOrder(t *testing.T) {
 						Name:  "item1",
 						Price: 1000,
 					}, nil)
-				os.EXPECT().CreateOrder(
+				or.EXPECT().Create(
 					gomock.Any(),
 					gomock.Any(),
 				).Do(func(_ context.Context, order entity.Order) {
@@ -465,14 +438,12 @@ func TestOrderUseCase_CreateOrder(t *testing.T) {
 			cr := repo_mock.NewMockCustomerRepository(ctrl)
 			cir := repo_mock.NewMockCatalogItemRepository(ctrl)
 			or := repo_mock.NewMockOrderRepository(ctrl)
-			olr := repo_mock.NewMockOrderLineRepository(ctrl)
-			os := service_mock.NewMockOrderService(ctrl)
 
 			if tt.setup != nil {
-				tt.setup(cr, cir, or, olr, os)
+				tt.setup(cr, cir, or)
 			}
 
-			ouc := NewOrderUseCase(cr, cir, or, olr, os)
+			ouc := NewOrderUseCase(cr, cir, or)
 
 			err := ouc.CreateOrder(tt.arg.ctx, tt.arg.params)
 			if (err != nil) != (tt.wantErr != nil) {
@@ -495,8 +466,6 @@ func TestOrderUseCase_DeleteOrder(t *testing.T) {
 			m *repo_mock.MockCustomerRepository,
 			m1 *repo_mock.MockCatalogItemRepository,
 			m2 *repo_mock.MockOrderRepository,
-			m3 *repo_mock.MockOrderLineRepository,
-			m4 *service_mock.MockOrderService,
 		)
 		arg struct {
 			ctx context.Context
@@ -510,10 +479,8 @@ func TestOrderUseCase_DeleteOrder(t *testing.T) {
 				cr *repo_mock.MockCustomerRepository,
 				cir *repo_mock.MockCatalogItemRepository,
 				or *repo_mock.MockOrderRepository,
-				olr *repo_mock.MockOrderLineRepository,
-				os *service_mock.MockOrderService,
 			) {
-				os.EXPECT().DeleteOrder(gomock.Any(), orderID).Return(nil)
+				or.EXPECT().Delete(gomock.Any(), orderID).Return(nil)
 			},
 			arg: struct {
 				ctx context.Context
@@ -535,14 +502,12 @@ func TestOrderUseCase_DeleteOrder(t *testing.T) {
 			cr := repo_mock.NewMockCustomerRepository(ctrl)
 			cir := repo_mock.NewMockCatalogItemRepository(ctrl)
 			or := repo_mock.NewMockOrderRepository(ctrl)
-			olr := repo_mock.NewMockOrderLineRepository(ctrl)
-			os := service_mock.NewMockOrderService(ctrl)
 
 			if tt.setup != nil {
-				tt.setup(cr, cir, or, olr, os)
+				tt.setup(cr, cir, or)
 			}
 
-			ouc := NewOrderUseCase(cr, cir, or, olr, os)
+			ouc := NewOrderUseCase(cr, cir, or)
 
 			err := ouc.DeleteOrder(tt.arg.ctx, tt.arg.id)
 			if (err != nil) != (tt.wantErr != nil) {

@@ -13,85 +13,56 @@ import (
 
 func Test_OrderRepository(t *testing.T) {
 	ctx := context.Background()
-	orderRepo := NewOrderRepository(db)
-	orderLineRepo := NewOrderLineRepository(db)
+	repo := NewOrderRepository(db)
 
-	order1ID := uuid.New().String()
-	order2ID := uuid.New().String()
-
-	orderLine1 := entity.OrderLineModel{
-		OrderID:       order1ID,
-		CatalogItemID: uuid.New().String(),
-		Count:         1,
+	order := entity.Order{
+		ID: uuid.New().String(),
+		Customer: entity.Customer{
+			ID: uuid.New().String(),
+			// Name:    "John Doe",
+			// Email:   "john.doe@example.com",
+			// Street:  "1600 Pennsylvania Avenue NW",
+			// City:    "Washington",
+			// Country: "USA",
+		},
+		OrderDate: time.Now(),
+		OrderLines: []entity.OrderLine{
+			{
+				CatalogItem: entity.CatalogItem{
+					ID: uuid.New().String(),
+					// Name:  "item1",
+					// Price: 100,
+				},
+				Count: 1,
+			},
+		},
 	}
-	orderLine2 := entity.OrderLineModel{
-		OrderID:       order1ID,
-		CatalogItemID: uuid.New().String(),
-		Count:         5,
-	}
-	orderLine3 := entity.OrderLineModel{
-		OrderID:       order2ID,
-		CatalogItemID: uuid.New().String(),
-		Count:         2,
-	}
-
-	order1 := entity.OrderModel{
-		ID:         order1ID,
-		CustomerID: uuid.New().String(),
-		OrderDate:  time.Now(),
-	}
-
-	order2 := entity.OrderModel{
-		ID:         order2ID,
-		CustomerID: uuid.New().String(),
-		OrderDate:  time.Now(),
-	}
+	order.TotalPrice = order.GetTotalPrice()
 
 	// Create
-	err := orderRepo.Create(ctx, order1)
-	ValidateErr(t, err, nil)
-	err = orderRepo.Create(ctx, order2)
-	ValidateErr(t, err, nil)
-
-	err = orderLineRepo.Create(ctx, orderLine3)
-	ValidateErr(t, err, nil)
-
-	err = orderLineRepo.BatchCreate(ctx, []entity.OrderLineModel{orderLine1, orderLine2})
+	err := repo.Create(ctx, order)
 	ValidateErr(t, err, nil)
 
 	// Get
-	gotOrder1, err := orderRepo.Get(ctx, order1.ID)
+	gotOrder, err := repo.Get(ctx, order.ID)
 	ValidateErr(t, err, nil)
-	if d := cmp.Diff(order1, *gotOrder1, cmpopts.IgnoreFields(entity.OrderModel{}, "OrderDate")); len(d) != 0 {
+	if d := cmp.Diff(order, *gotOrder, cmpopts.IgnoreFields(entity.Order{}, "OrderDate")); len(d) != 0 {
 		t.Errorf("differs: (-want +got)\n%s", d)
 	}
 
 	// List
-	gotOrders, err := orderRepo.List(ctx)
+	gotOrders, err := repo.List(ctx)
 	ValidateErr(t, err, nil)
-	if len(gotOrders) != 2 {
-		t.Errorf("want: 2, got: %d", len(gotOrders))
-	}
-
-	gotOrderLines, err := orderLineRepo.List(ctx, order1.ID)
-	ValidateErr(t, err, nil)
-	if len(gotOrderLines) != 2 {
-		t.Errorf("want: 2, got: %d", len(gotOrderLines))
+	if len(gotOrders) != 1 {
+		t.Errorf("got %d orders, want 1", len(gotOrders))
 	}
 
 	// Delete
-	err = orderLineRepo.Delete(ctx, orderLine3.OrderID, orderLine3.CatalogItemID)
+	err = repo.Delete(ctx, order.ID)
 	ValidateErr(t, err, nil)
 
-	err = orderLineRepo.BatchDelete(ctx, order1.ID)
-	ValidateErr(t, err, nil)
-
-	err = orderRepo.Delete(ctx, order1.ID)
-	ValidateErr(t, err, nil)
-
-	gotOrders, err = orderRepo.List(ctx)
-	ValidateErr(t, err, nil)
-	if len(gotOrders) != 1 {
-		t.Errorf("want: 1, got: %d", len(gotOrders))
+	_, err = repo.Get(ctx, order.ID)
+	if err == nil {
+		t.Errorf("want: %v, got: %v", nil, err)
 	}
 }

@@ -24,7 +24,6 @@ import (
 	catalogservice "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order/repository/catalog_service"
 	customerservice "github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order/repository/customer_service"
 	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order/repository/mysql"
-	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order/service"
 	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order/usecase"
 )
 
@@ -96,12 +95,10 @@ func BuildContainer(ctx context.Context) (*dig.Container, error) {
 		mysql.NewMySQLDB,
 		mysql.NewTransactionRepository,
 		mysql.NewOrderRepository,
-		mysql.NewOrderLineRepository,
 		NewCustomerServiceClient,
 		NewCatalogServiceClient,
 		customerservice.NewCustomerRepository,
 		catalogservice.NewCatalogItemRepository,
-		service.NewOrderService,
 		usecase.NewOrderUseCase,
 		gateway.NewOrderHandler,
 	}

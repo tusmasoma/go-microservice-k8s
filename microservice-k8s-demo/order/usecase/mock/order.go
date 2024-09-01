@@ -96,10 +96,10 @@ func (mr *MockOrderUseCaseMockRecorder) GetOrderCreationResources(ctx interface{
 }
 
 // ListOrders mocks base method.
-func (m *MockOrderUseCase) ListOrders(ctx context.Context) ([]entity.Order, error) {
+func (m *MockOrderUseCase) ListOrders(ctx context.Context) ([]*entity.Order, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListOrders", ctx)
-	ret0, _ := ret[0].([]entity.Order)
+	ret0, _ := ret[0].([]*entity.Order)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

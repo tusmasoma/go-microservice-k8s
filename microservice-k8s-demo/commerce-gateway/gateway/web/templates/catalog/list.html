@@ -41,18 +41,18 @@
                     {{ else }}
                     {{ range .Items }}
                     <tr>
-                        <td><a href="{{ .ID }}.html">{{ .ID }}</a></td>
+                        <td><a href="{{ .Id }}.html">{{ .Id }}</a></td>
                         <td>{{ .Name }}</td>
                         <td>{{ .Price }}</td>
                         <td>
                             <form action="/catalog/delete" method="GET">
-                                <input type="hidden" name="id" value="{{ .ID }}" />
+                                <input type="hidden" name="id" value="{{ .Id }}" />
                                 <input type="submit" value="delete" class="btn btn-link" />
                             </form>
                         </td>
                         <td>
                             <form action="/catalog/update" method="GET">
-                                <input type="hidden" name="id" value="{{ .ID }}" />
+                                <input type="hidden" name="id" value="{{ .Id }}" />
                                 <input type="submit" value="update" class="btn btn-link" />
                             </form>
                         </td>

@@ -28,15 +28,6 @@ func NewCustomerHandler(client pb.CustomerServiceClient) CustomerHandler {
 	}
 }
 
-type CustomerData struct {
-	ID      string
-	Name    string
-	Email   string
-	Street  string
-	City    string
-	Country string
-}
-
 func (ch *customerHandler) ListCustomers(c *gin.Context) {
 	ctx := c.Request.Context()
 
@@ -47,20 +38,8 @@ func (ch *customerHandler) ListCustomers(c *gin.Context) {
 		return
 	}
 
-	var customers []CustomerData
-	for _, c := range resp.GetCustomers() {
-		customers = append(customers, CustomerData{
-			ID:      c.GetId(),
-			Name:    c.GetName(),
-			Email:   c.GetEmail(),
-			Street:  c.GetStreet(),
-			City:    c.GetCity(),
-			Country: c.GetCountry(),
-		})
-	}
-
 	c.HTML(http.StatusOK, "customer/list.html", gin.H{
-		"Customers": customers,
+		"Customers": resp.GetCustomers(),
 	})
 }
 
@@ -135,17 +114,8 @@ func (ch *customerHandler) UpdateCustomerForm(c *gin.Context) {
 		return
 	}
 
-	customer := CustomerData{
-		ID:      resp.GetCustomer().GetId(),
-		Name:    resp.GetCustomer().GetName(),
-		Email:   resp.GetCustomer().GetEmail(),
-		Street:  resp.GetCustomer().GetStreet(),
-		City:    resp.GetCustomer().GetCity(),
-		Country: resp.GetCustomer().GetCountry(),
-	}
-
 	c.HTML(http.StatusOK, "customer/update.html", gin.H{
-		"Customer": customer,
+		"Customer": resp.GetCustomer(),
 	})
 }
 

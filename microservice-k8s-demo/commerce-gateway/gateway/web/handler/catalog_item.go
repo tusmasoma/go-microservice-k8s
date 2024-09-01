@@ -30,12 +30,6 @@ func NewCatalogItemHandler(client pb.CatalogServiceClient) CatalogItemHandler {
 	}
 }
 
-type CatalogItemData struct {
-	ID    string
-	Name  string
-	Price float64
-}
-
 func (ch *catalogItemHandler) GetCatalogItemByNameForm(c *gin.Context) {
 	c.HTML(http.StatusOK, "catalog/search.html", nil)
 }
@@ -59,17 +53,8 @@ func (ch *catalogItemHandler) GetCatalogItemByName(c *gin.Context) {
 		return
 	}
 
-	var items []CatalogItemData
-	for _, item := range resp.GetItems() {
-		items = append(items, CatalogItemData{
-			ID:    item.GetId(),
-			Name:  item.GetName(),
-			Price: item.GetPrice(),
-		})
-	}
-
 	c.HTML(http.StatusOK, "catalog/list.html", gin.H{
-		"Items": items,
+		"Items": resp.GetItems(),
 	})
 }
 
@@ -83,17 +68,8 @@ func (ch *catalogItemHandler) ListCatalogItems(c *gin.Context) {
 		return
 	}
 
-	var items []CatalogItemData
-	for _, item := range resp.GetItems() {
-		items = append(items, CatalogItemData{
-			ID:    item.GetId(),
-			Name:  item.GetName(),
-			Price: item.GetPrice(),
-		})
-	}
-
 	c.HTML(http.StatusOK, "catalog/list.html", gin.H{
-		"Items": items,
+		"Items": resp.GetItems(),
 	})
 }
 
@@ -160,14 +136,8 @@ func (ch *catalogItemHandler) UpdateCatalogItemForm(c *gin.Context) {
 		return
 	}
 
-	item := CatalogItemData{
-		ID:    resp.GetItem().GetId(),
-		Name:  resp.GetItem().GetName(),
-		Price: resp.GetItem().GetPrice(),
-	}
-
 	c.HTML(http.StatusOK, "catalog/update.html", gin.H{
-		"Item": item,
+		"Item": resp.GetItem(),
 	})
 }
 

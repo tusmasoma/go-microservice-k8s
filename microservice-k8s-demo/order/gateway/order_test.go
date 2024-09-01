@@ -90,7 +90,7 @@ func TestHandler_ListOrders(t *testing.T) {
 		Price: 1000,
 	}
 
-	order := entity.Order{
+	order := &entity.Order{
 		ID:        orderID,
 		Customer:  customer,
 		OrderDate: date,
@@ -118,7 +118,7 @@ func TestHandler_ListOrders(t *testing.T) {
 				ouc.EXPECT().ListOrders(
 					gomock.Any(),
 				).Return(
-					[]entity.Order{order},
+					[]*entity.Order{order},
 					nil,
 				)
 			},

@@ -166,8 +166,8 @@ func TestOrderUseCase_GetOrder(t *testing.T) {
 				)
 				cr.EXPECT().Get(gomock.Any(), customerID).Return(
 					&customer, nil)
-				cir.EXPECT().Get(gomock.Any(), catalogItemID).Return(
-					&item, nil)
+				cir.EXPECT().ListByIDs(gomock.Any(), []string{catalogItemID}).Return(
+					[]entity.CatalogItem{item}, nil)
 			},
 			arg: struct {
 				ctx context.Context
@@ -286,8 +286,8 @@ func TestOrderUseCase_ListOrder(t *testing.T) {
 				)
 				cr.EXPECT().Get(gomock.Any(), customerID).Return(
 					&customer, nil)
-				cir.EXPECT().Get(gomock.Any(), catalogItemID).Return(
-					&item, nil)
+				cir.EXPECT().ListByIDs(gomock.Any(), []string{catalogItemID}).Return(
+					[]entity.CatalogItem{item}, nil)
 			},
 			arg: struct {
 				ctx context.Context

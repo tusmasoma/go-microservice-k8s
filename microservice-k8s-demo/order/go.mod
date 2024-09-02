@@ -11,7 +11,7 @@ require (
 	github.com/ory/dockertest v3.3.5+incompatible
 	github.com/sethvargo/go-envconfig v0.9.0
 	github.com/stretchr/testify v1.9.0
-	github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog v0.0.0-20240824175103-2d74f731488d
+	github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog v0.0.0-20240902111619-a1e0fa3c07de
 	github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/customer v0.0.0-20240824175103-2d74f731488d
 	github.com/tusmasoma/go-tech-dojo v0.0.0-20240805120803-02e31d5c8a21
 	go.uber.org/dig v1.18.0

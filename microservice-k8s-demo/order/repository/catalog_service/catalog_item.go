@@ -70,6 +70,24 @@ func (r *catalogItemRepository) ListByName(ctx context.Context, name string) ([]
 	return items, nil
 }
 
+func (r *catalogItemRepository) ListByIDs(ctx context.Context, ids []string) ([]entity.CatalogItem, error) {
+	resp, err := r.client.ListCatalogItemsByIDs(ctx, &pb.ListCatalogItemsByIDsRequest{Ids: ids})
+	if err != nil {
+		return nil, err
+	}
+
+	var items []entity.CatalogItem
+	for _, i := range resp.GetItems() {
+		items = append(items, entity.CatalogItem{
+			ID:    i.GetId(),
+			Name:  i.GetName(),
+			Price: i.GetPrice(),
+		})
+	}
+
+	return items, nil
+}
+
 func (r *catalogItemRepository) Create(ctx context.Context, item entity.CatalogItem) error {
 	if _, err := r.client.CreateCatalogItem(ctx, &pb.CreateCatalogItemRequest{
 		Name:  item.Name,

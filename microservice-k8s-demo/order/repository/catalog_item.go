@@ -11,6 +11,7 @@ type CatalogItemRepository interface {
 	Get(ctx context.Context, id string) (*entity.CatalogItem, error)
 	List(ctx context.Context) ([]entity.CatalogItem, error)
 	ListByName(ctx context.Context, name string) ([]entity.CatalogItem, error)
+	ListByIDs(ctx context.Context, ids []string) ([]entity.CatalogItem, error)
 	Create(ctx context.Context, item entity.CatalogItem) error
 	Update(ctx context.Context, item entity.CatalogItem) error
 	Delete(ctx context.Context, id string) error

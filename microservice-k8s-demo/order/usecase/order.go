@@ -3,6 +3,7 @@ package usecase
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order/entity"
 	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order/repository"
@@ -73,17 +74,32 @@ func (ouc *orderUseCase) GetOrder(ctx context.Context, id string) (*OrderDetails
 		return nil, err
 	}
 
+	var itemIDs []string
+	for _, ol := range order.OrderLines {
+		itemIDs = append(itemIDs, ol.CatalogItemID)
+	}
+
+	items, err := ouc.cir.ListByIDs(ctx, itemIDs)
+	if err != nil {
+		log.Error("Failed to list catalog items", log.Ferror(err))
+		return nil, err
+	}
+
+	itemMap := make(map[string]entity.CatalogItem)
+	for _, item := range items {
+		itemMap[item.ID] = item
+	}
+
 	var orderLineDetails []*OrderLineDetails
 	for _, ol := range order.OrderLines {
-		// TODO: N + 1 problem
-		item, err := ouc.cir.Get(ctx, ol.CatalogItemID)
-		if err != nil {
-			log.Error("Failed to get catalog item", log.Ferror(err))
-			return nil, err
+		item, ok := itemMap[ol.CatalogItemID]
+		if !ok {
+			log.Error("Catalog item not found", log.Fstring("itemID", ol.CatalogItemID))
+			return nil, fmt.Errorf("catalog item not found: %s", ol.CatalogItemID)
 		}
 		orderLineDetails = append(orderLineDetails, &OrderLineDetails{
 			Count:       ol.Count,
-			CatalogItem: item,
+			CatalogItem: &item,
 		})
 
 		order.TotalPrice += item.Price * float64(ol.Count)
@@ -112,17 +128,32 @@ func (ouc *orderUseCase) ListOrders(ctx context.Context) ([]*OrderDetails, error
 			return nil, err
 		}
 
+		var itemIDs []string
+		for _, ol := range order.OrderLines {
+			itemIDs = append(itemIDs, ol.CatalogItemID)
+		}
+
+		items, err := ouc.cir.ListByIDs(ctx, itemIDs)
+		if err != nil {
+			log.Error("Failed to list catalog items", log.Ferror(err))
+			return nil, err
+		}
+
+		itemMap := make(map[string]entity.CatalogItem)
+		for _, item := range items {
+			itemMap[item.ID] = item
+		}
+
 		var orderLineDetails []*OrderLineDetails
 		for _, ol := range order.OrderLines {
-			// TODO: N + 1 problem
-			item, err := ouc.cir.Get(ctx, ol.CatalogItemID)
-			if err != nil {
-				log.Error("Failed to get catalog item", log.Ferror(err))
-				return nil, err
+			item, ok := itemMap[ol.CatalogItemID]
+			if !ok {
+				log.Error("Catalog item not found", log.Fstring("itemID", ol.CatalogItemID))
+				return nil, fmt.Errorf("catalog item not found: %s", ol.CatalogItemID)
 			}
 			orderLineDetails = append(orderLineDetails, &OrderLineDetails{
 				Count:       ol.Count,
-				CatalogItem: item,
+				CatalogItem: &item,
 			})
 
 			order.TotalPrice += item.Price * float64(ol.Count)

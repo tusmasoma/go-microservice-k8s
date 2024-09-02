@@ -8,6 +8,7 @@ service CatalogService {
   rpc GetCatalogItem(GetCatalogItemRequest) returns (GetCatalogItemResponse);
   rpc ListCatalogItems(ListCatalogItemsRequest) returns (ListCatalogItemsResponse);
   rpc ListCatalogItemsByName(ListCatalogItemsByNameRequest) returns (ListCatalogItemsByNameResponse);
+  rpc ListCatalogItemsByIDs(ListCatalogItemsByIDsRequest) returns (ListCatalogItemsByIDsResponse);
   rpc CreateCatalogItem(CreateCatalogItemRequest) returns (CreateCatalogItemResponse);
   rpc UpdateCatalogItem(UpdateCatalogItemRequest) returns (UpdateCatalogItemResponse);
   rpc DeleteCatalogItem(DeleteCatalogItemRequest) returns (DeleteCatalogItemResponse);
@@ -33,6 +34,14 @@ message ListCatalogItemsByNameRequest {
 }
 
 message ListCatalogItemsByNameResponse {
+    repeated CatalogItem items = 1;
+}
+
+message ListCatalogItemsByIDsRequest {
+    repeated string ids = 1;
+}
+
+message ListCatalogItemsByIDsResponse {
     repeated CatalogItem items = 1;
 }
 

@@ -244,6 +244,88 @@ func TestUseCase_ListCatalogItemsByName(t *testing.T) {
 	}
 }
 
+func TestUseCase_ListCatalogItemsByIDs(t *testing.T) {
+	t.Parallel()
+
+	item1 := entity.CatalogItem{
+		ID:    uuid.New().String(),
+		Name:  "item1",
+		Price: 100,
+	}
+	item2 := entity.CatalogItem{
+		ID:    uuid.New().String(),
+		Name:  "item2",
+		Price: 200,
+	}
+
+	patterns := []struct {
+		name  string
+		setup func(
+			m *mock.MockCatalogItemRepository,
+		)
+		arg struct {
+			ctx context.Context
+			ids []string
+		}
+		want struct {
+			items []entity.CatalogItem
+			err   error
+		}
+	}{
+		{
+			name: "success",
+			setup: func(tr *mock.MockCatalogItemRepository) {
+				tr.EXPECT().ListByIDs(gomock.Any(), []string{item1.ID, item2.ID}).Return(
+					[]entity.CatalogItem{item1, item2},
+					nil,
+				)
+			},
+			arg: struct {
+				ctx context.Context
+				ids []string
+			}{
+				ctx: context.Background(),
+				ids: []string{item1.ID, item2.ID},
+			},
+			want: struct {
+				items []entity.CatalogItem
+				err   error
+			}{
+				items: []entity.CatalogItem{item1, item2},
+				err:   nil,
+			},
+		},
+	}
+
+	for _, tt := range patterns {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			ctrl := gomock.NewController(t)
+			tr := mock.NewMockCatalogItemRepository(ctrl)
+
+			if tt.setup != nil {
+				tt.setup(tr)
+			}
+
+			tuc := NewCatalogItemUseCase(tr)
+
+			getCatalogItems, err := tuc.ListCatalogItemsByIDs(tt.arg.ctx, tt.arg.ids)
+
+			if (err != nil) != (tt.want.err != nil) {
+				t.Errorf("ListCatalogItemsByIDs() error = %v, wantErr %v", err, tt.want.err)
+			} else if err != nil && tt.want.err != nil && err.Error() != tt.want.err.Error() {
+				t.Errorf("ListCatalogItemsByName() error = %v, wantErr %v", err, tt.want.err)
+			}
+
+			if !reflect.DeepEqual(getCatalogItems, tt.want.items) {
+				t.Errorf("ListCatalogItemsByIDs() got = %v, want %v", getCatalogItems, tt.want.items)
+			}
+		})
+	}
+}
+
 func TestUseCase_CreateCatalogItem(t *testing.T) {
 	t.Parallel()
 

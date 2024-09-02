@@ -93,6 +93,21 @@ func (mr *MockCatalogItemRepositoryMockRecorder) List(ctx interface{}) *gomock.C
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockCatalogItemRepository)(nil).List), ctx)
 }
 
+// ListByIDs mocks base method.
+func (m *MockCatalogItemRepository) ListByIDs(ctx context.Context, ids []string) ([]entity.CatalogItem, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListByIDs", ctx, ids)
+	ret0, _ := ret[0].([]entity.CatalogItem)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListByIDs indicates an expected call of ListByIDs.
+func (mr *MockCatalogItemRepositoryMockRecorder) ListByIDs(ctx, ids interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListByIDs", reflect.TypeOf((*MockCatalogItemRepository)(nil).ListByIDs), ctx, ids)
+}
+
 // ListByName mocks base method.
 func (m *MockCatalogItemRepository) ListByName(ctx context.Context, name string) ([]entity.CatalogItem, error) {
 	m.ctrl.T.Helper()

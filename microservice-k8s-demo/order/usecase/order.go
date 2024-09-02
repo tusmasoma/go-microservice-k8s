@@ -84,6 +84,8 @@ func (ouc *orderUseCase) GetOrder(ctx context.Context, id string) (*OrderDetails
 			Count:       ol.Count,
 			CatalogItem: item,
 		})
+
+		order.TotalPrice += item.Price * float64(ol.Count)
 	}
 
 	return &OrderDetails{
@@ -120,6 +122,8 @@ func (ouc *orderUseCase) ListOrders(ctx context.Context) ([]*OrderDetails, error
 				Count:       ol.Count,
 				CatalogItem: item,
 			})
+
+			order.TotalPrice += item.Price * float64(ol.Count)
 		}
 
 		orderDetails = append(orderDetails, &OrderDetails{

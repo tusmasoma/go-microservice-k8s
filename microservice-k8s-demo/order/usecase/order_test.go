@@ -124,7 +124,6 @@ func TestOrderUseCase_GetOrder(t *testing.T) {
 				CatalogItemID: catalogItemID,
 			},
 		},
-		TotalPrice: 1000,
 	}
 
 	customer := entity.Customer{
@@ -245,7 +244,6 @@ func TestOrderUseCase_ListOrder(t *testing.T) {
 					CatalogItemID: catalogItemID,
 				},
 			},
-			TotalPrice: 1000,
 		},
 	}
 

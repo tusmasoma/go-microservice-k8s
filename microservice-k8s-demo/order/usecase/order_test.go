@@ -115,23 +115,27 @@ func TestOrderUseCase_GetOrder(t *testing.T) {
 	orderDate := time.Now()
 
 	order := entity.Order{
-		ID: orderID,
-		Customer: entity.Customer{
-			ID:   customerID,
-			Name: "customer1",
-		},
-		OrderDate: orderDate,
-		OrderLines: []entity.OrderLine{
+		ID:         orderID,
+		CustomerID: customerID,
+		OrderDate:  orderDate,
+		OrderLines: []*entity.OrderLine{
 			{
-				Count: 1,
-				CatalogItem: entity.CatalogItem{
-					ID:    catalogItemID,
-					Name:  "item1",
-					Price: 1000,
-				},
+				Count:         1,
+				CatalogItemID: catalogItemID,
 			},
 		},
 		TotalPrice: 1000,
+	}
+
+	customer := entity.Customer{
+		ID:   customerID,
+		Name: "customer1",
+	}
+
+	item := entity.CatalogItem{
+		ID:    catalogItemID,
+		Name:  "item1",
+		Price: 1000,
 	}
 
 	patterns := []struct {
@@ -146,8 +150,8 @@ func TestOrderUseCase_GetOrder(t *testing.T) {
 			id  string
 		}
 		want struct {
-			order *entity.Order
-			err   error
+			orderDetails *OrderDetails
+			err          error
 		}
 	}{
 		{
@@ -158,30 +162,13 @@ func TestOrderUseCase_GetOrder(t *testing.T) {
 				or *repo_mock.MockOrderRepository,
 			) {
 				or.EXPECT().Get(gomock.Any(), orderID).Return(
-					&entity.Order{
-						ID:        orderID,
-						Customer:  entity.Customer{ID: customerID},
-						OrderDate: orderDate,
-						OrderLines: []entity.OrderLine{
-							{
-								CatalogItem: entity.CatalogItem{ID: catalogItemID},
-								Count:       1,
-							},
-						},
-					},
+					&order,
 					nil,
 				)
 				cr.EXPECT().Get(gomock.Any(), customerID).Return(
-					&entity.Customer{
-						ID:   customerID,
-						Name: "customer1",
-					}, nil)
+					&customer, nil)
 				cir.EXPECT().Get(gomock.Any(), catalogItemID).Return(
-					&entity.CatalogItem{
-						ID:    catalogItemID,
-						Name:  "item1",
-						Price: 1000,
-					}, nil)
+					&item, nil)
 			},
 			arg: struct {
 				ctx context.Context
@@ -191,11 +178,20 @@ func TestOrderUseCase_GetOrder(t *testing.T) {
 				id:  orderID,
 			},
 			want: struct {
-				order *entity.Order
-				err   error
+				orderDetails *OrderDetails
+				err          error
 			}{
-				order: &order,
-				err:   nil,
+				orderDetails: &OrderDetails{
+					Order:    &order,
+					Customer: &customer,
+					OrderLines: []*OrderLineDetails{
+						{
+							Count:       1,
+							CatalogItem: &item,
+						},
+					},
+				},
+				err: nil,
 			},
 		},
 	}
@@ -216,15 +212,15 @@ func TestOrderUseCase_GetOrder(t *testing.T) {
 
 			ouc := NewOrderUseCase(cr, cir, or)
 
-			gotOrder, err := ouc.GetOrder(tt.arg.ctx, tt.arg.id)
+			gotOrderDetails, err := ouc.GetOrder(tt.arg.ctx, tt.arg.id)
 			if (err != nil) != (tt.want.err != nil) {
 				t.Errorf("GetOrder() error = %v, wantErr %v", err, tt.want.err)
 			} else if err != nil && tt.want.err != nil && err.Error() != tt.want.err.Error() {
 				t.Errorf("GetOrder() error = %v, wantErr %v", err, tt.want.err)
 			}
 
-			if !reflect.DeepEqual(gotOrder, tt.want.order) {
-				t.Errorf("GetOrder() got = %v, want %v", gotOrder, tt.want.order)
+			if !reflect.DeepEqual(gotOrderDetails, tt.want.orderDetails) {
+				t.Errorf("GetOrder() got = %v, want %v", gotOrderDetails, tt.want.orderDetails)
 			}
 		})
 	}
@@ -240,24 +236,28 @@ func TestOrderUseCase_ListOrder(t *testing.T) {
 
 	orders := []*entity.Order{
 		{
-			ID: orderID,
-			Customer: entity.Customer{
-				ID:   customerID,
-				Name: "customer1",
-			},
-			OrderDate: orderDate,
-			OrderLines: []entity.OrderLine{
+			ID:         orderID,
+			CustomerID: customerID,
+			OrderDate:  orderDate,
+			OrderLines: []*entity.OrderLine{
 				{
-					Count: 1,
-					CatalogItem: entity.CatalogItem{
-						ID:    catalogItemID,
-						Name:  "item1",
-						Price: 1000,
-					},
+					Count:         1,
+					CatalogItemID: catalogItemID,
 				},
 			},
 			TotalPrice: 1000,
 		},
+	}
+
+	customer := entity.Customer{
+		ID:   customerID,
+		Name: "customer1",
+	}
+
+	item := entity.CatalogItem{
+		ID:    catalogItemID,
+		Name:  "item1",
+		Price: 1000,
 	}
 
 	patterns := []struct {
@@ -271,8 +271,8 @@ func TestOrderUseCase_ListOrder(t *testing.T) {
 			ctx context.Context
 		}
 		want struct {
-			orders []*entity.Order
-			err    error
+			orderDetails []*OrderDetails
+			err          error
 		}
 	}{
 		{
@@ -283,32 +283,13 @@ func TestOrderUseCase_ListOrder(t *testing.T) {
 				or *repo_mock.MockOrderRepository,
 			) {
 				or.EXPECT().List(gomock.Any()).Return(
-					[]*entity.Order{
-						{
-							ID:        orderID,
-							Customer:  entity.Customer{ID: customerID},
-							OrderDate: orderDate,
-							OrderLines: []entity.OrderLine{
-								{
-									CatalogItem: entity.CatalogItem{ID: catalogItemID},
-									Count:       1,
-								},
-							},
-						},
-					},
+					orders,
 					nil,
 				)
 				cr.EXPECT().Get(gomock.Any(), customerID).Return(
-					&entity.Customer{
-						ID:   customerID,
-						Name: "customer1",
-					}, nil)
+					&customer, nil)
 				cir.EXPECT().Get(gomock.Any(), catalogItemID).Return(
-					&entity.CatalogItem{
-						ID:    catalogItemID,
-						Name:  "item1",
-						Price: 1000,
-					}, nil)
+					&item, nil)
 			},
 			arg: struct {
 				ctx context.Context
@@ -316,11 +297,22 @@ func TestOrderUseCase_ListOrder(t *testing.T) {
 				ctx: context.Background(),
 			},
 			want: struct {
-				orders []*entity.Order
-				err    error
+				orderDetails []*OrderDetails
+				err          error
 			}{
-				orders: orders,
-				err:    nil,
+				orderDetails: []*OrderDetails{
+					{
+						Order:    orders[0],
+						Customer: &customer,
+						OrderLines: []*OrderLineDetails{
+							{
+								Count:       1,
+								CatalogItem: &item,
+							},
+						},
+					},
+				},
+				err: nil,
 			},
 		},
 	}
@@ -341,15 +333,15 @@ func TestOrderUseCase_ListOrder(t *testing.T) {
 
 			ouc := NewOrderUseCase(cr, cir, or)
 
-			gotOrders, err := ouc.ListOrders(tt.arg.ctx)
+			gotOrderDetails, err := ouc.ListOrders(tt.arg.ctx)
 			if (err != nil) != (tt.want.err != nil) {
 				t.Errorf("ListOrder() error = %v, wantErr %v", err, tt.want.err)
 			} else if err != nil && tt.want.err != nil && err.Error() != tt.want.err.Error() {
 				t.Errorf("ListOrder() error = %v, wantErr %v", err, tt.want.err)
 			}
 
-			if !reflect.DeepEqual(gotOrders, tt.want.orders) {
-				t.Errorf("ListOrder() got = %v, want %v", gotOrders, tt.want.orders)
+			if !reflect.DeepEqual(gotOrderDetails, tt.want.orderDetails) {
+				t.Errorf("ListOrder() got = %v, want %v", gotOrderDetails, tt.want.orderDetails)
 			}
 		})
 	}
@@ -381,29 +373,15 @@ func TestOrderUseCase_CreateOrder(t *testing.T) {
 				cir *repo_mock.MockCatalogItemRepository,
 				or *repo_mock.MockOrderRepository,
 			) {
-				cr.EXPECT().Get(gomock.Any(), customerID).Return(
-					&entity.Customer{
-						ID:   customerID,
-						Name: "customer1",
-					}, nil)
-				cir.EXPECT().Get(gomock.Any(), catalogItemID).Return(
-					&entity.CatalogItem{
-						ID:    catalogItemID,
-						Name:  "item1",
-						Price: 1000,
-					}, nil)
 				or.EXPECT().Create(
 					gomock.Any(),
 					gomock.Any(),
 				).Do(func(_ context.Context, order entity.Order) {
-					if order.Customer.ID != customerID {
-						t.Errorf("unexpected customerID: got %v, want %v", order.Customer.ID, customerID)
+					if order.CustomerID != customerID {
+						t.Errorf("unexpected customerID: got %v, want %v", order.CustomerID, customerID)
 					}
-					if order.OrderLines[0].CatalogItem.ID != catalogItemID {
-						t.Errorf("unexpected catalogItemID: got %v, want %v", order.OrderLines[0].CatalogItem.ID, catalogItemID)
-					}
-					if order.TotalPrice != 1000 {
-						t.Errorf("unexpected totalPrice: got %v, want %v", order.TotalPrice, 1000)
+					if order.OrderLines[0].CatalogItemID != catalogItemID {
+						t.Errorf("unexpected catalogItemID: got %v, want %v", order.OrderLines[0].CatalogItemID, catalogItemID)
 					}
 				}).Return(nil)
 			},

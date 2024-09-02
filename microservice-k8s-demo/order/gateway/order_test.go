@@ -75,7 +75,7 @@ func TestHandler_ListOrders(t *testing.T) {
 
 	date := time.Now()
 
-	customer := entity.Customer{
+	customer := &entity.Customer{
 		ID:      customerID,
 		Name:    "John Doe",
 		Email:   "john.doe@example.com",
@@ -83,24 +83,33 @@ func TestHandler_ListOrders(t *testing.T) {
 		City:    "Springfield",
 		Country: "USA",
 	}
-
-	item := entity.CatalogItem{
+	item := &entity.CatalogItem{
 		ID:    itemID,
 		Name:  "item",
 		Price: 1000,
 	}
-
 	order := &entity.Order{
-		ID:        orderID,
-		Customer:  customer,
-		OrderDate: date,
-		OrderLines: []entity.OrderLine{
+		ID:         orderID,
+		CustomerID: customerID,
+		OrderDate:  date,
+		OrderLines: []*entity.OrderLine{
+			{
+				Count:         1,
+				CatalogItemID: itemID,
+			},
+		},
+		TotalPrice: 1000,
+	}
+
+	orderDetails := &usecase.OrderDetails{
+		Order:    order,
+		Customer: customer,
+		OrderLines: []*usecase.OrderLineDetails{
 			{
 				Count:       1,
 				CatalogItem: item,
 			},
 		},
-		TotalPrice: 1000,
 	}
 
 	patterns := []struct {
@@ -118,7 +127,7 @@ func TestHandler_ListOrders(t *testing.T) {
 				ouc.EXPECT().ListOrders(
 					gomock.Any(),
 				).Return(
-					[]*entity.Order{order},
+					[]*usecase.OrderDetails{orderDetails},
 					nil,
 				)
 			},

@@ -76,21 +76,20 @@ func (or *orderRepository) Get(ctx context.Context, id string) (*entity.Order, e
 	}
 
 	// Mapping to entity.Order and entity.OrderLine
-	var orderLines []entity.OrderLine
+	var orderLines []*entity.OrderLine
 	for _, line := range orderModelLines {
-		orderLines = append(orderLines, entity.OrderLine{
-			CatalogItem: entity.CatalogItem{ID: line.CatalogItemID},
-			Count:       line.Count,
+		orderLines = append(orderLines, &entity.OrderLine{
+			CatalogItemID: line.CatalogItemID,
+			Count:         line.Count,
 		})
 	}
 
 	order := entity.Order{
 		ID:         orderModel.ID,
-		Customer:   entity.Customer{ID: orderModel.CustomerID},
+		CustomerID: orderModel.CustomerID,
 		OrderDate:  orderModel.OrderDate,
 		OrderLines: orderLines,
 	}
-	order.TotalPrice = order.GetTotalPrice()
 
 	return &order, nil
 }
@@ -135,25 +134,21 @@ func (or *orderRepository) List(ctx context.Context) ([]*entity.Order, error) {
 		order, exists := orderMap[orderModel.ID]
 		if !exists {
 			order = &entity.Order{
-				ID:        orderModel.ID,
-				Customer:  entity.Customer{ID: orderModel.CustomerID},
-				OrderDate: orderModel.OrderDate,
+				ID:         orderModel.ID,
+				CustomerID: orderModel.CustomerID,
+				OrderDate:  orderModel.OrderDate,
 			}
 			orderMap[orderModel.ID] = order
 			orders = append(orders, order)
 		}
 
-		order.OrderLines = append(order.OrderLines, entity.OrderLine{
-			CatalogItem: entity.CatalogItem{ID: orderLineModel.CatalogItemID},
-			Count:       orderLineModel.Count,
+		order.OrderLines = append(order.OrderLines, &entity.OrderLine{
+			CatalogItemID: orderLineModel.CatalogItemID,
+			Count:         orderLineModel.Count,
 		})
 	}
 	if err = rows.Err(); err != nil {
 		return nil, err
-	}
-
-	for _, order := range orders {
-		order.TotalPrice = order.GetTotalPrice()
 	}
 
 	return orders, nil
@@ -178,7 +173,7 @@ func (or *orderRepository) Create(ctx context.Context, order entity.Order) error
 
 	orderModel := entity.OrderModel{
 		ID:         order.ID,
-		CustomerID: order.Customer.ID,
+		CustomerID: order.CustomerID,
 		OrderDate:  order.OrderDate,
 	}
 
@@ -207,7 +202,7 @@ func (or *orderRepository) Create(ctx context.Context, order entity.Order) error
 
 		orderLineModel := entity.OrderLineModel{
 			OrderID:       order.ID,
-			CatalogItemID: line.CatalogItem.ID,
+			CatalogItemID: line.CatalogItemID,
 			Count:         line.Count,
 		}
 		values = append(values, orderLineModel.OrderID, orderLineModel.CatalogItemID, orderLineModel.Count)

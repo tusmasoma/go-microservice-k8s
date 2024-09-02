@@ -65,10 +65,10 @@ func (mr *MockOrderUseCaseMockRecorder) DeleteOrder(ctx, id interface{}) *gomock
 }
 
 // GetOrder mocks base method.
-func (m *MockOrderUseCase) GetOrder(ctx context.Context, id string) (*entity.Order, error) {
+func (m *MockOrderUseCase) GetOrder(ctx context.Context, id string) (*usecase.OrderDetails, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetOrder", ctx, id)
-	ret0, _ := ret[0].(*entity.Order)
+	ret0, _ := ret[0].(*usecase.OrderDetails)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -96,10 +96,10 @@ func (mr *MockOrderUseCaseMockRecorder) GetOrderCreationResources(ctx interface{
 }
 
 // ListOrders mocks base method.
-func (m *MockOrderUseCase) ListOrders(ctx context.Context) ([]*entity.Order, error) {
+func (m *MockOrderUseCase) ListOrders(ctx context.Context) ([]*usecase.OrderDetails, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListOrders", ctx)
-	ret0, _ := ret[0].([]*entity.Order)
+	ret0, _ := ret[0].([]*usecase.OrderDetails)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

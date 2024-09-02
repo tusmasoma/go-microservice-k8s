@@ -16,28 +16,16 @@ func Test_OrderRepository(t *testing.T) {
 	repo := NewOrderRepository(db)
 
 	order := entity.Order{
-		ID: uuid.New().String(),
-		Customer: entity.Customer{
-			ID: uuid.New().String(),
-			// Name:    "John Doe",
-			// Email:   "john.doe@example.com",
-			// Street:  "1600 Pennsylvania Avenue NW",
-			// City:    "Washington",
-			// Country: "USA",
-		},
-		OrderDate: time.Now(),
-		OrderLines: []entity.OrderLine{
+		ID:         uuid.New().String(),
+		CustomerID: uuid.New().String(),
+		OrderDate:  time.Now(),
+		OrderLines: []*entity.OrderLine{
 			{
-				CatalogItem: entity.CatalogItem{
-					ID: uuid.New().String(),
-					// Name:  "item1",
-					// Price: 100,
-				},
-				Count: 1,
+				CatalogItemID: uuid.New().String(),
+				Count:         1,
 			},
 		},
 	}
-	order.TotalPrice = order.GetTotalPrice()
 
 	// Create
 	err := repo.Create(ctx, order)

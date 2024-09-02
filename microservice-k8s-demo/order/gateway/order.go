@@ -27,14 +27,14 @@ func NewOrderHandler(ouc usecase.OrderUseCase) pb.OrderServiceServer {
 }
 
 func (oh *orderHandler) ListOrders(ctx context.Context, _ *pb.ListOrdersRequest) (*pb.ListOrdersResponse, error) {
-	orders, err := oh.ouc.ListOrders(ctx)
+	orderDetails, err := oh.ouc.ListOrders(ctx)
 	if err != nil {
 		return nil, err
 	}
-	orderResponses := make([]*pb.Order, 0, len(orders))
-	for _, order := range orders {
-		orderLines := make([]*pb.OrderLine, 0, len(order.OrderLines))
-		for _, ol := range order.OrderLines {
+	orderResponses := make([]*pb.Order, 0, len(orderDetails))
+	for _, od := range orderDetails {
+		orderLines := make([]*pb.OrderLine, 0, len(od.OrderLines))
+		for _, ol := range od.OrderLines {
 			orderLines = append(orderLines, &pb.OrderLine{
 				Item: &pb.CatalogItem{
 					Id:    ol.CatalogItem.ID,
@@ -46,18 +46,18 @@ func (oh *orderHandler) ListOrders(ctx context.Context, _ *pb.ListOrdersRequest)
 		}
 
 		orderResponses = append(orderResponses, &pb.Order{
-			Id: order.ID,
+			Id: od.Order.ID,
 			Customer: &pb.Customer{
-				Id:      order.Customer.ID,
-				Name:    order.Customer.Name,
-				Email:   order.Customer.Email,
-				Street:  order.Customer.Street,
-				City:    order.Customer.City,
-				Country: order.Customer.Country,
+				Id:      od.Customer.ID,
+				Name:    od.Customer.Name,
+				Email:   od.Customer.Email,
+				Street:  od.Customer.Street,
+				City:    od.Customer.City,
+				Country: od.Customer.Country,
 			},
-			OrderDate:  timestamppb.New(order.OrderDate),
+			OrderDate:  timestamppb.New(od.Order.OrderDate),
 			OrderLines: orderLines,
-			TotalPrice: order.TotalPrice,
+			TotalPrice: od.Order.TotalPrice,
 		})
 	}
 	return &pb.ListOrdersResponse{

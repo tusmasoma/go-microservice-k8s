@@ -11,8 +11,8 @@ import (
 
 type OrderUseCase interface {
 	GetOrderCreationResources(ctx context.Context) ([]entity.Customer, []entity.CatalogItem, error)
-	GetOrder(ctx context.Context, id string) (*entity.Order, error)
-	ListOrders(ctx context.Context) ([]*entity.Order, error)
+	GetOrder(ctx context.Context, id string) (*OrderDetails, error)
+	ListOrders(ctx context.Context) ([]*OrderDetails, error)
 	CreateOrder(ctx context.Context, params *CreateOrderParams) error
 	DeleteOrder(ctx context.Context, id string) error
 }
@@ -49,41 +49,53 @@ func (ouc *orderUseCase) GetOrderCreationResources(ctx context.Context) ([]entit
 	return customers, items, nil
 }
 
-func (ouc *orderUseCase) GetOrder(ctx context.Context, id string) (*entity.Order, error) {
+type OrderDetails struct {
+	Order      *entity.Order
+	Customer   *entity.Customer
+	OrderLines []*OrderLineDetails
+}
+
+type OrderLineDetails struct {
+	Count       int
+	CatalogItem *entity.CatalogItem
+}
+
+func (ouc *orderUseCase) GetOrder(ctx context.Context, id string) (*OrderDetails, error) {
 	order, err := ouc.or.Get(ctx, id)
 	if err != nil {
 		log.Error("Failed to get order", log.Ferror(err))
 		return nil, err
 	}
 
-	customer, err := ouc.cr.Get(ctx, order.Customer.ID)
+	customer, err := ouc.cr.Get(ctx, order.CustomerID)
 	if err != nil {
 		log.Error("Failed to get customer", log.Ferror(err))
 		return nil, err
 	}
 
-	var orderLines []entity.OrderLine
+	var orderLineDetails []*OrderLineDetails
 	for _, ol := range order.OrderLines {
 		// TODO: N + 1 problem
-		item, err := ouc.cir.Get(ctx, ol.CatalogItem.ID)
+		item, err := ouc.cir.Get(ctx, ol.CatalogItemID)
 		if err != nil {
 			return nil, err
 		}
-		orderLines = append(orderLines, entity.OrderLine{
+		orderLineDetails = append(orderLineDetails, &OrderLineDetails{
 			Count:       ol.Count,
-			CatalogItem: *item,
+			CatalogItem: item,
 		})
 	}
 
-	order.Customer = *customer
-	order.OrderLines = orderLines
-
-	order.TotalPrice = order.GetTotalPrice()
-
-	return order, nil
+	return &OrderDetails{
+		Order:      order,
+		Customer:   customer,
+		OrderLines: orderLineDetails,
+	}, nil
 }
 
-func (ouc *orderUseCase) ListOrders(ctx context.Context) ([]*entity.Order, error) {
+func (ouc *orderUseCase) ListOrders(ctx context.Context) ([]*OrderDetails, error) {
+	var orderDetails []*OrderDetails
+
 	orders, err := ouc.or.List(ctx)
 	if err != nil {
 		log.Error("Failed to get orders", log.Ferror(err))
@@ -91,31 +103,33 @@ func (ouc *orderUseCase) ListOrders(ctx context.Context) ([]*entity.Order, error
 	}
 
 	for _, order := range orders {
-		customer, err := ouc.cr.Get(ctx, order.Customer.ID)
+		customer, err := ouc.cr.Get(ctx, order.CustomerID)
 		if err != nil {
 			log.Error("Failed to get customer", log.Ferror(err))
 			return nil, err
 		}
 
-		var orderLines []entity.OrderLine
+		var orderLineDetails []*OrderLineDetails
 		for _, ol := range order.OrderLines {
 			// TODO: N + 1 problem
-			item, err := ouc.cir.Get(ctx, ol.CatalogItem.ID)
+			item, err := ouc.cir.Get(ctx, ol.CatalogItemID)
 			if err != nil {
 				return nil, err
 			}
-			orderLines = append(orderLines, entity.OrderLine{
+			orderLineDetails = append(orderLineDetails, &OrderLineDetails{
 				Count:       ol.Count,
-				CatalogItem: *item,
+				CatalogItem: item,
 			})
 		}
 
-		order.Customer = *customer
-		order.OrderLines = orderLines
-		order.TotalPrice = order.GetTotalPrice()
+		orderDetails = append(orderDetails, &OrderDetails{
+			Order:      order,
+			Customer:   customer,
+			OrderLines: orderLineDetails,
+		})
 	}
 
-	return orders, nil
+	return orderDetails, nil
 }
 
 type CreateOrderParams struct {
@@ -127,28 +141,17 @@ type CreateOrderParams struct {
 }
 
 func (ouc *orderUseCase) CreateOrder(ctx context.Context, params *CreateOrderParams) error {
-	customer, err := ouc.cr.Get(ctx, params.CustomerID)
-	if err != nil {
-		log.Error("Failed to get cusotmer", log.Ferror(err))
-		return err
-	}
-
-	var orderLiens []entity.OrderLine
+	var orderLiens []*entity.OrderLine
 	for _, ol := range params.OrderLine {
-		item, err := ouc.cir.Get(ctx, ol.CatalogItemID) //nolint:govet // err shadow
-		if err != nil {
-			log.Error("Failed to get catalog item", log.Ferror(err))
-			return err
-		}
-		orderLine, err := entity.NewOrderLine(ol.Count, *item)
+		orderLine, err := entity.NewOrderLine(ol.Count, ol.CatalogItemID)
 		if err != nil {
 			log.Error("Failed to create order line", log.Ferror(err))
 			return err
 		}
-		orderLiens = append(orderLiens, *orderLine)
+		orderLiens = append(orderLiens, orderLine)
 	}
 
-	order, err := entity.NewOrder(*customer, orderLiens)
+	order, err := entity.NewOrder(params.CustomerID, orderLiens)
 	if err != nil {
 		log.Error("Failed to create order", log.Ferror(err))
 		return err

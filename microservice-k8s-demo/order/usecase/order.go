@@ -78,6 +78,7 @@ func (ouc *orderUseCase) GetOrder(ctx context.Context, id string) (*OrderDetails
 		// TODO: N + 1 problem
 		item, err := ouc.cir.Get(ctx, ol.CatalogItemID)
 		if err != nil {
+			log.Error("Failed to get catalog item", log.Ferror(err))
 			return nil, err
 		}
 		orderLineDetails = append(orderLineDetails, &OrderLineDetails{
@@ -116,6 +117,7 @@ func (ouc *orderUseCase) ListOrders(ctx context.Context) ([]*OrderDetails, error
 			// TODO: N + 1 problem
 			item, err := ouc.cir.Get(ctx, ol.CatalogItemID)
 			if err != nil {
+				log.Error("Failed to get catalog item", log.Ferror(err))
 				return nil, err
 			}
 			orderLineDetails = append(orderLineDetails, &OrderLineDetails{

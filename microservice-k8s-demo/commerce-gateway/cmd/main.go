@@ -64,7 +64,7 @@ func main() {
 	log.Info("Server exited")
 }
 
-func BuildContainer(ctx context.Context, addr string) (*http.Server, error) {
+func BuildContainer(ctx context.Context, addr string) (*http.Server, error) { //nolint:funlen // it's okay
 	serverConfig, err := config.NewServerConfig(ctx)
 	if err != nil {
 		log.Critical("Failed to load server config", log.Ferror(err))
@@ -107,9 +107,15 @@ func BuildContainer(ctx context.Context, addr string) (*http.Server, error) {
 		MaxAge:           time.Duration(serverConfig.PreflightCacheDurationSec) * time.Second,
 	}))
 
+	r.LoadHTMLFiles("gateway/web/templates/index.html")
 	r.LoadHTMLGlob("gateway/web/templates/**/*")
 
 	api := r.Group("/")
+	{
+		api.GET("/", func(c *gin.Context) {
+			c.HTML(http.StatusOK, "base/index.html", gin.H{})
+		})
+	}
 	{
 		catalog := api.Group("/catalog")
 		{

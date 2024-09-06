@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: customer
-        image: customer:latest
+        image: somakimura/customer-service:latest
         ports:
         - containerPort: 8081
         envFrom:

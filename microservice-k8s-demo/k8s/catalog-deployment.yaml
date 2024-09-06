@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: catalog
-        image: catalog:latest
+        image: somakimura/catalog-service:latest
         ports:
         - containerPort: 8082
         envFrom:

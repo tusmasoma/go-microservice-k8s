@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: order
-        image: order:latest
+        image: somakimura/order-service:latest
         ports:
         - containerPort: 8083
         envFrom:

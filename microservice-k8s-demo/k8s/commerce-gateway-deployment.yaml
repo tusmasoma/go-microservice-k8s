@@ -19,13 +19,13 @@ spec:
         image: commerce-gateway:latest
         ports:
         - containerPort: 8080
-        resources: {
-          limits: {
-            memory: "128Mi",
+        envFrom:
+        - configMapRef:
+            name: shared-config
+        resources:
+          limits:
+            memory: "128Mi"
             cpu: "500m"
-          },
-          requests: {
-            memory: "64Mi",
+          requests:
+            memory: "64Mi"
             cpu: "250m"
-          }
-        }

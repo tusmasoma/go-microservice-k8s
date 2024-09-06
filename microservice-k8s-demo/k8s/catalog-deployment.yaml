@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog
+  labels:
+    app: catalog
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: catalog
+  template:
+    metadata:
+      labels:
+        app: catalog
+    spec:
+      containers:
+      - name: catalog
+        image: catalog:latest
+        ports:
+        - containerPort: 8082
+        resources: {
+          limits: {
+            memory: "128Mi",
+            cpu: "500m"
+          },
+          requests: {
+            memory: "64Mi",
+            cpu: "250m"
+          }
+        }

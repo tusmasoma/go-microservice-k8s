@@ -3,10 +3,10 @@ kind: ConfigMap
 metadata:
   name: shared-config
 data:
-  MYSQL_HOST: "mysql"
+  MYSQL_HOST: "mysql-service"
   MYSQL_PORT: "3306"
   MYSQL_DB_NAME: "microservice-k8s-demo-db"
-  MYSQL_USER: "root"
+  MYSQL_USER: "microservice-k8s-demo"
   MYSQL_PASSWORD: "microservice-k8s-demo"
   MYSQL_ROOT_PASSWORD: "microservice-k8s-demo"
   SERVER_READ_TIMEOUT: "10s"

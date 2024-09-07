@@ -6,7 +6,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-    - host: "commerce.local"  # ローカルホスト名
+    - host: commerce.local  # ローカルホスト名
       http:
         paths:
           - path: /

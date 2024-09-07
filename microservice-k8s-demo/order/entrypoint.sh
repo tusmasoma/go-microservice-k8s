@@ -1,6 +1,6 @@
 #!/bin/sh
 
-MYSQL_HOST=${MYSQL_HOST:-"mysql"}
+MYSQL_HOST=${MYSQL_HOST:-"mysql-service"}
 
 echo "Waiting for MySQL to start on host $MYSQL_HOST..."
 

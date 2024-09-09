@@ -93,6 +93,21 @@ func (mr *MockCatalogItemUseCaseMockRecorder) ListCatalogItems(ctx interface{}) 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListCatalogItems", reflect.TypeOf((*MockCatalogItemUseCase)(nil).ListCatalogItems), ctx)
 }
 
+// ListCatalogItemsByIDs mocks base method.
+func (m *MockCatalogItemUseCase) ListCatalogItemsByIDs(ctx context.Context, ids []string) ([]entity.CatalogItem, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListCatalogItemsByIDs", ctx, ids)
+	ret0, _ := ret[0].([]entity.CatalogItem)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListCatalogItemsByIDs indicates an expected call of ListCatalogItemsByIDs.
+func (mr *MockCatalogItemUseCaseMockRecorder) ListCatalogItemsByIDs(ctx, ids interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListCatalogItemsByIDs", reflect.TypeOf((*MockCatalogItemUseCase)(nil).ListCatalogItemsByIDs), ctx, ids)
+}
+
 // ListCatalogItemsByName mocks base method.
 func (m *MockCatalogItemUseCase) ListCatalogItemsByName(ctx context.Context, name string) ([]entity.CatalogItem, error) {
 	m.ctrl.T.Helper()

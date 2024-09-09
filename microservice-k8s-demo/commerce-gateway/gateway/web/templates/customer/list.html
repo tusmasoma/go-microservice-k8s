@@ -42,7 +42,7 @@
                     {{ else }}
                     {{ range .Customers }}
                     <tr>
-                        <td><a href="{{ .ID }}.html">{{ .ID }}</a></td>
+                        <td><a href="{{ .Id }}.html">{{ .Id }}</a></td>
                         <td>{{ .Name }}</td>
                         <td>{{ .Email }}</td>
                         <td>{{ .Street }}</td>
@@ -50,13 +50,13 @@
                         <td>{{ .Country }}</td>
                         <td>
                             <form action="/customer/delete" method="GET">
-                                <input type="hidden" name="id" value="{{ .ID }}" />
+                                <input type="hidden" name="id" value="{{ .Id }}" />
                                 <input type="submit" value="delete" class="btn btn-link" />
                             </form>
                         </td>
                         <td>
                             <form action="/customer/update" method="GET">
-                                <input type="hidden" name="id" value="{{ .ID }}" />
+                                <input type="hidden" name="id" value="{{ .Id }}" />
                                 <input type="submit" value="update" class="btn btn-link" />
                             </form>
                         </td>

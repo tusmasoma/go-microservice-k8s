@@ -23,6 +23,7 @@ const (
 	CatalogService_GetCatalogItem_FullMethodName         = "/catalog.CatalogService/GetCatalogItem"
 	CatalogService_ListCatalogItems_FullMethodName       = "/catalog.CatalogService/ListCatalogItems"
 	CatalogService_ListCatalogItemsByName_FullMethodName = "/catalog.CatalogService/ListCatalogItemsByName"
+	CatalogService_ListCatalogItemsByIDs_FullMethodName  = "/catalog.CatalogService/ListCatalogItemsByIDs"
 	CatalogService_CreateCatalogItem_FullMethodName      = "/catalog.CatalogService/CreateCatalogItem"
 	CatalogService_UpdateCatalogItem_FullMethodName      = "/catalog.CatalogService/UpdateCatalogItem"
 	CatalogService_DeleteCatalogItem_FullMethodName      = "/catalog.CatalogService/DeleteCatalogItem"
@@ -35,6 +36,7 @@ type CatalogServiceClient interface {
 	GetCatalogItem(ctx context.Context, in *GetCatalogItemRequest, opts ...grpc.CallOption) (*GetCatalogItemResponse, error)
 	ListCatalogItems(ctx context.Context, in *ListCatalogItemsRequest, opts ...grpc.CallOption) (*ListCatalogItemsResponse, error)
 	ListCatalogItemsByName(ctx context.Context, in *ListCatalogItemsByNameRequest, opts ...grpc.CallOption) (*ListCatalogItemsByNameResponse, error)
+	ListCatalogItemsByIDs(ctx context.Context, in *ListCatalogItemsByIDsRequest, opts ...grpc.CallOption) (*ListCatalogItemsByIDsResponse, error)
 	CreateCatalogItem(ctx context.Context, in *CreateCatalogItemRequest, opts ...grpc.CallOption) (*CreateCatalogItemResponse, error)
 	UpdateCatalogItem(ctx context.Context, in *UpdateCatalogItemRequest, opts ...grpc.CallOption) (*UpdateCatalogItemResponse, error)
 	DeleteCatalogItem(ctx context.Context, in *DeleteCatalogItemRequest, opts ...grpc.CallOption) (*DeleteCatalogItemResponse, error)
@@ -75,6 +77,15 @@ func (c *catalogServiceClient) ListCatalogItemsByName(ctx context.Context, in *L
 	return out, nil
 }
 
+func (c *catalogServiceClient) ListCatalogItemsByIDs(ctx context.Context, in *ListCatalogItemsByIDsRequest, opts ...grpc.CallOption) (*ListCatalogItemsByIDsResponse, error) {
+	out := new(ListCatalogItemsByIDsResponse)
+	err := c.cc.Invoke(ctx, CatalogService_ListCatalogItemsByIDs_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *catalogServiceClient) CreateCatalogItem(ctx context.Context, in *CreateCatalogItemRequest, opts ...grpc.CallOption) (*CreateCatalogItemResponse, error) {
 	out := new(CreateCatalogItemResponse)
 	err := c.cc.Invoke(ctx, CatalogService_CreateCatalogItem_FullMethodName, in, out, opts...)
@@ -109,6 +120,7 @@ type CatalogServiceServer interface {
 	GetCatalogItem(context.Context, *GetCatalogItemRequest) (*GetCatalogItemResponse, error)
 	ListCatalogItems(context.Context, *ListCatalogItemsRequest) (*ListCatalogItemsResponse, error)
 	ListCatalogItemsByName(context.Context, *ListCatalogItemsByNameRequest) (*ListCatalogItemsByNameResponse, error)
+	ListCatalogItemsByIDs(context.Context, *ListCatalogItemsByIDsRequest) (*ListCatalogItemsByIDsResponse, error)
 	CreateCatalogItem(context.Context, *CreateCatalogItemRequest) (*CreateCatalogItemResponse, error)
 	UpdateCatalogItem(context.Context, *UpdateCatalogItemRequest) (*UpdateCatalogItemResponse, error)
 	DeleteCatalogItem(context.Context, *DeleteCatalogItemRequest) (*DeleteCatalogItemResponse, error)
@@ -128,6 +140,10 @@ func (UnimplementedCatalogServiceServer) ListCatalogItems(context.Context, *List
 
 func (UnimplementedCatalogServiceServer) ListCatalogItemsByName(context.Context, *ListCatalogItemsByNameRequest) (*ListCatalogItemsByNameResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListCatalogItemsByName not implemented")
+}
+
+func (UnimplementedCatalogServiceServer) ListCatalogItemsByIDs(context.Context, *ListCatalogItemsByIDsRequest) (*ListCatalogItemsByIDsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListCatalogItemsByIDs not implemented")
 }
 
 func (UnimplementedCatalogServiceServer) CreateCatalogItem(context.Context, *CreateCatalogItemRequest) (*CreateCatalogItemResponse, error) {
@@ -208,6 +224,24 @@ func _CatalogService_ListCatalogItemsByName_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CatalogService_ListCatalogItemsByIDs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListCatalogItemsByIDsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CatalogServiceServer).ListCatalogItemsByIDs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CatalogService_ListCatalogItemsByIDs_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CatalogServiceServer).ListCatalogItemsByIDs(ctx, req.(*ListCatalogItemsByIDsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _CatalogService_CreateCatalogItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateCatalogItemRequest)
 	if err := dec(in); err != nil {
@@ -280,6 +314,10 @@ var CatalogService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListCatalogItemsByName",
 			Handler:    _CatalogService_ListCatalogItemsByName_Handler,
+		},
+		{
+			MethodName: "ListCatalogItemsByIDs",
+			Handler:    _CatalogService_ListCatalogItemsByIDs_Handler,
 		},
 		{
 			MethodName: "CreateCatalogItem",

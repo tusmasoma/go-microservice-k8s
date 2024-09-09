@@ -15,6 +15,7 @@ import (
 type CatalogItemHandler interface {
 	GetCatalogItem(ctx context.Context, req *pb.GetCatalogItemRequest) (*pb.GetCatalogItemResponse, error)
 	ListCatalogItemsByName(ctx context.Context, req *pb.ListCatalogItemsByNameRequest) (*pb.ListCatalogItemsByNameResponse, error)
+	ListCatalogItemsByIDs(ctx context.Context, req *pb.ListCatalogItemsByIDsRequest) (*pb.ListCatalogItemsByIDsResponse, error)
 	ListCatalogItems(ctx context.Context, req *pb.ListCatalogItemsRequest) (*pb.ListCatalogItemsResponse, error)
 	CreateCatalogItem(ctx context.Context, req *pb.CreateCatalogItemRequest) (*pb.CreateCatalogItemResponse, error)
 	UpdateCatalogItem(ctx context.Context, req *pb.UpdateCatalogItemRequest) (*pb.UpdateCatalogItemResponse, error)
@@ -77,6 +78,33 @@ func (ch *catalogItemHandler) ListCatalogItemsByName(ctx context.Context, req *p
 	}
 
 	return &pb.ListCatalogItemsByNameResponse{
+		Items: res,
+	}, nil
+}
+
+func (ch *catalogItemHandler) ListCatalogItemsByIDs(ctx context.Context, req *pb.ListCatalogItemsByIDsRequest) (*pb.ListCatalogItemsByIDsResponse, error) {
+	ids := req.GetIds()
+	if len(ids) == 0 {
+		log.Warn("IDs are required")
+		return nil, status.Errorf(codes.InvalidArgument, "IDs are required")
+	}
+
+	items, err := ch.cuc.ListCatalogItemsByIDs(ctx, ids)
+	if err != nil {
+		log.Error("Failed to list catalog items by IDs", log.Ferror(err))
+		return nil, status.Errorf(codes.Internal, "Failed to list catalog items by IDs")
+	}
+
+	var res []*pb.CatalogItem
+	for _, item := range items {
+		res = append(res, &pb.CatalogItem{
+			Id:    item.ID,
+			Name:  item.Name,
+			Price: item.Price,
+		})
+	}
+
+	return &pb.ListCatalogItemsByIDsResponse{
 		Items: res,
 	}, nil
 }

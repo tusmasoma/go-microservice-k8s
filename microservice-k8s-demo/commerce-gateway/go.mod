@@ -7,8 +7,9 @@ require (
 	github.com/gin-gonic/gin v1.10.0
 	github.com/joho/godotenv v1.5.1
 	github.com/sethvargo/go-envconfig v0.9.0
-	github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog v0.0.0-20240824105341-16334c5e8fb3
-	github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/customer v0.0.0-20240824105955-6f1c73830b18
+	github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog v0.0.0-20240824175103-2d74f731488d
+	github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/customer v0.0.0-20240824175103-2d74f731488d
+	github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/order v0.0.0-20240830112230-f745e0958195
 	github.com/tusmasoma/go-tech-dojo v0.0.0-20240805120803-02e31d5c8a21
 	google.golang.org/grpc v1.65.0
 )

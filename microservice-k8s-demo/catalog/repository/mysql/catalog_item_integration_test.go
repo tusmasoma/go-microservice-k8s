@@ -50,6 +50,13 @@ func Test_CatalogItemRepository(t *testing.T) {
 		t.Errorf("want: 2, got: %d", len(gotItems))
 	}
 
+	// ListByIDs
+	gotItems, err = repo.ListByIDs(ctx, []string{item1.ID, item2.ID})
+	ValidateErr(t, err, nil)
+	if len(gotItems) != 2 {
+		t.Errorf("want: 2, got: %d", len(gotItems))
+	}
+
 	// Update
 	item1.Name = "item1-updated"
 	item1.Price = 150

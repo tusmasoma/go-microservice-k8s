@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shared-config
+data:
+  MYSQL_HOST: "mysql-service"
+  MYSQL_PORT: "3306"
+  MYSQL_DB_NAME: "microservice-k8s-demo-db"
+  MYSQL_USER: "microservice-k8s-demo"
+  MYSQL_PASSWORD: "microservice-k8s-demo"
+  MYSQL_ROOT_PASSWORD: "microservice-k8s-demo"
+  SERVER_READ_TIMEOUT: "10s"
+  SERVER_WRITE_TIMEOUT: "15s"
+  SERVER_IDLE_TIMEOUT: "20s"
+  SERVER_GRACEFUL_SHUTDOWN_TIMEOUT: "10s"
+  SERVER_PREFLIGHT_CACHE_DURATION_SEC: "600"

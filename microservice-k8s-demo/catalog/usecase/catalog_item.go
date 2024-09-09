@@ -14,6 +14,7 @@ type CatalogItemUseCase interface {
 	GetCatalogItem(ctx context.Context, id string) (*entity.CatalogItem, error)
 	ListCatalogItems(ctx context.Context) ([]entity.CatalogItem, error)
 	ListCatalogItemsByName(ctx context.Context, name string) ([]entity.CatalogItem, error)
+	ListCatalogItemsByIDs(ctx context.Context, ids []string) ([]entity.CatalogItem, error)
 	CreateCatalogItem(ctx context.Context, name string, price float64) error
 	UpdateCatalogItem(ctx context.Context, id, name string, price float64) error
 	DeleteCatalogItem(ctx context.Context, id string) error
@@ -51,6 +52,15 @@ func (cu *catalogItemUseCase) ListCatalogItemsByName(ctx context.Context, name s
 	items, err := cu.cr.ListByName(ctx, name)
 	if err != nil {
 		log.Error("Failed to list catalog items by name", log.Ferror(err))
+		return nil, err
+	}
+	return items, nil
+}
+
+func (cu *catalogItemUseCase) ListCatalogItemsByIDs(ctx context.Context, ids []string) ([]entity.CatalogItem, error) {
+	items, err := cu.cr.ListByIDs(ctx, ids)
+	if err != nil {
+		log.Error("Failed to list catalog items by ids", log.Ferror(err))
 		return nil, err
 	}
 	return items, nil

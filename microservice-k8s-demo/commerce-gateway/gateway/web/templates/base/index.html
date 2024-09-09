@@ -1,0 +1,43 @@
+{{ define "base/index.html" }}
+<!DOCTYPE html>
+<html>
+<head>
+<title>Order Processing</title>
+
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+	<h1>Order Processing</h1>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-4">
+				<a href="/customer/list">Customer</a>
+			</div>
+			<div class="col-md-4">List / add / remove customers</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4">
+				<a href="/catalog/list">Catalog</a>
+			</div>
+			<div class="col-md-4">List / add / remove items</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4">
+				<a href="/order/list">Order</a>
+			</div>
+			<div class="col-md-4">List / add / remove orders</div>
+		</div>
+		<div class="row">
+		</div>
+	</div>
+</body>
+</html>
+{{ end }}

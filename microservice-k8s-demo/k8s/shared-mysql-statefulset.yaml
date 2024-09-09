@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+spec:
+  serviceName: mysql
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: shared-config
+              key: MYSQL_ROOT_PASSWORD
+        - name: MYSQL_DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: shared-config
+              key: MYSQL_DB_NAME
+        - name: MYSQL_USER
+          valueFrom:
+            configMapKeyRef:
+              name: shared-config
+              key: MYSQL_USER
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: shared-config
+              key: MYSQL_PASSWORD
+        volumeMounts:
+        - name: mysql-data
+          mountPath: /var/lib/mysql
+      #   - name: mysql-initdb
+      #     mountPath: /docker-entrypoint-initdb.d
+      #   - name: mysql-config
+      #     mountPath: /etc/mysql/my.cnf
+      # volumes: # TODO: 相対パスでの指定はできないので、絶対パスで指定する
+      #   - name: mysql-initdb
+      #     hostPath:
+      #       path: ../mysql/
+      #   - name: mysql-config
+      #     hostPath:
+      #       path: ../mysql/my.cnf
+  volumeClaimTemplates:
+  - metadata:
+      name: mysql-data
+    # storageClassName: "my-storage-class" -> ここでstorageClassを指定しないと、デフォルトのStorageClassが割り当てられる (kubectl get storageclassで確認可能)
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 5Gi

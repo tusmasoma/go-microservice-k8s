@@ -1,4 +1,4 @@
-FROM golang:1.21.3
+FROM golang:1.21.3 AS builder
 
 RUN apt-get update && apt-get install -y default-mysql-client
 
@@ -11,6 +11,15 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o main ./cmd/main.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main ./cmd/main.go
+
+FROM alpine:3.18 AS production
+
+RUN apk add --no-cache mysql-client
+
+WORKDIR /app
+
+COPY --from=builder /app/main .
+COPY gateway/web/templates /app/gateway/web/templates
 
 CMD ["/app/main"]

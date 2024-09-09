@@ -3,6 +3,7 @@ package mysql
 import (
 	"context"
 	"database/sql"
+	"strings"
 
 	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/entity"
 	"github.com/tusmasoma/go-microservice-k8s/microservice-k8s-demo/catalog/repository"
@@ -92,6 +93,50 @@ func (cr *catalogItemRepository) ListByName(ctx context.Context, name string) ([
 	`
 
 	rows, err := executor.QueryContext(ctx, query, "%"+name+"%")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var items []entity.CatalogItem
+	for rows.Next() {
+		var item entity.CatalogItem
+		if err = rows.Scan(
+			&item.ID,
+			&item.Name,
+			&item.Price,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, item)
+	}
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return items, nil
+}
+
+func (cr *catalogItemRepository) ListByIDs(ctx context.Context, ids []string) ([]entity.CatalogItem, error) {
+	executor := cr.db
+	if tx := TxFromCtx(ctx); tx != nil {
+		executor = tx
+	}
+
+	placeholders := make([]string, len(ids))
+	args := make([]interface{}, len(ids))
+	for i, id := range ids {
+		placeholders[i] = "?"
+		args[i] = id
+	}
+
+	query := `
+	SELECT id, name, price
+	FROM CatalogItems
+	WHERE id IN (` + strings.Join(placeholders, ",") + `)
+	`
+
+	rows, err := executor.QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, err
 	}

@@ -8,7 +8,7 @@ GO_ENV ?= GOPRIVATE=github.com/tusmasoma GOBIN=$(BIN)
 
 # maicroservices
 SERVICES := catalog customer order commerce-gateway
-SERVICE_PATH_PREFIX := microservice-k8s-demo
+SERVICE_PATH_PREFIX := services
 
 # tools
 $(shell mkdir -p $(BIN))
@@ -84,14 +84,14 @@ fmt: $(BIN)/goimports-$(GOIMPORTS_VERSION) $(BIN)/gofumpt-$(GOFUMPT_VERSION)
 ifdef SERVICE
 	@echo "Running fmt for service: $(SERVICE)"
 	FILES=$$(find $(SERVICE_PATH_PREFIX)/$(SERVICE) -type f -name "*.go") && \
-	LOCAL_PKG="github.com/tusmasoma/microservice-k8s-demo/$(SERVICE)" && \
+	LOCAL_PKG="github.com/tusmasoma/services/$(SERVICE)" && \
 	${GO_ENV} $(BIN)/goimports -local "$${LOCAL_PKG}" -w $${FILES} && \
 	${GO_ENV} $(BIN)/gofumpt -l -w $${FILES}
 else
 	@for service in $(SERVICES); do \
 		echo "Running fmt for service: $$service"; \
 		FILES=$$(find $(SERVICE_PATH_PREFIX)/$$service -type f -name "*.go") && \
-		LOCAL_PKG="github.com/tusmasoma/microservice-k8s-demo/$$service" && \
+		LOCAL_PKG="github.com/tusmasoma/services/$$service" && \
 		${GO_ENV} $(BIN)/goimports -local "$${LOCAL_PKG}" -w $${FILES} && \
 		${GO_ENV} $(BIN)/gofumpt -l -w $${FILES}; \
 	done

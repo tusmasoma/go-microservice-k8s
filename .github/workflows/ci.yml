@@ -54,19 +54,19 @@ jobs:
         uses: actions/setup-go@v4.1.0
         id: setup-go
         with:
-          go-version-file: ./microservice-k8s-demo/${{ matrix.service }}/go.mod
-          cache-dependency-path: ./microservice-k8s-demo/${{ matrix.service }}/go.sum
+          go-version-file: ./services/${{ matrix.service }}/go.mod
+          cache-dependency-path: ./services/${{ matrix.service }}/go.sum
 
       - name: Download Go modules
         shell: bash
         if: ${{ steps.setup-go.outputs.cache-hit != 'true' }}
-        working-directory: ./microservice-k8s-demo/${{ matrix.service }}
+        working-directory: ./services/${{ matrix.service }}
         run: |
           go mod download
           go mod verify
 
       - name: Build
-        working-directory: ./microservice-k8s-demo/${{ matrix.service }}
+        working-directory: ./services/${{ matrix.service }}
         run: |
           go build -v -o app ./cmd/
 
@@ -74,7 +74,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: app-${{ matrix.service }}
-          path: ./microservice-k8s-demo/${{ matrix.service }}/app
+          path: ./services/${{ matrix.service }}/app
 
   test:
     needs: build
@@ -87,15 +87,15 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: app-${{ matrix.service }}
-          path: ./microservice-k8s-demo/${{ matrix.service }}/app
+          path: ./services/${{ matrix.service }}/app
 
       # - name: Setup .env file
-      #   run: echo "${{ secrets.LOCAL_ENV_FILE }}" > ./microservice-k8s-demo/.env
+      #   run: echo "${{ secrets.LOCAL_ENV_FILE }}" > ./services/.env
       #   env:
       #     LOCAL_ENV_FILE: ${{ secrets.LOCAL_ENV_FILE }}
 
       - name: Test
-        working-directory: ./microservice-k8s-demo/${{ matrix.service }}
+        working-directory: ./services/${{ matrix.service }}
         run: go test -v ./...
 
   lint:
@@ -109,7 +109,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: app-${{ matrix.service }}
-          path: ./microservice-k8s-demo/${{ matrix.service }}/app
+          path: ./services/${{ matrix.service }}/app
 
       - name: Lint
         run: make lint SERVICE=${{ matrix.service }}
@@ -124,7 +124,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
          name: app-${{ matrix.service }}
-         path: ./microservice-k8s-demo/${{ matrix.service }}/app
+         path: ./services/${{ matrix.service }}/app
 
       - name: Generate and check for changes
         run: |

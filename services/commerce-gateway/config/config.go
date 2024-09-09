@@ -24,7 +24,10 @@ type ServerConfig struct {
 func NewServerConfig(ctx context.Context) (*ServerConfig, error) {
 	conf := &ServerConfig{}
 	pl := envconfig.PrefixLookuper(serverPrefix, envconfig.OsLookuper())
-	if err := envconfig.ProcessWith(ctx, conf, pl); err != nil {
+	if err := envconfig.ProcessWith(ctx, &envconfig.Config{
+		Target:   conf,
+		Lookuper: pl,
+	}); err != nil {
 		log.Error("Failed to load server config", log.Ferror(err))
 		return nil, err
 	}

@@ -59,10 +59,10 @@ github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXf
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/stretchr/testify v1.9.0 h1:HtqpIVDClZ4nwg75+f6Lvsy/wHu+3BoSGCbBAcpTsTg=
 github.com/stretchr/testify v1.9.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
-github.com/tusmasoma/go-microservice-k8s/services/catalog v0.0.0-20240909071852-84d4d65d2ea1 h1:yAnYs7taWkgKAX4HTbwSLiRxVJyjrG5eBBHF7FZ7X14=
-github.com/tusmasoma/go-microservice-k8s/services/catalog v0.0.0-20240909071852-84d4d65d2ea1/go.mod h1:/XliqBfzLENl+ctPkyLg+ER90HH/Y/H+En92ZtTD1PM=
-github.com/tusmasoma/go-microservice-k8s/services/customer v0.0.0-20240909071852-84d4d65d2ea1 h1:8IZFyQiNfkC04z2ZCnXQea7oTaf1lpOyf5G6SNGbYmg=
-github.com/tusmasoma/go-microservice-k8s/services/customer v0.0.0-20240909071852-84d4d65d2ea1/go.mod h1:aqZuAax2IV9OwdnB6jSHOO8r9SLegswqHb5xyyBn7EE=
+github.com/tusmasoma/go-microservice-k8s/services/catalog v0.0.0-20240909075020-3aaa6e21f967 h1:+mlIryH9//X1KmqpztHh+BNwKFSDabdUiXi0ibFmmFQ=
+github.com/tusmasoma/go-microservice-k8s/services/catalog v0.0.0-20240909075020-3aaa6e21f967/go.mod h1:tcAG1ESWBGFV0z+WChz3ou86wdLJewk2XTq9UtyE50c=
+github.com/tusmasoma/go-microservice-k8s/services/customer v0.0.0-20240909075020-3aaa6e21f967 h1:3dD3oRsoOfoBfoFIIzR4xSD1KMAzAa51gKeKO0oFUL4=
+github.com/tusmasoma/go-microservice-k8s/services/customer v0.0.0-20240909075020-3aaa6e21f967/go.mod h1:DD1G2+5UW1ttTJtj9gLgdkRn+HPQh9BxZu42XFyiX9Q=
 github.com/tusmasoma/go-tech-dojo v0.0.0-20240805120803-02e31d5c8a21 h1:PqS+hcn9LqAtAlT4smL+La21yitR4EUlJMwRS+sXxbM=
 github.com/tusmasoma/go-tech-dojo v0.0.0-20240805120803-02e31d5c8a21/go.mod h1:mH89EpPULPVXGy2COeSKz3GXGwRmUvqHj7rm24MXjIo=
 github.com/yuin/goldmark v1.3.5/go.mod h1:mwnBkeHKe2W/ZEtQ+71ViKU8L12m81fl3OWwC1Zlc8k=

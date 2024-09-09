@@ -32,7 +32,10 @@ type ServerConfig struct {
 func NewDBConfig(ctx context.Context, dbPrefix string) (*DBConfig, error) {
 	conf := &DBConfig{}
 	pl := envconfig.PrefixLookuper(dbPrefix, envconfig.OsLookuper())
-	if err := envconfig.ProcessWith(ctx, conf, pl); err != nil {
+	if err := envconfig.ProcessWith(ctx, &envconfig.Config{
+		Target:   conf,
+		Lookuper: pl,
+	}); err != nil {
 		log.Error("Failed to load database config", log.Ferror(err))
 		return nil, err
 	}
@@ -42,7 +45,10 @@ func NewDBConfig(ctx context.Context, dbPrefix string) (*DBConfig, error) {
 func NewServerConfig(ctx context.Context) (*ServerConfig, error) {
 	conf := &ServerConfig{}
 	pl := envconfig.PrefixLookuper(serverPrefix, envconfig.OsLookuper())
-	if err := envconfig.ProcessWith(ctx, conf, pl); err != nil {
+	if err := envconfig.ProcessWith(ctx, &envconfig.Config{
+		Target:   conf,
+		Lookuper: pl,
+	}); err != nil {
 		log.Error("Failed to load server config", log.Ferror(err))
 		return nil, err
 	}

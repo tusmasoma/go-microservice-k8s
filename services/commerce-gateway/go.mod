@@ -6,7 +6,9 @@ require (
 	github.com/gin-contrib/cors v1.7.2
 	github.com/gin-gonic/gin v1.10.0
 	github.com/joho/godotenv v1.5.1
-	github.com/sethvargo/go-envconfig v0.9.0
+	github.com/sethvargo/go-envconfig v1.1.0
+	github.com/tusmasoma/go-microservice-k8s/services/catalog v0.0.0-20240909071852-84d4d65d2ea1
+	github.com/tusmasoma/go-microservice-k8s/services/customer v0.0.0-20240909071852-84d4d65d2ea1
 	github.com/tusmasoma/go-microservice-k8s/services/order v0.0.0-20240909074153-a2c2c0248c67
 	github.com/tusmasoma/go-tech-dojo v0.0.0-20240805120803-02e31d5c8a21
 	google.golang.org/grpc v1.66.0

@@ -1,3 +1,3 @@
 in progress
 
-![eks](https://github.com/user-attachments/assets/fb6d5f9b-661b-41c9-877a-001635d7ecf0)
+<img width="1350" alt="eks" src="https://github.com/user-attachments/assets/b56b68a2-23fc-47c0-b181-4d4bf30a419c">

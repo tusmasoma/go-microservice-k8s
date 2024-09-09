@@ -82,10 +82,16 @@ github.com/stretchr/testify v1.9.0 h1:HtqpIVDClZ4nwg75+f6Lvsy/wHu+3BoSGCbBAcpTsT
 github.com/stretchr/testify v1.9.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
 github.com/tusmasoma/go-microservice-k8s/services/catalog v0.0.0-20240909071852-84d4d65d2ea1 h1:yAnYs7taWkgKAX4HTbwSLiRxVJyjrG5eBBHF7FZ7X14=
 github.com/tusmasoma/go-microservice-k8s/services/catalog v0.0.0-20240909071852-84d4d65d2ea1/go.mod h1:/XliqBfzLENl+ctPkyLg+ER90HH/Y/H+En92ZtTD1PM=
+github.com/tusmasoma/go-microservice-k8s/services/catalog v0.0.0-20240909082345-576e37efb494 h1:UrPwdF+Eby/t9lMBX9tRRIY8oPDwR8rWzxTwGC4jFRE=
+github.com/tusmasoma/go-microservice-k8s/services/catalog v0.0.0-20240909082345-576e37efb494/go.mod h1:/XliqBfzLENl+ctPkyLg+ER90HH/Y/H+En92ZtTD1PM=
 github.com/tusmasoma/go-microservice-k8s/services/customer v0.0.0-20240909071852-84d4d65d2ea1 h1:8IZFyQiNfkC04z2ZCnXQea7oTaf1lpOyf5G6SNGbYmg=
 github.com/tusmasoma/go-microservice-k8s/services/customer v0.0.0-20240909071852-84d4d65d2ea1/go.mod h1:aqZuAax2IV9OwdnB6jSHOO8r9SLegswqHb5xyyBn7EE=
+github.com/tusmasoma/go-microservice-k8s/services/customer v0.0.0-20240909082345-576e37efb494 h1:1a0IWUDZc4rfnGDua1xtImJJB7Q8QWyS7UCX9g7wpGw=
+github.com/tusmasoma/go-microservice-k8s/services/customer v0.0.0-20240909082345-576e37efb494/go.mod h1:aqZuAax2IV9OwdnB6jSHOO8r9SLegswqHb5xyyBn7EE=
 github.com/tusmasoma/go-microservice-k8s/services/order v0.0.0-20240909074153-a2c2c0248c67 h1:UYov+OpHnsCUVEKiyaQv3Z/f18ruoB+YIX720AwYhLY=
 github.com/tusmasoma/go-microservice-k8s/services/order v0.0.0-20240909074153-a2c2c0248c67/go.mod h1:Gikv7txjSZ1OHOVdnmQQhiceuepp0v/eYXJOnsrATd4=
+github.com/tusmasoma/go-microservice-k8s/services/order v0.0.0-20240909082345-576e37efb494 h1:Bhbiuz5HDt5+MFg3Og31P0zEeUe8BLWiOkmL76O/r6I=
+github.com/tusmasoma/go-microservice-k8s/services/order v0.0.0-20240909082345-576e37efb494/go.mod h1:mmwbH0i+3eutQlveJZTVFw2GR7MDncaGRcqS5j2sM4A=
 github.com/tusmasoma/go-tech-dojo v0.0.0-20240805120803-02e31d5c8a21 h1:PqS+hcn9LqAtAlT4smL+La21yitR4EUlJMwRS+sXxbM=
 github.com/tusmasoma/go-tech-dojo v0.0.0-20240805120803-02e31d5c8a21/go.mod h1:mH89EpPULPVXGy2COeSKz3GXGwRmUvqHj7rm24MXjIo=
 github.com/twitchyliquid64/golang-asm v0.15.1 h1:SU5vSMR7hnwNxj24w34ZyCi/FmDZTkS4MhqMhdFk5YI=

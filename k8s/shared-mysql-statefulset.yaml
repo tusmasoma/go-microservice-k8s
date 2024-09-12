@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: mysql
-        image: mysql:8
+        image: somakimura/mysql-service:latest
         ports:
         - containerPort: 3306
         env:
@@ -42,17 +42,6 @@ spec:
         volumeMounts:
         - name: mysql-data
           mountPath: /var/lib/mysql
-      #   - name: mysql-initdb
-      #     mountPath: /docker-entrypoint-initdb.d
-      #   - name: mysql-config
-      #     mountPath: /etc/mysql/my.cnf
-      # volumes: # TODO: 相対パスでの指定はできないので、絶対パスで指定する
-      #   - name: mysql-initdb
-      #     hostPath:
-      #       path: ../mysql/
-      #   - name: mysql-config
-      #     hostPath:
-      #       path: ../mysql/my.cnf
   volumeClaimTemplates:
   - metadata:
       name: mysql-data

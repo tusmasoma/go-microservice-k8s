@@ -44,10 +44,6 @@ func NewOrder(id, customerID string, orderDate *time.Time, orderLines []*OrderLi
 	if orderDate == nil {
 		orderDate = new(time.Time)
 	}
-
-	if len(orderLines) == 0 {
-		return nil, errors.New("orderLines is required")
-	}
 	order := &Order{
 		ID:         id,
 		CustomerID: customerID,

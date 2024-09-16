@@ -13,6 +13,7 @@ func Test_CustomerRepository(t *testing.T) {
 	repo := NewCustomerRepository(db)
 
 	customer1, err := entity.NewCustomer(
+		"",
 		"John Doe",
 		"john.doe@example.com",
 		"123 Maple Street",
@@ -21,6 +22,7 @@ func Test_CustomerRepository(t *testing.T) {
 	)
 	ValidateErr(t, err, nil)
 	customer2, err := entity.NewCustomer(
+		"",
 		"Jane Smith",
 		"jane.smith@example.com",
 		"456 Oak Avenue",

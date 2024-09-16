@@ -67,7 +67,7 @@ func (cu *catalogItemUseCase) ListCatalogItemsByIDs(ctx context.Context, ids []s
 }
 
 func (cu *catalogItemUseCase) CreateCatalogItem(ctx context.Context, name string, price float64) error {
-	item, err := entity.NewCatalogItem(name, price)
+	item, err := entity.NewCatalogItem("", name, price)
 	if err != nil {
 		log.Error("Failed to create catalog item", log.Ferror(err))
 		return err

@@ -188,7 +188,7 @@ func (ouc *orderUseCase) CreateOrder(ctx context.Context, params *CreateOrderPar
 		orderLiens = append(orderLiens, orderLine)
 	}
 
-	order, err := entity.NewOrder(params.CustomerID, orderLiens)
+	order, err := entity.NewOrder("", params.CustomerID, nil, orderLiens)
 	if err != nil {
 		log.Error("Failed to create order", log.Ferror(err))
 		return err

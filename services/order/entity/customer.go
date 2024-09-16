@@ -16,7 +16,10 @@ type Customer struct {
 	Country string `json:"country" db:"country"`
 }
 
-func NewCustomer(name, email, street, city, country string) (*Customer, error) {
+func NewCustomer(id, name, email, street, city, country string) (*Customer, error) {
+	if id == "" {
+		id = uuid.New().String()
+	}
 	if name == "" {
 		log.Error("name is required")
 		return nil, errors.New("name is required")
@@ -38,7 +41,7 @@ func NewCustomer(name, email, street, city, country string) (*Customer, error) {
 		return nil, errors.New("country is required")
 	}
 	return &Customer{
-		ID:      uuid.New().String(),
+		ID:      id,
 		Name:    name,
 		Email:   email,
 		Street:  street,

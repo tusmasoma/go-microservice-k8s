@@ -25,16 +25,19 @@ func (r *customerRepository) Get(ctx context.Context, id string) (*entity.Custom
 		return nil, err
 	}
 
-	customer := entity.Customer{
-		ID:      resp.GetCustomer().GetId(),
-		Name:    resp.GetCustomer().GetName(),
-		Email:   resp.GetCustomer().GetEmail(),
-		Street:  resp.GetCustomer().GetStreet(),
-		City:    resp.GetCustomer().GetCity(),
-		Country: resp.GetCustomer().GetCountry(),
+	customer, err := entity.NewCustomer(
+		resp.GetCustomer().GetId(),
+		resp.GetCustomer().GetName(),
+		resp.GetCustomer().GetEmail(),
+		resp.GetCustomer().GetStreet(),
+		resp.GetCustomer().GetCity(),
+		resp.GetCustomer().GetCountry(),
+	)
+	if err != nil {
+		return nil, err
 	}
 
-	return &customer, err
+	return customer, err
 }
 
 func (r *customerRepository) List(ctx context.Context) ([]entity.Customer, error) {
@@ -43,16 +46,20 @@ func (r *customerRepository) List(ctx context.Context) ([]entity.Customer, error
 		return nil, err
 	}
 
-	var customers []entity.Customer
+	customers := make([]entity.Customer, 0, len(resp.GetCustomers()))
 	for _, c := range resp.GetCustomers() {
-		customers = append(customers, entity.Customer{
-			ID:      c.GetId(),
-			Name:    c.GetName(),
-			Email:   c.GetEmail(),
-			Street:  c.GetStreet(),
-			City:    c.GetCity(),
-			Country: c.GetCountry(),
-		})
+		customer, err := entity.NewCustomer(
+			c.GetId(),
+			c.GetName(),
+			c.GetEmail(),
+			c.GetStreet(),
+			c.GetCity(),
+			c.GetCountry(),
+		)
+		if err != nil {
+			return nil, err
+		}
+		customers = append(customers, *customer)
 	}
 
 	return customers, nil

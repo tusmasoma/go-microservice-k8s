@@ -76,22 +76,21 @@ func (or *orderRepository) Get(ctx context.Context, id string) (*entity.Order, e
 	}
 
 	// Mapping to entity.Order and entity.OrderLine
-	var orderLines []*entity.OrderLine
+	orderLines := make([]*entity.OrderLine, 0, len(orderModelLines))
 	for _, line := range orderModelLines {
-		orderLines = append(orderLines, &entity.OrderLine{
-			CatalogItemID: line.CatalogItemID,
-			Count:         line.Count,
-		})
+		orderLine, err := entity.NewOrderLine(line.Count, line.CatalogItemID)
+		if err != nil {
+			return nil, err
+		}
+		orderLines = append(orderLines, orderLine)
 	}
 
-	order := entity.Order{
-		ID:         orderModel.ID,
-		CustomerID: orderModel.CustomerID,
-		OrderDate:  orderModel.OrderDate,
-		OrderLines: orderLines,
+	order, err := entity.NewOrder(orderModel.ID, orderModel.CustomerID, &orderModel.OrderDate, orderLines)
+	if err != nil {
+		return nil, err
 	}
 
-	return &order, nil
+	return order, nil
 }
 
 func (or *orderRepository) List(ctx context.Context) ([]*entity.Order, error) {
@@ -133,19 +132,19 @@ func (or *orderRepository) List(ctx context.Context) ([]*entity.Order, error) {
 
 		order, exists := orderMap[orderModel.ID]
 		if !exists {
-			order = &entity.Order{
-				ID:         orderModel.ID,
-				CustomerID: orderModel.CustomerID,
-				OrderDate:  orderModel.OrderDate,
+			order, err := entity.NewOrder(orderModel.ID, orderModel.CustomerID, &orderModel.OrderDate, nil)
+			if err != nil {
+				return nil, err
 			}
 			orderMap[orderModel.ID] = order
 			orders = append(orders, order)
 		}
 
-		order.OrderLines = append(order.OrderLines, &entity.OrderLine{
-			CatalogItemID: orderLineModel.CatalogItemID,
-			Count:         orderLineModel.Count,
-		})
+		orderLine, err := entity.NewOrderLine(orderLineModel.Count, orderLineModel.CatalogItemID)
+		if err != nil {
+			return nil, err
+		}
+		order.OrderLines = append(order.OrderLines, orderLine)
 	}
 	if err = rows.Err(); err != nil {
 		return nil, err
@@ -174,7 +173,7 @@ func (or *orderRepository) Create(ctx context.Context, order entity.Order) error
 	orderModel := entity.OrderModel{
 		ID:         order.ID,
 		CustomerID: order.CustomerID,
-		OrderDate:  order.OrderDate,
+		OrderDate:  *order.OrderDate,
 	}
 
 	query := `

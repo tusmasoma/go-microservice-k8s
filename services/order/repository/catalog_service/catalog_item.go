@@ -25,13 +25,16 @@ func (r *catalogItemRepository) Get(ctx context.Context, id string) (*entity.Cat
 		return nil, err
 	}
 
-	item := entity.CatalogItem{
-		ID:    resp.GetItem().GetId(),
-		Name:  resp.GetItem().GetName(),
-		Price: resp.GetItem().GetPrice(),
+	item, err := entity.NewCatalogItem(
+		resp.GetItem().GetId(),
+		resp.GetItem().GetName(),
+		resp.GetItem().GetPrice(),
+	)
+	if err != nil {
+		return nil, err
 	}
 
-	return &item, err
+	return item, err
 }
 
 func (r *catalogItemRepository) List(ctx context.Context) ([]entity.CatalogItem, error) {
@@ -40,13 +43,17 @@ func (r *catalogItemRepository) List(ctx context.Context) ([]entity.CatalogItem,
 		return nil, err
 	}
 
-	var items []entity.CatalogItem
+	items := make([]entity.CatalogItem, 0, len(resp.GetItems()))
 	for _, i := range resp.GetItems() {
-		items = append(items, entity.CatalogItem{
-			ID:    i.GetId(),
-			Name:  i.GetName(),
-			Price: i.GetPrice(),
-		})
+		item, err := entity.NewCatalogItem(
+			i.GetId(),
+			i.GetName(),
+			i.GetPrice(),
+		)
+		if err != nil {
+			return nil, err
+		}
+		items = append(items, *item)
 	}
 
 	return items, nil
@@ -58,13 +65,17 @@ func (r *catalogItemRepository) ListByName(ctx context.Context, name string) ([]
 		return nil, err
 	}
 
-	var items []entity.CatalogItem
+	items := make([]entity.CatalogItem, 0, len(resp.GetItems()))
 	for _, i := range resp.GetItems() {
-		items = append(items, entity.CatalogItem{
-			ID:    i.GetId(),
-			Name:  i.GetName(),
-			Price: i.GetPrice(),
-		})
+		item, err := entity.NewCatalogItem(
+			i.GetId(),
+			i.GetName(),
+			i.GetPrice(),
+		)
+		if err != nil {
+			return nil, err
+		}
+		items = append(items, *item)
 	}
 
 	return items, nil
@@ -76,13 +87,17 @@ func (r *catalogItemRepository) ListByIDs(ctx context.Context, ids []string) ([]
 		return nil, err
 	}
 
-	var items []entity.CatalogItem
+	items := make([]entity.CatalogItem, 0, len(resp.GetItems()))
 	for _, i := range resp.GetItems() {
-		items = append(items, entity.CatalogItem{
-			ID:    i.GetId(),
-			Name:  i.GetName(),
-			Price: i.GetPrice(),
-		})
+		item, err := entity.NewCatalogItem(
+			i.GetId(),
+			i.GetName(),
+			i.GetPrice(),
+		)
+		if err != nil {
+			return nil, err
+		}
+		items = append(items, *item)
 	}
 
 	return items, nil

@@ -78,7 +78,7 @@ func (or *orderRepository) Get(ctx context.Context, id string) (*entity.Order, e
 	// Mapping to entity.Order and entity.OrderLine
 	orderLines := make([]*entity.OrderLine, 0, len(orderModelLines))
 	for _, line := range orderModelLines {
-		orderLine, err := entity.NewOrderLine(line.Count, line.CatalogItemID)
+		orderLine, err := entity.NewOrderLine(line.Count, line.CatalogItemID) //nolint:govet // err shadowed
 		if err != nil {
 			return nil, err
 		}
@@ -132,7 +132,7 @@ func (or *orderRepository) List(ctx context.Context) ([]*entity.Order, error) {
 
 		order, exists := orderMap[orderModel.ID]
 		if !exists {
-			order, err := entity.NewOrder(orderModel.ID, orderModel.CustomerID, &orderModel.OrderDate, nil)
+			order, err = entity.NewOrder(orderModel.ID, orderModel.CustomerID, &orderModel.OrderDate, nil)
 			if err != nil {
 				return nil, err
 			}
@@ -140,7 +140,7 @@ func (or *orderRepository) List(ctx context.Context) ([]*entity.Order, error) {
 			orders = append(orders, order)
 		}
 
-		orderLine, err := entity.NewOrderLine(orderLineModel.Count, orderLineModel.CatalogItemID)
+		orderLine, err := entity.NewOrderLine(orderLineModel.Count, orderLineModel.CatalogItemID) //nolint:govet // err shadowed
 		if err != nil {
 			return nil, err
 		}

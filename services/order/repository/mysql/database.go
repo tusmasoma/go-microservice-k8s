@@ -83,7 +83,7 @@ func NewMySQLDB(ctx context.Context) (*sql.DB, error) {
 
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
-		log.Critical("Failed to connect to database", log.Fstring("dsn", dsn), log.Ferror(err))
+		log.Critical("Failed to connect to database", log.Ferror(err))
 		return nil, err
 	}
 
@@ -92,6 +92,6 @@ func NewMySQLDB(ctx context.Context) (*sql.DB, error) {
 		return nil, err
 	}
 
-	log.Info("Successfully connected to database", log.Fstring("dsn", dsn))
+	log.Info("Successfully connected to database")
 	return db, nil
 }

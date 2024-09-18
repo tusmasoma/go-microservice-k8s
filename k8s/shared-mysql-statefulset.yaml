@@ -39,9 +39,6 @@ spec:
             configMapKeyRef:
               name: shared-config
               key: MYSQL_PASSWORD
-        volumeMounts:
-        - name: mysql-data
-          mountPath: /var/lib/mysql
   volumeClaimTemplates:
   - metadata:
       name: mysql-data

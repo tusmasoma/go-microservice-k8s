@@ -2,12 +2,9 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: commerce-gateway-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-    - host: commerce.local  # ローカルホスト名
-      http:
+    - http:
         paths:
           - path: /
             pathType: Prefix

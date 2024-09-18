@@ -34,7 +34,7 @@ func (r *catalogItemRepository) Get(ctx context.Context, id string) (*entity.Cat
 		return nil, err
 	}
 
-	return item, err
+	return item, nil
 }
 
 func (r *catalogItemRepository) List(ctx context.Context) ([]entity.CatalogItem, error) {

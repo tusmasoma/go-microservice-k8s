@@ -37,7 +37,7 @@ func (r *customerRepository) Get(ctx context.Context, id string) (*entity.Custom
 		return nil, err
 	}
 
-	return customer, err
+	return customer, nil
 }
 
 func (r *customerRepository) List(ctx context.Context) ([]entity.Customer, error) {

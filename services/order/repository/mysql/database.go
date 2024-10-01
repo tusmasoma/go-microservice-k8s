@@ -34,15 +34,10 @@ func (tr *transactionRepository) Transaction(ctx context.Context, fn func(ctx co
 
 	ctx = context.WithValue(ctx, CtxTxKey(), tx)
 
-	var done bool
 	defer func() {
-		ctx = context.WithValue(ctx, CtxTxKey(), nil)
-		if !done {
+		if p := recover(); p != nil || err != nil {
 			if rollbackErr := tx.Rollback(); rollbackErr != nil {
 				log.Error("Failed to rollback transaction: %v", rollbackErr)
-				if err == nil {
-					err = rollbackErr
-				}
 			}
 		}
 	}()
@@ -51,7 +46,6 @@ func (tr *transactionRepository) Transaction(ctx context.Context, fn func(ctx co
 		return err
 	}
 
-	done = true
 	if err = tx.Commit(); err != nil {
 		return err
 	}
@@ -89,7 +83,7 @@ func NewMySQLDB(ctx context.Context) (*sql.DB, error) {
 
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
-		log.Critical("Failed to connect to database", log.Fstring("dsn", dsn), log.Ferror(err))
+		log.Critical("Failed to connect to database", log.Ferror(err))
 		return nil, err
 	}
 
@@ -98,6 +92,6 @@ func NewMySQLDB(ctx context.Context) (*sql.DB, error) {
 		return nil, err
 	}
 
-	log.Info("Successfully connected to database", log.Fstring("dsn", dsn))
+	log.Info("Successfully connected to database")
 	return db, nil
 }

@@ -91,7 +91,7 @@ func TestHandler_ListOrders(t *testing.T) {
 	order := &entity.Order{
 		ID:         orderID,
 		CustomerID: customerID,
-		OrderDate:  date,
+		OrderDate:  &date,
 		OrderLines: []*entity.OrderLine{
 			{
 				Count:         1,

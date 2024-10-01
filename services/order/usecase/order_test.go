@@ -117,7 +117,7 @@ func TestOrderUseCase_GetOrder(t *testing.T) {
 	order := entity.Order{
 		ID:         orderID,
 		CustomerID: customerID,
-		OrderDate:  orderDate,
+		OrderDate:  &orderDate,
 		OrderLines: []*entity.OrderLine{
 			{
 				Count:         1,
@@ -237,7 +237,7 @@ func TestOrderUseCase_ListOrder(t *testing.T) {
 		{
 			ID:         orderID,
 			CustomerID: customerID,
-			OrderDate:  orderDate,
+			OrderDate:  &orderDate,
 			OrderLines: []*entity.OrderLine{
 				{
 					Count:         1,

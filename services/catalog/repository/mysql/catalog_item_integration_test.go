@@ -13,11 +13,13 @@ func Test_CatalogItemRepository(t *testing.T) {
 	repo := NewCatalogItemRepository(db)
 
 	item1, err := entity.NewCatalogItem(
+		"",
 		"item1",
 		100,
 	)
 	ValidateErr(t, err, nil)
 	item2, err := entity.NewCatalogItem(
+		"",
 		"item2",
 		200,
 	)

@@ -15,10 +15,12 @@ func Test_OrderRepository(t *testing.T) {
 	ctx := context.Background()
 	repo := NewOrderRepository(db)
 
+	orderDate := time.Now()
+
 	order := entity.Order{
 		ID:         uuid.New().String(),
 		CustomerID: uuid.New().String(),
-		OrderDate:  time.Now(),
+		OrderDate:  &orderDate,
 		OrderLines: []*entity.OrderLine{
 			{
 				CatalogItemID: uuid.New().String(),

@@ -11,7 +11,7 @@ import (
 type Order struct {
 	ID         string       `json:"id"`
 	CustomerID string       `json:"customer_id"`
-	OrderDate  time.Time    `json:"order_date"`
+	OrderDate  *time.Time   `json:"order_date"`
 	OrderLines []*OrderLine `json:"order_lines"`
 	TotalPrice float64      `json:"total_price"`
 }
@@ -21,30 +21,20 @@ type OrderLine struct {
 	CatalogItemID string `json:"catalog_item_id"`
 }
 
-// data model
-type OrderModel struct {
-	ID         string    `json:"id" db:"id"`
-	CustomerID string    `json:"customer_id" db:"customer_id"`
-	OrderDate  time.Time `json:"order_date" db:"order_date"`
-}
-
-type OrderLineModel struct {
-	OrderID       string `json:"order_id" db:"order_id"`
-	CatalogItemID string `json:"catalog_item_id" db:"catalog_item_id"`
-	Count         int    `json:"count" db:"count"`
-}
-
-func NewOrder(customerID string, orderLines []*OrderLine) (*Order, error) {
+func NewOrder(id, customerID string, orderDate *time.Time, orderLines []*OrderLine) (*Order, error) {
+	if id == "" {
+		id = uuid.New().String()
+	}
 	if customerID == "" {
 		return nil, errors.New("customerID is required")
 	}
-	if len(orderLines) == 0 {
-		return nil, errors.New("orderLines is required")
+	if orderDate == nil {
+		orderDate = new(time.Time)
 	}
 	order := &Order{
-		ID:         uuid.New().String(),
+		ID:         id,
 		CustomerID: customerID,
-		OrderDate:  time.Now(),
+		OrderDate:  orderDate,
 		OrderLines: orderLines,
 	}
 

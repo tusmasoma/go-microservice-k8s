@@ -6,14 +6,18 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
+	"github.com/google/uuid"
 )
 
 func TestEntity_NewCatalogItem(t *testing.T) {
 	t.Parallel()
 
+	catalogID := uuid.New().String()
+
 	patterns := []struct {
 		name string
 		arg  struct {
+			id    string
 			name  string
 			price float64
 		}
@@ -23,8 +27,32 @@ func TestEntity_NewCatalogItem(t *testing.T) {
 		}
 	}{
 		{
-			name: "success",
+			name: "success: id is not empty",
 			arg: struct {
+				id    string
+				name  string
+				price float64
+			}{
+				id:    catalogID,
+				name:  "item",
+				price: 100,
+			},
+			want: struct {
+				item *CatalogItem
+				err  error
+			}{
+				item: &CatalogItem{
+					ID:    catalogID,
+					Name:  "item",
+					Price: 100,
+				},
+				err: nil,
+			},
+		},
+		{
+			name: "success: id is empty",
+			arg: struct {
+				id    string
 				name  string
 				price float64
 			}{
@@ -36,6 +64,7 @@ func TestEntity_NewCatalogItem(t *testing.T) {
 				err  error
 			}{
 				item: &CatalogItem{
+					ID:    uuid.New().String(),
 					Name:  "item",
 					Price: 100,
 				},
@@ -45,9 +74,11 @@ func TestEntity_NewCatalogItem(t *testing.T) {
 		{
 			name: "Fail: name is empty",
 			arg: struct {
+				id    string
 				name  string
 				price float64
 			}{
+				id:    catalogID,
 				name:  "",
 				price: 100,
 			},
@@ -62,9 +93,11 @@ func TestEntity_NewCatalogItem(t *testing.T) {
 		{
 			name: "Fail: price is less than 0",
 			arg: struct {
+				id    string
 				name  string
 				price float64
 			}{
+				id:    catalogID,
 				name:  "item",
 				price: -1,
 			},
@@ -83,7 +116,7 @@ func TestEntity_NewCatalogItem(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			item, err := NewCatalogItem(tt.arg.name, tt.arg.price)
+			item, err := NewCatalogItem(tt.arg.id, tt.arg.name, tt.arg.price)
 
 			if (err != nil) != (tt.want.err != nil) {
 				t.Errorf("NewCatalogItem() error = %v, wantErr %v", err, tt.want.err)

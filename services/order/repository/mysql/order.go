@@ -3,6 +3,7 @@ package mysql
 import (
 	"context"
 	"database/sql"
+	"time"
 
 	"github.com/tusmasoma/go-microservice-k8s/services/order/entity"
 	"github.com/tusmasoma/go-microservice-k8s/services/order/repository"
@@ -16,6 +17,18 @@ import (
 // In this case, we are implementing both the Order and OrderLine tables within the same repository.
 // This approach simplifies the management of related data and ensures consistency within the repository itself.
 // While this can reduce the complexity at the service layer, it may result in a larger, more tightly coupled repository.
+
+type orderModel struct {
+	ID         string    `db:"id"`
+	CustomerID string    `db:"customer_id"`
+	OrderDate  time.Time `db:"order_date"`
+}
+
+type orderLineModel struct {
+	OrderID       string `db:"order_id"`
+	CatalogItemID string `db:"catalog_item_id"`
+	Count         int    `db:"count"`
+}
 
 type orderRepository struct {
 	db *sql.DB
@@ -38,11 +51,11 @@ func (or *orderRepository) Get(ctx context.Context, id string) (*entity.Order, e
 
 	row := or.db.QueryRowContext(ctx, query, id)
 
-	var orderModel entity.OrderModel
+	var om orderModel
 	if err := row.Scan(
-		&orderModel.ID,
-		&orderModel.CustomerID,
-		&orderModel.OrderDate,
+		&om.ID,
+		&om.CustomerID,
+		&om.OrderDate,
 	); err != nil {
 		return nil, err
 	}
@@ -60,38 +73,37 @@ func (or *orderRepository) Get(ctx context.Context, id string) (*entity.Order, e
 	}
 	defer rows.Close()
 
-	var orderModelLines []entity.OrderLineModel
+	var olms []orderLineModel
 	for rows.Next() {
-		var orderLineModel entity.OrderLineModel
+		var olm orderLineModel
 		if err = rows.Scan(
-			&orderLineModel.CatalogItemID,
-			&orderLineModel.Count,
+			&olm.CatalogItemID,
+			&olm.Count,
 		); err != nil {
 			return nil, err
 		}
-		orderModelLines = append(orderModelLines, orderLineModel)
+		olms = append(olms, olm)
 	}
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
 
 	// Mapping to entity.Order and entity.OrderLine
-	var orderLines []*entity.OrderLine
-	for _, line := range orderModelLines {
-		orderLines = append(orderLines, &entity.OrderLine{
-			CatalogItemID: line.CatalogItemID,
-			Count:         line.Count,
-		})
+	orderLines := make([]*entity.OrderLine, 0, len(olms))
+	for _, line := range olms {
+		orderLine, err := entity.NewOrderLine(line.Count, line.CatalogItemID) //nolint:govet // err shadowed
+		if err != nil {
+			return nil, err
+		}
+		orderLines = append(orderLines, orderLine)
 	}
 
-	order := entity.Order{
-		ID:         orderModel.ID,
-		CustomerID: orderModel.CustomerID,
-		OrderDate:  orderModel.OrderDate,
-		OrderLines: orderLines,
+	order, err := entity.NewOrder(om.ID, om.CustomerID, &om.OrderDate, orderLines)
+	if err != nil {
+		return nil, err
 	}
 
-	return &order, nil
+	return order, nil
 }
 
 func (or *orderRepository) List(ctx context.Context) ([]*entity.Order, error) {
@@ -118,34 +130,34 @@ func (or *orderRepository) List(ctx context.Context) ([]*entity.Order, error) {
 	orderMap := make(map[string]*entity.Order)
 
 	for rows.Next() {
-		var orderModel entity.OrderModel
-		var orderLineModel entity.OrderLineModel
+		var om orderModel
+		var olm orderLineModel
 
 		if err = rows.Scan(
-			&orderModel.ID,
-			&orderModel.CustomerID,
-			&orderModel.OrderDate,
-			&orderLineModel.CatalogItemID,
-			&orderLineModel.Count,
+			&om.ID,
+			&om.CustomerID,
+			&om.OrderDate,
+			&olm.CatalogItemID,
+			&olm.Count,
 		); err != nil {
 			return nil, err
 		}
 
-		order, exists := orderMap[orderModel.ID]
+		order, exists := orderMap[om.ID]
 		if !exists {
-			order = &entity.Order{
-				ID:         orderModel.ID,
-				CustomerID: orderModel.CustomerID,
-				OrderDate:  orderModel.OrderDate,
+			order, err = entity.NewOrder(om.ID, om.CustomerID, &om.OrderDate, nil)
+			if err != nil {
+				return nil, err
 			}
-			orderMap[orderModel.ID] = order
+			orderMap[om.ID] = order
 			orders = append(orders, order)
 		}
 
-		order.OrderLines = append(order.OrderLines, &entity.OrderLine{
-			CatalogItemID: orderLineModel.CatalogItemID,
-			Count:         orderLineModel.Count,
-		})
+		orderLine, err := entity.NewOrderLine(olm.Count, olm.CatalogItemID) //nolint:govet // err shadowed
+		if err != nil {
+			return nil, err
+		}
+		order.OrderLines = append(order.OrderLines, orderLine)
 	}
 	if err = rows.Err(); err != nil {
 		return nil, err
@@ -171,10 +183,10 @@ func (or *orderRepository) Create(ctx context.Context, order entity.Order) error
 		}
 	}()
 
-	orderModel := entity.OrderModel{
+	om := orderModel{
 		ID:         order.ID,
 		CustomerID: order.CustomerID,
-		OrderDate:  order.OrderDate,
+		OrderDate:  *order.OrderDate,
 	}
 
 	query := `
@@ -184,9 +196,9 @@ func (or *orderRepository) Create(ctx context.Context, order entity.Order) error
 	if _, err = tx.ExecContext(
 		ctx,
 		query,
-		orderModel.ID,
-		orderModel.CustomerID,
-		orderModel.OrderDate,
+		om.ID,
+		om.CustomerID,
+		om.OrderDate,
 	); err != nil {
 		return err
 	}
@@ -200,12 +212,12 @@ func (or *orderRepository) Create(ctx context.Context, order entity.Order) error
 		}
 		query += "(?, ?, ?)"
 
-		orderLineModel := entity.OrderLineModel{
+		olm := orderLineModel{
 			OrderID:       order.ID,
 			CatalogItemID: line.CatalogItemID,
 			Count:         line.Count,
 		}
-		values = append(values, orderLineModel.OrderID, orderLineModel.CatalogItemID, orderLineModel.Count)
+		values = append(values, olm.OrderID, olm.CatalogItemID, olm.Count)
 	}
 
 	if _, err = tx.ExecContext(ctx, query, values...); err != nil {

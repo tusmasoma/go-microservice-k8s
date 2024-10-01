@@ -56,6 +56,7 @@ type CreateCustomerParams struct {
 
 func (cuc *customerUseCase) CreateCustomer(ctx context.Context, params *CreateCustomerParams) error {
 	customer, err := entity.NewCustomer(
+		"",
 		params.Name,
 		params.Email,
 		params.Street,

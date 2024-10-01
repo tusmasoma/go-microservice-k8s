@@ -12,7 +12,10 @@ type CatalogItem struct {
 	Price float64 `json:"price" db:"price"`
 }
 
-func NewCatalogItem(name string, price float64) (*CatalogItem, error) {
+func NewCatalogItem(id, name string, price float64) (*CatalogItem, error) {
+	if id == "" {
+		id = uuid.New().String()
+	}
 	if name == "" {
 		return nil, errors.New("name is required")
 	}
@@ -20,7 +23,7 @@ func NewCatalogItem(name string, price float64) (*CatalogItem, error) {
 		return nil, errors.New("price must be greater than 0")
 	}
 	return &CatalogItem{
-		ID:    uuid.New().String(),
+		ID:    id,
 		Name:  name,
 		Price: price,
 	}, nil

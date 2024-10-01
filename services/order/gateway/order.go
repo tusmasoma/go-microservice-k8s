@@ -55,7 +55,7 @@ func (oh *orderHandler) ListOrders(ctx context.Context, _ *pb.ListOrdersRequest)
 				City:    od.Customer.City,
 				Country: od.Customer.Country,
 			},
-			OrderDate:  timestamppb.New(od.Order.OrderDate),
+			OrderDate:  timestamppb.New(*od.Order.OrderDate),
 			OrderLines: orderLines,
 			TotalPrice: od.Order.TotalPrice,
 		})

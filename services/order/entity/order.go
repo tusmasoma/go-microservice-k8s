@@ -21,19 +21,6 @@ type OrderLine struct {
 	CatalogItemID string `json:"catalog_item_id"`
 }
 
-// data model
-type OrderModel struct {
-	ID         string    `json:"id" db:"id"`
-	CustomerID string    `json:"customer_id" db:"customer_id"`
-	OrderDate  time.Time `json:"order_date" db:"order_date"`
-}
-
-type OrderLineModel struct {
-	OrderID       string `json:"order_id" db:"order_id"`
-	CatalogItemID string `json:"catalog_item_id" db:"catalog_item_id"`
-	Count         int    `json:"count" db:"count"`
-}
-
 func NewOrder(id, customerID string, orderDate *time.Time, orderLines []*OrderLine) (*Order, error) {
 	if id == "" {
 		id = uuid.New().String()

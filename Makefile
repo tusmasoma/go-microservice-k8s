@@ -13,7 +13,7 @@ SERVICE_PATH_PREFIX := services
 # tools
 $(shell mkdir -p $(BIN))
 
-GOLANGCI_LINT_VERSION := v1.55.2
+GOLANGCI_LINT_VERSION := v1.63.4
 $(BIN)/golangci-lint-$(GOLANGCI_LINT_VERSION):
 	unlink $(BIN)/golangci-lint || true
 	$(GO_ENV) ${GO} install github.com/golangci/golangci-lint/cmd/golangci-lint@$(GOLANGCI_LINT_VERSION)
@@ -36,10 +36,37 @@ $(BIN)/goimports-$(GOIMPORTS_VERSION):
 
 GOFUMPT_VERSION := v0.6.0
 $(BIN)/gofumpt-$(GOFUMPT_VERSION):
-	unlink $(BIN)/gofumpt || true
+	unlink $(BIN)/gofumpt || truep
 	$(GO_ENV) ${GO} install mvdan.cc/gofumpt@$(GOFUMPT_VERSION)
 	mv $(BIN)/gofumpt $(BIN)/gofumpt-$(GOFUMPT_VERSION)
 	ln -s $(BIN)/gofumpt-$(GOFUMPT_VERSION) $(BIN)/gofumpt
+
+
+PROTOC_VERSION := 24.4
+PROTOC_ZIP := protoc-$(PROTOC_VERSION)-linux-x86_64.zip
+$(BIN)/protoc-$(PROTOC_VERSION):
+	@if ! command -v protoc &> /dev/null; then \
+		echo "Installing protoc..."; \
+		curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOC_VERSION)/$(PROTOC_ZIP); \
+		unzip -o $(PROTOC_ZIP) -d $(HOME)/.local; \
+		rm -f $(PROTOC_ZIP); \
+	fi
+
+PROTOC_GEN_GO_VERSION := v1.31.0
+$(BIN)/protoc-gen-go-$(PROTOC_GEN_GO_VERSION):
+	unlink $(BIN)/protoc-gen-go || true
+	$(GO_ENV) ${GO} install google.golang.org/protobuf/cmd/protoc-gen-go@$(PROTOC_GEN_GO_VERSION)
+	mv $(BIN)/protoc-gen-go $(BIN)/protoc-gen-go-$(PROTOC_GEN_GO_VERSION)
+	ln -s $(BIN)/protoc-gen-go-$(PROTOC_GEN_GO_VERSION) $(BIN)/protoc-gen-go
+
+PROTOC_GEN_GO_GRPC_VERSION := v1.3.0
+$(BIN)/protoc-gen-go-grpc-$(PROTOC_GEN_GO_GRPC_VERSION):
+	unlink $(BIN)/protoc-gen-go-grpc || true
+	$(GO_ENV) ${GO} install google.golang.org/grpc/cmd/protoc-gen-go-grpc@$(PROTOC_GEN_GO_GRPC_VERSION)
+	mv $(BIN)/protoc-gen-go-grpc $(BIN)/protoc-gen-go-grpc-$(PROTOC_GEN_GO_GRPC_VERSION)
+	ln -s $(BIN)/protoc-gen-go-grpc-$(PROTOC_GEN_GO_GRPC_VERSION) $(BIN)/protoc-gen-go-grpc
+
+proto_tools: $(BIN)/protoc-$(PROTOC_VERSION) $(BIN)/protoc-gen-go-$(PROTOC_GEN_GO_VERSION) $(BIN)/protoc-gen-go-grpc-$(PROTOC_GEN_GO_GRPC_VERSION)
 
 # go: test for all under the PKG
 .PHONY: test
@@ -56,12 +83,12 @@ lint: $(BIN)/golangci-lint-$(GOLANGCI_LINT_VERSION)
 ifdef SERVICE
 	@echo "Running lint for service: $(SERVICE)"
 	cd ./$(SERVICE_PATH_PREFIX)/$(SERVICE) && \
-	$(BIN)/golangci-lint run -c ./.golangci.yml ./...
+	$(BIN)/golangci-lint run -c ../../.golangci.yml ./...
 else
 	@for service in $(SERVICES); do \
 		echo "Running lint for service: $$service"; \
 		(cd ./$(SERVICE_PATH_PREFIX)/$$service && \
-		$(BIN)/golangci-lint run -c ./.golangci.yml ./...) || true; \
+		$(BIN)/golangci-lint run -c ../../.golangci.yml ./...) || true; \
 	done
 endif
 
@@ -70,12 +97,12 @@ lint-diff: $(BIN)/golangci-lint-$(GOLANGCI_LINT_VERSION)
 ifdef SERVICE
 	@echo "Running lint-diff for service: $(SERVICE)"
 	cd $(SERVICE_PATH_PREFIX)/$(SERVICE) && \
-	$(BIN)/golangci-lint run -c ./.golangci.yml ./... | reviewdog -f=golangci-lint -diff="git diff origin/main"
+	$(BIN)/golangci-lint run -c ../../.golangci.yml ./... | reviewdog -f=golangci-lint -diff="git diff origin/main"
 else
 	@for service in $(SERVICES); do \
 		echo "Running lint-diff for service: $$service"; \
 		(cd $(SERVICE_PATH_PREFIX)/$$service && \
-		$(BIN)/golangci-lint run -c ./.golangci.yml ./... | reviewdog -f=golangci-lint -diff="git diff origin/main") || true; \
+		$(BIN)/golangci-lint run -c ../../.golangci.yml ./... | reviewdog -f=golangci-lint -diff="git diff origin/main") || true; \
 	done
 endif
 
@@ -96,6 +123,19 @@ else
 		${GO_ENV} $(BIN)/gofumpt -l -w $${FILES}; \
 	done
 endif
+
+# proto: generate proto files
+.PHONY: proto_gen
+proto_gen: proto_tools
+	@for service in $(SERVICES); do \
+		if [ "$$service" != "commerce-gateway" ]; then \
+			echo "Running proto_gen for service: $$service"; \
+			(cd $(SERVICE_PATH_PREFIX)/$$service && \
+			protoc --proto_path=proto --go_out=./ --go-grpc_out=./ proto/$$service.proto); \
+		else \
+			echo "Skipping proto_gen for commerce-gateway"; \
+		fi \
+	done
 
 # .PHONY: generate
 # generate: generate-deps

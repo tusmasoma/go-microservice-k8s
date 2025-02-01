@@ -16,7 +16,8 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
-	"github.com/tusmasoma/go-microservice-k8s/services/catalog/config"
+	"github.com/tusmasoma/go-microservice-k8s/pkg/config"
+	pmysql "github.com/tusmasoma/go-microservice-k8s/pkg/repository/mysql"
 	"github.com/tusmasoma/go-microservice-k8s/services/catalog/gateway"
 	"github.com/tusmasoma/go-microservice-k8s/services/catalog/repository/mysql"
 	"github.com/tusmasoma/go-microservice-k8s/services/catalog/usecase"
@@ -42,7 +43,7 @@ func main() {
 		return
 	}
 
-	err = container.Invoke(func(grpcHandler pb.CatalogServiceServer, config *config.ServerConfig) {
+	err = container.Invoke(func(grpcHandler pb.CatalogServiceServer, _ *config.ServerConfig) {
 		lis, err := net.Listen("tcp", addr) //nolint:govet // This is not a mistake
 		if err != nil {
 			log.Critical("Failed to listen", log.Ferror(err))
@@ -89,8 +90,8 @@ func BuildContainer(ctx context.Context) (*dig.Container, error) {
 	providers := []interface{}{
 		config.NewServerConfig,
 		config.NewDBConfig,
-		mysql.NewMySQLDB,
-		mysql.NewTransactionRepository,
+		pmysql.NewMySQLDB,
+		pmysql.NewTransactionRepository,
 		mysql.NewCatalogItemRepository,
 		usecase.NewCatalogItemUseCase,
 		gateway.NewCatalogItemHandler,

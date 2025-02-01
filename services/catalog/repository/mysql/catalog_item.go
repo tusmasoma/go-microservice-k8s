@@ -5,12 +5,13 @@ import (
 	"database/sql"
 	"strings"
 
+	"github.com/tusmasoma/go-microservice-k8s/pkg/repository/mysql"
 	"github.com/tusmasoma/go-microservice-k8s/services/catalog/entity"
 	"github.com/tusmasoma/go-microservice-k8s/services/catalog/repository"
 )
 
 type catalogItemRepository struct {
-	db SQLExecutor
+	db mysql.SQLExecutor
 }
 
 func NewCatalogItemRepository(db *sql.DB) repository.CatalogItemRepository {
@@ -21,7 +22,7 @@ func NewCatalogItemRepository(db *sql.DB) repository.CatalogItemRepository {
 
 func (cr *catalogItemRepository) Get(ctx context.Context, id string) (*entity.CatalogItem, error) {
 	executor := cr.db
-	if tx := TxFromCtx(ctx); tx != nil {
+	if tx := mysql.TxFromCtx(ctx); tx != nil {
 		executor = tx
 	}
 
@@ -46,7 +47,7 @@ func (cr *catalogItemRepository) Get(ctx context.Context, id string) (*entity.Ca
 
 func (cr *catalogItemRepository) List(ctx context.Context) ([]entity.CatalogItem, error) {
 	executor := cr.db
-	if tx := TxFromCtx(ctx); tx != nil {
+	if tx := mysql.TxFromCtx(ctx); tx != nil {
 		executor = tx
 	}
 
@@ -82,7 +83,7 @@ func (cr *catalogItemRepository) List(ctx context.Context) ([]entity.CatalogItem
 
 func (cr *catalogItemRepository) ListByName(ctx context.Context, name string) ([]entity.CatalogItem, error) {
 	executor := cr.db
-	if tx := TxFromCtx(ctx); tx != nil {
+	if tx := mysql.TxFromCtx(ctx); tx != nil {
 		executor = tx
 	}
 
@@ -119,7 +120,7 @@ func (cr *catalogItemRepository) ListByName(ctx context.Context, name string) ([
 
 func (cr *catalogItemRepository) ListByIDs(ctx context.Context, ids []string) ([]entity.CatalogItem, error) {
 	executor := cr.db
-	if tx := TxFromCtx(ctx); tx != nil {
+	if tx := mysql.TxFromCtx(ctx); tx != nil {
 		executor = tx
 	}
 
@@ -163,7 +164,7 @@ func (cr *catalogItemRepository) ListByIDs(ctx context.Context, ids []string) ([
 
 func (cr *catalogItemRepository) Create(ctx context.Context, item entity.CatalogItem) error {
 	executor := cr.db
-	if tx := TxFromCtx(ctx); tx != nil {
+	if tx := mysql.TxFromCtx(ctx); tx != nil {
 		executor = tx
 	}
 
@@ -188,7 +189,7 @@ func (cr *catalogItemRepository) Create(ctx context.Context, item entity.Catalog
 
 func (cr *catalogItemRepository) Update(ctx context.Context, item entity.CatalogItem) error {
 	executor := cr.db
-	if tx := TxFromCtx(ctx); tx != nil {
+	if tx := mysql.TxFromCtx(ctx); tx != nil {
 		executor = tx
 	}
 
@@ -212,7 +213,7 @@ func (cr *catalogItemRepository) Update(ctx context.Context, item entity.Catalog
 
 func (cr *catalogItemRepository) Delete(ctx context.Context, id string) error {
 	executor := cr.db
-	if tx := TxFromCtx(ctx); tx != nil {
+	if tx := mysql.TxFromCtx(ctx); tx != nil {
 		executor = tx
 	}
 

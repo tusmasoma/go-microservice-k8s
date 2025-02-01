@@ -48,7 +48,7 @@ message Order {
 }
 
 message OrderLine {
-    int32 count = 1;
+    int64 count = 1;
     CatalogItem item = 2;
 }
 

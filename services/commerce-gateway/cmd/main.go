@@ -13,7 +13,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	"github.com/tusmasoma/go-microservice-k8s/services/catalog/config"
+	"github.com/tusmasoma/go-microservice-k8s/pkg/config"
 	"github.com/tusmasoma/go-microservice-k8s/services/commerce-gateway/gateway/web/handler"
 	"github.com/tusmasoma/go-tech-dojo/pkg/log"
 	"google.golang.org/grpc"
@@ -55,7 +55,7 @@ func main() {
 	<-signalCtx.Done()
 	log.Info("Server stopping...")
 
-	tctx, cancelShutdown := context.WithTimeout(context.Background(), 5*time.Second) //nolint:gomnd // 5 is reasonable
+	tctx, cancelShutdown := context.WithTimeout(context.Background(), 5*time.Second) //nolint:mnd // 5 is reasonable
 	defer cancelShutdown()
 
 	if err = srv.Shutdown(tctx); err != nil {

@@ -4,12 +4,13 @@ import (
 	"context"
 	"database/sql"
 
+	"github.com/tusmasoma/go-microservice-k8s/pkg/repository/mysql"
 	"github.com/tusmasoma/go-microservice-k8s/services/customer/entity"
 	"github.com/tusmasoma/go-microservice-k8s/services/customer/repository"
 )
 
 type customerRepository struct {
-	db SQLExecutor
+	db mysql.SQLExecutor
 }
 
 func NewCustomerRepository(db *sql.DB) repository.CustomerRepository {
@@ -20,7 +21,7 @@ func NewCustomerRepository(db *sql.DB) repository.CustomerRepository {
 
 func (cr *customerRepository) Get(ctx context.Context, id string) (*entity.Customer, error) {
 	executor := cr.db
-	if tx := TxFromCtx(ctx); tx != nil {
+	if tx := mysql.TxFromCtx(ctx); tx != nil {
 		executor = tx
 	}
 
@@ -48,7 +49,7 @@ func (cr *customerRepository) Get(ctx context.Context, id string) (*entity.Custo
 
 func (cr *customerRepository) List(ctx context.Context) ([]entity.Customer, error) {
 	executor := cr.db
-	if tx := TxFromCtx(ctx); tx != nil {
+	if tx := mysql.TxFromCtx(ctx); tx != nil {
 		executor = tx
 	}
 
@@ -87,7 +88,7 @@ func (cr *customerRepository) List(ctx context.Context) ([]entity.Customer, erro
 
 func (cr *customerRepository) Create(ctx context.Context, customer entity.Customer) error {
 	executor := cr.db
-	if tx := TxFromCtx(ctx); tx != nil {
+	if tx := mysql.TxFromCtx(ctx); tx != nil {
 		executor = tx
 	}
 
@@ -115,7 +116,7 @@ func (cr *customerRepository) Create(ctx context.Context, customer entity.Custom
 
 func (cr *customerRepository) Update(ctx context.Context, customer entity.Customer) error {
 	executor := cr.db
-	if tx := TxFromCtx(ctx); tx != nil {
+	if tx := mysql.TxFromCtx(ctx); tx != nil {
 		executor = tx
 	}
 
@@ -142,7 +143,7 @@ func (cr *customerRepository) Update(ctx context.Context, customer entity.Custom
 
 func (cr *customerRepository) Delete(ctx context.Context, id string) error {
 	executor := cr.db
-	if tx := TxFromCtx(ctx); tx != nil {
+	if tx := mysql.TxFromCtx(ctx); tx != nil {
 		executor = tx
 	}
 

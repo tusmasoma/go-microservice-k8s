@@ -16,9 +16,10 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
+	"github.com/tusmasoma/go-microservice-k8s/pkg/config"
+	pmysql "github.com/tusmasoma/go-microservice-k8s/pkg/repository/mysql"
 	catalog_pb "github.com/tusmasoma/go-microservice-k8s/services/catalog/proto"
 	cusotmer_pb "github.com/tusmasoma/go-microservice-k8s/services/customer/proto"
-	"github.com/tusmasoma/go-microservice-k8s/services/order/config"
 	"github.com/tusmasoma/go-microservice-k8s/services/order/gateway"
 	pb "github.com/tusmasoma/go-microservice-k8s/services/order/proto"
 	catalogservice "github.com/tusmasoma/go-microservice-k8s/services/order/repository/catalog_service"
@@ -45,7 +46,7 @@ func main() {
 		return
 	}
 
-	err = container.Invoke(func(grpcHandler pb.OrderServiceServer, config *config.ServerConfig) {
+	err = container.Invoke(func(grpcHandler pb.OrderServiceServer, _ *config.ServerConfig) {
 		lis, err := net.Listen("tcp", addr) //nolint:govet // This is not a mistake
 		if err != nil {
 			log.Critical("Failed to listen", log.Ferror(err))
@@ -92,8 +93,8 @@ func BuildContainer(ctx context.Context) (*dig.Container, error) {
 	providers := []interface{}{
 		config.NewServerConfig,
 		config.NewDBConfig,
-		mysql.NewMySQLDB,
-		mysql.NewTransactionRepository,
+		pmysql.NewMySQLDB,
+		pmysql.NewTransactionRepository,
 		mysql.NewOrderRepository,
 		NewCustomerServiceClient,
 		NewCatalogServiceClient,

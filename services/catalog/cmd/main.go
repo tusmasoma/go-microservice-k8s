@@ -16,7 +16,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
-	"github.com/tusmasoma/go-microservice-k8s/services/catalog/config"
+	"github.com/tusmasoma/go-microservice-k8s/pkg/config"
 	"github.com/tusmasoma/go-microservice-k8s/services/catalog/gateway"
 	"github.com/tusmasoma/go-microservice-k8s/services/catalog/repository/mysql"
 	"github.com/tusmasoma/go-microservice-k8s/services/catalog/usecase"

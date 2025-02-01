@@ -17,6 +17,7 @@ import (
 	"google.golang.org/grpc/reflection"
 
 	"github.com/tusmasoma/go-microservice-k8s/pkg/config"
+	pmysql "github.com/tusmasoma/go-microservice-k8s/pkg/repository/mysql"
 	"github.com/tusmasoma/go-microservice-k8s/services/catalog/gateway"
 	"github.com/tusmasoma/go-microservice-k8s/services/catalog/repository/mysql"
 	"github.com/tusmasoma/go-microservice-k8s/services/catalog/usecase"
@@ -89,8 +90,8 @@ func BuildContainer(ctx context.Context) (*dig.Container, error) {
 	providers := []interface{}{
 		config.NewServerConfig,
 		config.NewDBConfig,
-		mysql.NewMySQLDB,
-		mysql.NewTransactionRepository,
+		pmysql.NewMySQLDB,
+		pmysql.NewTransactionRepository,
 		mysql.NewCatalogItemRepository,
 		usecase.NewCatalogItemUseCase,
 		gateway.NewCatalogItemHandler,

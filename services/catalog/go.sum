@@ -57,8 +57,7 @@ github.com/slack-go/slack v0.13.1/go.mod h1:hlGi5oXA+Gt+yWTPP0plCdRKmjsDxecdHxYQ
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
-github.com/stretchr/testify v1.9.0 h1:HtqpIVDClZ4nwg75+f6Lvsy/wHu+3BoSGCbBAcpTsTg=
-github.com/stretchr/testify v1.9.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
+github.com/stretchr/testify v1.10.0 h1:Xv5erBjTwe/5IxqUQTdXv5kgmIvbHo3QQyRwhJsOfJA=
 github.com/tusmasoma/go-microservice-k8s v0.0.0-20250201104020-4149ad3c3f79 h1:f9imu8L4JzePXaPmFWCinV9sjeKkNXnJ2lYlP2sGw2Q=
 github.com/tusmasoma/go-microservice-k8s v0.0.0-20250201104020-4149ad3c3f79/go.mod h1:O89Hvt4XsPvcmOB1c+Y2dN5+9fHm05nFxUMj9INNwNo=
 github.com/tusmasoma/go-tech-dojo v0.0.0-20240805120803-02e31d5c8a21 h1:PqS+hcn9LqAtAlT4smL+La21yitR4EUlJMwRS+sXxbM=

@@ -33,6 +33,7 @@ require (
 	github.com/sethvargo/go-envconfig v1.1.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/slack-go/slack v0.13.1 // indirect
+	github.com/stretchr/testify v1.10.0 // indirect
 	golang.org/x/net v0.27.0 // indirect
 	golang.org/x/sys v0.22.0 // indirect
 	golang.org/x/text v0.16.0 // indirect

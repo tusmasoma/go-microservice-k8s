@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/tusmasoma/go-microservice-k8s/services/order/config"
+	"github.com/tusmasoma/go-microservice-k8s/pkg/config"
 	"github.com/tusmasoma/go-microservice-k8s/services/order/repository"
 	"github.com/tusmasoma/go-tech-dojo/pkg/log"
 )

@@ -16,9 +16,9 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
+	"github.com/tusmasoma/go-microservice-k8s/pkg/config"
 	catalog_pb "github.com/tusmasoma/go-microservice-k8s/services/catalog/proto"
 	cusotmer_pb "github.com/tusmasoma/go-microservice-k8s/services/customer/proto"
-	"github.com/tusmasoma/go-microservice-k8s/services/order/config"
 	"github.com/tusmasoma/go-microservice-k8s/services/order/gateway"
 	pb "github.com/tusmasoma/go-microservice-k8s/services/order/proto"
 	catalogservice "github.com/tusmasoma/go-microservice-k8s/services/order/repository/catalog_service"

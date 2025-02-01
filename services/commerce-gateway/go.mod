@@ -6,7 +6,7 @@ require (
 	github.com/gin-contrib/cors v1.7.2
 	github.com/gin-gonic/gin v1.10.0
 	github.com/joho/godotenv v1.5.1
-	github.com/sethvargo/go-envconfig v1.1.0
+	github.com/tusmasoma/go-microservice-k8s v0.0.0-20250201104020-4149ad3c3f79
 	github.com/tusmasoma/go-microservice-k8s/services/catalog v0.0.0-20240909082345-576e37efb494
 	github.com/tusmasoma/go-microservice-k8s/services/customer v0.0.0-20240909082345-576e37efb494
 	github.com/tusmasoma/go-microservice-k8s/services/order v0.0.0-20240909082345-576e37efb494
@@ -34,6 +34,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.2 // indirect
+	github.com/sethvargo/go-envconfig v1.1.0 // indirect
 	github.com/slack-go/slack v0.13.1 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect

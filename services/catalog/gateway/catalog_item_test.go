@@ -44,7 +44,7 @@ func setupTestServer(t *testing.T, setup func(m *mock.MockCatalogItemUseCase)) (
 		}
 	}()
 
-	conn, err := grpc.Dial("", grpc.WithContextDialer(func(ctx context.Context, s string) (net.Conn, error) { //nolint:staticcheck // ignore deprecation
+	conn, err := grpc.Dial("", grpc.WithContextDialer(func(_ context.Context, _ string) (net.Conn, error) { //nolint:staticcheck // ignore deprecation
 		return lis.Dial()
 	}), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {

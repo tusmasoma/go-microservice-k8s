@@ -43,7 +43,7 @@ func main() {
 		return
 	}
 
-	err = container.Invoke(func(grpcHandler pb.CatalogServiceServer, config *config.ServerConfig) {
+	err = container.Invoke(func(grpcHandler pb.CatalogServiceServer, _ *config.ServerConfig) {
 		lis, err := net.Listen("tcp", addr) //nolint:govet // This is not a mistake
 		if err != nil {
 			log.Critical("Failed to listen", log.Ferror(err))

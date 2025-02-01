@@ -6,8 +6,6 @@ GOARCH := $(shell $(GO) env GOARCH)
 BIN := $(abspath ./bin/$(GOOS)_$(GOARCH))
 GO_ENV ?= GOPRIVATE=github.com/tusmasoma GOBIN=$(BIN)
 
-ROOT_DIR := $(shell git rev-parse --show-toplevel)
-
 # maicroservices
 SERVICES := catalog customer order commerce-gateway
 SERVICE_PATH_PREFIX := services
@@ -15,7 +13,7 @@ SERVICE_PATH_PREFIX := services
 # tools
 $(shell mkdir -p $(BIN))
 
-GOLANGCI_LINT_VERSION := v1.55.2
+GOLANGCI_LINT_VERSION := v1.63.4
 $(BIN)/golangci-lint-$(GOLANGCI_LINT_VERSION):
 	unlink $(BIN)/golangci-lint || true
 	$(GO_ENV) ${GO} install github.com/golangci/golangci-lint/cmd/golangci-lint@$(GOLANGCI_LINT_VERSION)
@@ -38,7 +36,7 @@ $(BIN)/goimports-$(GOIMPORTS_VERSION):
 
 GOFUMPT_VERSION := v0.6.0
 $(BIN)/gofumpt-$(GOFUMPT_VERSION):
-	unlink $(BIN)/gofumpt || true
+	unlink $(BIN)/gofumpt || truep
 	$(GO_ENV) ${GO} install mvdan.cc/gofumpt@$(GOFUMPT_VERSION)
 	mv $(BIN)/gofumpt $(BIN)/gofumpt-$(GOFUMPT_VERSION)
 	ln -s $(BIN)/gofumpt-$(GOFUMPT_VERSION) $(BIN)/gofumpt
@@ -58,12 +56,12 @@ lint: $(BIN)/golangci-lint-$(GOLANGCI_LINT_VERSION)
 ifdef SERVICE
 	@echo "Running lint for service: $(SERVICE)"
 	cd ./$(SERVICE_PATH_PREFIX)/$(SERVICE) && \
-	$(BIN)/golangci-lint run -c $(ROOT_DIR)/.golangci.yml ./...
+	$(BIN)/golangci-lint run -c ../../.golangci.yml ./...
 else
 	@for service in $(SERVICES); do \
 		echo "Running lint for service: $$service"; \
 		(cd ./$(SERVICE_PATH_PREFIX)/$$service && \
-		$(BIN)/golangci-lint run -c $(ROOT_DIR)/.golangci.yml ./...) || true; \
+		$(BIN)/golangci-lint run -c ../../.golangci.yml ./...) || true; \
 	done
 endif
 
@@ -72,12 +70,12 @@ lint-diff: $(BIN)/golangci-lint-$(GOLANGCI_LINT_VERSION)
 ifdef SERVICE
 	@echo "Running lint-diff for service: $(SERVICE)"
 	cd $(SERVICE_PATH_PREFIX)/$(SERVICE) && \
-	$(BIN)/golangci-lint run -c $(ROOT_DIR)/.golangci.yml ./... | reviewdog -f=golangci-lint -diff="git diff origin/main"
+	$(BIN)/golangci-lint run -c ../../.golangci.yml ./... | reviewdog -f=golangci-lint -diff="git diff origin/main"
 else
 	@for service in $(SERVICES); do \
 		echo "Running lint-diff for service: $$service"; \
 		(cd $(SERVICE_PATH_PREFIX)/$$service && \
-		$(BIN)/golangci-lint run -c $(ROOT_DIR)/.golangci.yml ./... | reviewdog -f=golangci-lint -diff="git diff origin/main") || true; \
+		$(BIN)/golangci-lint run -c ../../.golangci.yml ./... | reviewdog -f=golangci-lint -diff="git diff origin/main") || true; \
 	done
 endif
 
@@ -98,6 +96,15 @@ else
 		${GO_ENV} $(BIN)/gofumpt -l -w $${FILES}; \
 	done
 endif
+
+# proto: generate proto files
+.PHONY: proto_gen
+proto_gen:
+	@for service in $(SERVICES); do \
+		echo "Running proto_gen for service: $$service"; \
+		(cd $(SERVICE_PATH_PREFIX)/$$service && \
+		protoc --proto_path=. --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative ./proto/*.proto); \
+	done
 
 # .PHONY: generate
 # generate: generate-deps

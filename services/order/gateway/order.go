@@ -41,7 +41,7 @@ func (oh *orderHandler) ListOrders(ctx context.Context, _ *pb.ListOrdersRequest)
 					Name:  ol.CatalogItem.Name,
 					Price: ol.CatalogItem.Price,
 				},
-				Count: int32(ol.Count),
+				Count: int64(ol.Count),
 			})
 		}
 

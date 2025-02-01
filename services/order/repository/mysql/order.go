@@ -205,7 +205,7 @@ func (or *orderRepository) Create(ctx context.Context, order entity.Order) error
 
 	query = `
 	INSERT INTO OrderLines (order_id, catalog_item_id, count) VALUES`
-	values := make([]interface{}, 0, len(order.OrderLines)*3) //nolint:gomnd // 3 is the number of columns.
+	values := make([]interface{}, 0, len(order.OrderLines)*3) //nolint:mnd // 3 is the number of columns.
 	for i, line := range order.OrderLines {
 		if i > 0 {
 			query += ", "

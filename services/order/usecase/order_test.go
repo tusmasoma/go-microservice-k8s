@@ -51,7 +51,7 @@ func TestOrderUseCase_GetOrderCreationResources(t *testing.T) {
 			setup: func(
 				cr *repo_mock.MockCustomerRepository,
 				cir *repo_mock.MockCatalogItemRepository,
-				or *repo_mock.MockOrderRepository,
+				_ *repo_mock.MockOrderRepository,
 			) {
 				cr.EXPECT().List(gomock.Any()).Return(customers, nil)
 				cir.EXPECT().List(gomock.Any()).Return(items, nil)
@@ -367,8 +367,8 @@ func TestOrderUseCase_CreateOrder(t *testing.T) {
 		{
 			name: "success",
 			setup: func(
-				cr *repo_mock.MockCustomerRepository,
-				cir *repo_mock.MockCatalogItemRepository,
+				_ *repo_mock.MockCustomerRepository,
+				_ *repo_mock.MockCatalogItemRepository,
 				or *repo_mock.MockOrderRepository,
 			) {
 				or.EXPECT().Create(
@@ -452,8 +452,8 @@ func TestOrderUseCase_DeleteOrder(t *testing.T) {
 		{
 			name: "success",
 			setup: func(
-				cr *repo_mock.MockCustomerRepository,
-				cir *repo_mock.MockCatalogItemRepository,
+				_ *repo_mock.MockCustomerRepository,
+				_ *repo_mock.MockCatalogItemRepository,
 				or *repo_mock.MockOrderRepository,
 			) {
 				or.EXPECT().Delete(gomock.Any(), orderID).Return(nil)

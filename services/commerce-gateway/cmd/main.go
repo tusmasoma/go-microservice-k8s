@@ -55,7 +55,7 @@ func main() {
 	<-signalCtx.Done()
 	log.Info("Server stopping...")
 
-	tctx, cancelShutdown := context.WithTimeout(context.Background(), 5*time.Second) //nolint:gomnd // 5 is reasonable
+	tctx, cancelShutdown := context.WithTimeout(context.Background(), 5*time.Second) //nolint:mnd // 5 is reasonable
 	defer cancelShutdown()
 
 	if err = srv.Shutdown(tctx); err != nil {

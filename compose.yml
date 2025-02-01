@@ -4,8 +4,8 @@ services:
   mysql:
     container_name: mysql
     build:
-      context: ../migrations
-      dockerfile: ./Dockerfile
+      context: ./migrations
+      dockerfile: ./docker/mysql/Dockerfile
     ports:
       - 3306:3306
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
@@ -17,8 +17,8 @@ services:
       - microservices-net
   commerce-gateway:
     build:
-      context: ./commerce-gateway
-      dockerfile: ./Dockerfile
+      context: ./services/commerce-gateway
+      dockerfile: ./docker/commerce_gateway/Dockerfile
     container_name: commerce-gateway
     ports:
       - "8080:8080"
@@ -31,8 +31,8 @@ services:
       - microservices-net
   customer-service:
     build:
-      context: ./customer
-      dockerfile: ./Dockerfile
+      context: ./services/customer
+      dockerfile: ./docker/customer_service/Dockerfile
     container_name: customer-service
     ports:
       - "8081:8081"
@@ -44,8 +44,8 @@ services:
       - microservices-net
   catalog-service:
     build:
-      context: ./catalog
-      dockerfile: ./Dockerfile
+      context: ./services/catalog
+      dockerfile: ./docker/catalog_service/Dockerfile
     container_name: catalog-service
     ports:
       - "8082:8082"
@@ -57,8 +57,8 @@ services:
       - microservices-net
   order-service:
     build:
-      context: ./order
-      dockerfile: ./Dockerfile
+      context: ./services/order
+      dockerfile: ./docker/order_service/Dockerfile
     container_name: order-service
     ports:
       - "8083:8083"

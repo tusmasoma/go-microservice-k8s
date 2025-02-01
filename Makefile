@@ -41,6 +41,33 @@ $(BIN)/gofumpt-$(GOFUMPT_VERSION):
 	mv $(BIN)/gofumpt $(BIN)/gofumpt-$(GOFUMPT_VERSION)
 	ln -s $(BIN)/gofumpt-$(GOFUMPT_VERSION) $(BIN)/gofumpt
 
+
+PROTOC_VERSION := 24.4
+PROTOC_ZIP := protoc-$(PROTOC_VERSION)-linux-x86_64.zip
+$(BIN)/protoc-$(PROTOC_VERSION):
+	@if ! command -v protoc &> /dev/null; then \
+		echo "Installing protoc..."; \
+		curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOC_VERSION)/$(PROTOC_ZIP); \
+		unzip -o $(PROTOC_ZIP) -d $(HOME)/.local; \
+		rm -f $(PROTOC_ZIP); \
+	fi
+
+PROTOC_GEN_GO_VERSION := v1.31.0
+$(BIN)/protoc-gen-go-$(PROTOC_GEN_GO_VERSION):
+	unlink $(BIN)/protoc-gen-go || true
+	$(GO_ENV) ${GO} install google.golang.org/protobuf/cmd/protoc-gen-go@$(PROTOC_GEN_GO_VERSION)
+	mv $(BIN)/protoc-gen-go $(BIN)/protoc-gen-go-$(PROTOC_GEN_GO_VERSION)
+	ln -s $(BIN)/protoc-gen-go-$(PROTOC_GEN_GO_VERSION) $(BIN)/protoc-gen-go
+
+PROTOC_GEN_GO_GRPC_VERSION := v1.3.0
+$(BIN)/protoc-gen-go-grpc-$(PROTOC_GEN_GO_GRPC_VERSION):
+	unlink $(BIN)/protoc-gen-go-grpc || true
+	$(GO_ENV) ${GO} install google.golang.org/grpc/cmd/protoc-gen-go-grpc@$(PROTOC_GEN_GO_GRPC_VERSION)
+	mv $(BIN)/protoc-gen-go-grpc $(BIN)/protoc-gen-go-grpc-$(PROTOC_GEN_GO_GRPC_VERSION)
+	ln -s $(BIN)/protoc-gen-go-grpc-$(PROTOC_GEN_GO_GRPC_VERSION) $(BIN)/protoc-gen-go-grpc
+
+proto_tools: $(BIN)/protoc-$(PROTOC_VERSION) $(BIN)/protoc-gen-go-$(PROTOC_GEN_GO_VERSION) $(BIN)/protoc-gen-go-grpc-$(PROTOC_GEN_GO_GRPC_VERSION)
+
 # go: test for all under the PKG
 .PHONY: test
 test:
@@ -99,11 +126,15 @@ endif
 
 # proto: generate proto files
 .PHONY: proto_gen
-proto_gen:
+proto_gen: proto_tools
 	@for service in $(SERVICES); do \
-		echo "Running proto_gen for service: $$service"; \
-		(cd $(SERVICE_PATH_PREFIX)/$$service && \
-		protoc --proto_path=. --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative ./proto/*.proto); \
+		if [ "$$service" != "commerce-gateway" ]; then \
+			echo "Running proto_gen for service: $$service"; \
+			(cd $(SERVICE_PATH_PREFIX)/$$service && \
+			protoc --proto_path=proto --go_out=./ --go-grpc_out=./ proto/$$service.proto); \
+		else \
+			echo "Skipping proto_gen for commerce-gateway"; \
+		fi \
 	done
 
 # .PHONY: generate

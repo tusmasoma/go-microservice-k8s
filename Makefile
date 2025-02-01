@@ -36,7 +36,7 @@ $(BIN)/goimports-$(GOIMPORTS_VERSION):
 
 GOFUMPT_VERSION := v0.6.0
 $(BIN)/gofumpt-$(GOFUMPT_VERSION):
-	unlink $(BIN)/gofumpt || truep
+	unlink $(BIN)/gofumpt || true
 	$(GO_ENV) ${GO} install mvdan.cc/gofumpt@$(GOFUMPT_VERSION)
 	mv $(BIN)/gofumpt $(BIN)/gofumpt-$(GOFUMPT_VERSION)
 	ln -s $(BIN)/gofumpt-$(GOFUMPT_VERSION) $(BIN)/gofumpt
@@ -74,7 +74,7 @@ test:
 ifdef SERVICE
 	$(GO) test -v -count=1 ./$(SERVICE_PATH_PREFIX)/$(SERVICE)/...
 else
-	$(GO) test -v -count=1 $(foreach service,$(SERVICES),./$(SERVICE_PATH_PREFIX)/$(service)/...)
+	$(GO) test -v -count=1 $(foreach service,$(SERVICES),./$(SERVICE_PATH_PREFIX)/$(service)/...) ./pkg/...
 endif
 
 # golangci-lint: lint for all under the PKG
@@ -90,6 +90,8 @@ else
 		(cd ./$(SERVICE_PATH_PREFIX)/$$service && \
 		$(BIN)/golangci-lint run -c ../../.golangci.yml ./...) || true; \
 	done
+	@echo "Running lint for pkg/"
+	(cd ./pkg && $(BIN)/golangci-lint run -c ../.golangci.yml ./...) || true;
 endif
 
 .PHONY: lint-diff
@@ -104,6 +106,8 @@ else
 		(cd $(SERVICE_PATH_PREFIX)/$$service && \
 		$(BIN)/golangci-lint run -c ../../.golangci.yml ./... | reviewdog -f=golangci-lint -diff="git diff origin/main") || true; \
 	done
+	@echo "Running lint-diff for pkg/"
+	(cd ./pkg && $(BIN)/golangci-lint run -c ../.golangci.yml ./... | reviewdog -f=golangci-lint -diff="git diff origin/main") || true;
 endif
 
 .PHONY: fmt
@@ -122,6 +126,10 @@ else
 		${GO_ENV} $(BIN)/goimports -local "$${LOCAL_PKG}" -w $${FILES} && \
 		${GO_ENV} $(BIN)/gofumpt -l -w $${FILES}; \
 	done
+	@echo "Running fmt for pkg/"
+	FILES=$$(find ./pkg -type f -name "*.go") && \
+	${GO_ENV} $(BIN)/goimports -local "github.com/tusmasoma/pkg" -w $${FILES} && \
+	${GO_ENV} $(BIN)/gofumpt -l -w $${FILES};
 endif
 
 # proto: generate proto files
@@ -167,6 +175,13 @@ else
 		done; \
 	done
 endif
+	@echo "Running generate for pkg/"
+	@for dir in $$(find ./pkg -type d); do \
+		if [ -n "$$(git diff --name-only origin/main -- $$dir)" ]; then \
+			echo "go generate $$dir/..." && \
+			(cd "$$dir" && PATH="$(BIN):$(PATH)" ${GO_ENV} ${GO} generate ./...) || true; \
+		fi; \
+	done
 	$(MAKE) fmt
 
 .PHONY: generate-deps

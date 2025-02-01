@@ -1,15 +1,17 @@
 module github.com/tusmasoma/go-microservice-k8s/services/commerce-gateway
 
-go 1.21.3
+go 1.23.4
+
+replace github.com/tusmasoma/go-microservice-k8s/pkg/ => ../../pkg/
 
 require (
 	github.com/gin-contrib/cors v1.7.2
 	github.com/gin-gonic/gin v1.10.0
 	github.com/joho/godotenv v1.5.1
-	github.com/tusmasoma/go-microservice-k8s v0.0.0-20250201104020-4149ad3c3f79
-	github.com/tusmasoma/go-microservice-k8s/services/catalog v0.0.0-20240909082345-576e37efb494
-	github.com/tusmasoma/go-microservice-k8s/services/customer v0.0.0-20240909082345-576e37efb494
-	github.com/tusmasoma/go-microservice-k8s/services/order v0.0.0-20240909082345-576e37efb494
+	github.com/tusmasoma/go-microservice-k8s/pkg v0.0.0-20250201142409-2fffeecb0b62
+	github.com/tusmasoma/go-microservice-k8s/services/catalog v0.0.0-20250201142409-2fffeecb0b62
+	github.com/tusmasoma/go-microservice-k8s/services/customer v0.0.0-20250201142409-2fffeecb0b62
+	github.com/tusmasoma/go-microservice-k8s/services/order v0.0.0-20250201142409-2fffeecb0b62
 	github.com/tusmasoma/go-tech-dojo v0.0.0-20240805120803-02e31d5c8a21
 	google.golang.org/grpc v1.66.0
 )
@@ -36,7 +38,6 @@ require (
 	github.com/pelletier/go-toml/v2 v2.2.2 // indirect
 	github.com/sethvargo/go-envconfig v1.1.0 // indirect
 	github.com/slack-go/slack v0.13.1 // indirect
-	github.com/stretchr/testify v1.10.0 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect
 	golang.org/x/arch v0.8.0 // indirect

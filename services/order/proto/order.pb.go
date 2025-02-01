@@ -7,11 +7,12 @@
 package proto
 
 import (
+	reflect "reflect"
+	sync "sync"
+
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
-	reflect "reflect"
-	sync "sync"
 )
 
 const (
@@ -763,22 +764,25 @@ func file_order_proto_rawDescGZIP() []byte {
 	return file_order_proto_rawDescData
 }
 
-var file_order_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
-var file_order_proto_goTypes = []interface{}{
-	(*ListOrdersRequest)(nil),                 // 0: order.ListOrdersRequest
-	(*ListOrdersResponse)(nil),                // 1: order.ListOrdersResponse
-	(*GetOrderCreationResourcesRequest)(nil),  // 2: order.GetOrderCreationResourcesRequest
-	(*GetOrderCreationResourcesResponse)(nil), // 3: order.GetOrderCreationResourcesResponse
-	(*CreateOrderRequest)(nil),                // 4: order.CreateOrderRequest
-	(*CreateOrderResponse)(nil),               // 5: order.CreateOrderResponse
-	(*DeleteOrderRequest)(nil),                // 6: order.DeleteOrderRequest
-	(*DeleteOrderResponse)(nil),               // 7: order.DeleteOrderResponse
-	(*Order)(nil),                             // 8: order.Order
-	(*OrderLine)(nil),                         // 9: order.OrderLine
-	(*Customer)(nil),                          // 10: order.Customer
-	(*CatalogItem)(nil),                       // 11: order.CatalogItem
-	(*timestamppb.Timestamp)(nil),             // 12: google.protobuf.Timestamp
-}
+var (
+	file_order_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+	file_order_proto_goTypes  = []interface{}{
+		(*ListOrdersRequest)(nil),                 // 0: order.ListOrdersRequest
+		(*ListOrdersResponse)(nil),                // 1: order.ListOrdersResponse
+		(*GetOrderCreationResourcesRequest)(nil),  // 2: order.GetOrderCreationResourcesRequest
+		(*GetOrderCreationResourcesResponse)(nil), // 3: order.GetOrderCreationResourcesResponse
+		(*CreateOrderRequest)(nil),                // 4: order.CreateOrderRequest
+		(*CreateOrderResponse)(nil),               // 5: order.CreateOrderResponse
+		(*DeleteOrderRequest)(nil),                // 6: order.DeleteOrderRequest
+		(*DeleteOrderResponse)(nil),               // 7: order.DeleteOrderResponse
+		(*Order)(nil),                             // 8: order.Order
+		(*OrderLine)(nil),                         // 9: order.OrderLine
+		(*Customer)(nil),                          // 10: order.Customer
+		(*CatalogItem)(nil),                       // 11: order.CatalogItem
+		(*timestamppb.Timestamp)(nil),             // 12: google.protobuf.Timestamp
+	}
+)
+
 var file_order_proto_depIdxs = []int32{
 	8,  // 0: order.ListOrdersResponse.orders:type_name -> order.Order
 	10, // 1: order.GetOrderCreationResourcesResponse.customers:type_name -> order.Customer

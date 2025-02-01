@@ -1,6 +1,8 @@
 module github.com/tusmasoma/go-microservice-k8s/services/catalog
 
-go 1.21.3
+go 1.23.4
+
+replace github.com/tusmasoma/go-microservice-k8s/pkg/ => ../../pkg/
 
 require (
 	github.com/go-sql-driver/mysql v1.8.1
@@ -9,7 +11,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
 	github.com/ory/dockertest v3.3.5+incompatible
-	github.com/tusmasoma/go-microservice-k8s v0.0.0-20250201104020-4149ad3c3f79
+	github.com/tusmasoma/go-microservice-k8s/pkg v0.0.0-20250201142409-2fffeecb0b62
 	github.com/tusmasoma/go-tech-dojo v0.0.0-20240805120803-02e31d5c8a21
 	go.uber.org/dig v1.18.0
 	google.golang.org/grpc v1.66.0
@@ -33,7 +35,6 @@ require (
 	github.com/sethvargo/go-envconfig v1.1.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/slack-go/slack v0.13.1 // indirect
-	github.com/stretchr/testify v1.10.0 // indirect
 	golang.org/x/net v0.27.0 // indirect
 	golang.org/x/sys v0.22.0 // indirect
 	golang.org/x/text v0.16.0 // indirect

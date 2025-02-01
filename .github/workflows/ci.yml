@@ -84,7 +84,7 @@ jobs:
         service: [catalog, customer, order, commerce-gateway]
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: app-${{ matrix.service }}
           path: ./services/${{ matrix.service }}/app
@@ -106,7 +106,7 @@ jobs:
         service: [catalog, customer, order, commerce-gateway]
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: app-${{ matrix.service }}
           path: ./services/${{ matrix.service }}/app
@@ -121,7 +121,7 @@ jobs:
         service: [catalog, customer, order, commerce-gateway]
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
          name: app-${{ matrix.service }}
          path: ./services/${{ matrix.service }}/app

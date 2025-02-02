@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 golang:1.21.3 AS builder
+FROM --platform=linux/amd64 golang:1.23.4 AS builder
 
 RUN apt-get update && apt-get install -y default-mysql-client
 

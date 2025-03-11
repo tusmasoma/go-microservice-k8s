@@ -15,11 +15,11 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     networks:
       - microservices-net
-  commerce-gateway:
+  gateway:
     build:
-      context: ./services/commerce-gateway
-      dockerfile: ../../docker/commerce_gateway/Dockerfile
-    container_name: commerce-gateway
+      context: ./services/gateway
+      dockerfile: ../../docker/gateway/Dockerfile
+    container_name: gateway
     ports:
       - "8080:8080"
     env_file:

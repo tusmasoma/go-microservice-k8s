@@ -14,7 +14,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/tusmasoma/go-microservice-k8s/pkg/config"
-	"github.com/tusmasoma/go-microservice-k8s/services/commerce-gateway/gateway/web/handler"
+	"github.com/tusmasoma/go-microservice-k8s/services/gateway/web/handler"
 	"github.com/tusmasoma/go-tech-dojo/pkg/log"
 	"google.golang.org/grpc"
 

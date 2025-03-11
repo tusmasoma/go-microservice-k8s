@@ -52,11 +52,11 @@ Once Minikube is running, apply the necessary Kubernetes configurations in the f
    kubectl apply -f order-service.yaml
    ```
 
-5. **Deploy the commerce-gateway service**:
+5. **Deploy the gateway service**:
 
    ```bash
-   kubectl apply -f commerce-gateway-deployment.yaml
-   kubectl apply -f commerce-gateway-service.yaml
+   kubectl apply -f gateway-deployment.yaml
+   kubectl apply -f gateway-service.yaml
    ```
 
 6. **Apply ingress configuration**:
@@ -79,10 +79,10 @@ kubectl get ingress
 
 #### Option 2: Access Directly via Minikube (If Ingress Fails)
 
-If the ingress does not work as expected, you can access the services directly using Minikube's `service` command. For example, to access the commerce-gateway service, run:
+If the ingress does not work as expected, you can access the services directly using Minikube's `service` command. For example, to access the gateway service, run:
 
 ```bash
-minikube service commerce-gateway-service
+minikube service gateway-service
 ```
 
 This will open the service in your default web browser.

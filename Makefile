@@ -7,7 +7,7 @@ BIN := $(abspath ./bin/$(GOOS)_$(GOARCH))
 GO_ENV ?= GOPRIVATE=github.com/tusmasoma GOBIN=$(BIN)
 
 # maicroservices
-SERVICES := catalog customer order commerce-gateway
+SERVICES := catalog customer order gateway
 SERVICE_PATH_PREFIX := services
 
 # tools
@@ -136,12 +136,12 @@ endif
 .PHONY: proto_gen
 proto_gen: proto_tools
 	@for service in $(SERVICES); do \
-		if [ "$$service" != "commerce-gateway" ]; then \
+		if [ "$$service" != "gateway" ]; then \
 			echo "Running proto_gen for service: $$service"; \
 			(cd $(SERVICE_PATH_PREFIX)/$$service && \
 			protoc --proto_path=proto --go_out=./ --go-grpc_out=./ proto/$$service.proto); \
 		else \
-			echo "Skipping proto_gen for commerce-gateway"; \
+			echo "Skipping proto_gen for gateway"; \
 		fi \
 	done
 

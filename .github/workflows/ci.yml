@@ -54,8 +54,8 @@ jobs:
         uses: actions/setup-go@v4.1.0
         id: setup-go
         with:
-          go-version-file: ./services/${{ matrix.service }}/go.mod
-          cache-dependency-path: ./services/${{ matrix.service }}/go.sum
+          go-version-file: ./go.mod
+          cache-dependency-path: ./go.sum
 
       - name: Download Go modules
         shell: bash

@@ -138,8 +138,8 @@ proto_gen: proto_tools
 	@for service in $(SERVICES); do \
 		if [ "$$service" != "gateway" ]; then \
 			echo "Running proto_gen for service: $$service"; \
-			(cd $(SERVICE_PATH_PREFIX)/$$service && \
-			protoc --proto_path=proto --go_out=./ --go-grpc_out=./ proto/$$service.proto); \
+			(cd proto/$$service && \
+			protoc --proto_path=proto --go_out=./ --go-grpc_out=./ ./$$service.proto); \
 		else \
 			echo "Skipping proto_gen for gateway"; \
 		fi \

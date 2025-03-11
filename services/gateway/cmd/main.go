@@ -18,9 +18,9 @@ import (
 	"github.com/tusmasoma/go-tech-dojo/pkg/log"
 	"google.golang.org/grpc"
 
-	catalog_pb "github.com/tusmasoma/go-microservice-k8s/services/proto/catalog"
-	cusotmer_pb "github.com/tusmasoma/go-microservice-k8s/services/proto/customer"
-	order_pb "github.com/tusmasoma/go-microservice-k8s/services/proto/order"
+	"github.com/tusmasoma/go-microservice-k8s/proto/catalog"
+	"github.com/tusmasoma/go-microservice-k8s/proto/customer"
+	"github.com/tusmasoma/go-microservice-k8s/proto/order"
 )
 
 func main() {
@@ -88,9 +88,9 @@ func BuildContainer(ctx context.Context, addr string) (*http.Server, error) { //
 		return nil, err
 	}
 
-	catalogClient := catalog_pb.NewCatalogServiceClient(catalogConn)
-	customerClient := cusotmer_pb.NewCustomerServiceClient(customerConn)
-	orderClient := order_pb.NewOrderServiceClient(orderConn)
+	catalogClient := catalog.NewCatalogServiceClient(catalogConn)
+	customerClient := customer.NewCustomerServiceClient(customerConn)
+	orderClient := order.NewOrderServiceClient(orderConn)
 
 	catalogHandler := handler.NewCatalogItemHandler(catalogClient)
 	customerHandler := handler.NewCustomerHandler(customerClient)

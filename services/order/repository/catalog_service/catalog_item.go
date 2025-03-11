@@ -6,7 +6,7 @@ import (
 	"github.com/tusmasoma/go-microservice-k8s/services/order/entity"
 	"github.com/tusmasoma/go-microservice-k8s/services/order/repository"
 
-	pb "github.com/tusmasoma/go-microservice-k8s/services/proto/catalog"
+	pb "github.com/tusmasoma/go-microservice-k8s/proto/catalog"
 )
 
 type catalogItemRepository struct {

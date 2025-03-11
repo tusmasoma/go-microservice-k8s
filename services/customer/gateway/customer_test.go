@@ -17,7 +17,7 @@ import (
 	"github.com/tusmasoma/go-microservice-k8s/services/customer/entity"
 	"github.com/tusmasoma/go-microservice-k8s/services/customer/usecase"
 
-	pb "github.com/tusmasoma/go-microservice-k8s/services/proto/customer"
+	pb "github.com/tusmasoma/go-microservice-k8s/proto/customer"
 
 	"github.com/tusmasoma/go-microservice-k8s/services/customer/usecase/mock"
 )

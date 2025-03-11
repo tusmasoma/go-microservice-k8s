@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	pb "github.com/tusmasoma/go-microservice-k8s/services/proto/order"
+	pb "github.com/tusmasoma/go-microservice-k8s/proto/order"
 	"github.com/tusmasoma/go-tech-dojo/pkg/log"
 )
 

@@ -18,14 +18,14 @@ import (
 
 	"github.com/tusmasoma/go-microservice-k8s/pkg/config"
 	pmysql "github.com/tusmasoma/go-microservice-k8s/pkg/repository/mysql"
+	catalog_pb "github.com/tusmasoma/go-microservice-k8s/proto/catalog"
+	cusotmer_pb "github.com/tusmasoma/go-microservice-k8s/proto/customer"
+	pb "github.com/tusmasoma/go-microservice-k8s/proto/order"
 	"github.com/tusmasoma/go-microservice-k8s/services/order/gateway"
 	catalogservice "github.com/tusmasoma/go-microservice-k8s/services/order/repository/catalog_service"
 	customerservice "github.com/tusmasoma/go-microservice-k8s/services/order/repository/customer_service"
 	"github.com/tusmasoma/go-microservice-k8s/services/order/repository/mysql"
 	"github.com/tusmasoma/go-microservice-k8s/services/order/usecase"
-	catalog_pb "github.com/tusmasoma/go-microservice-k8s/services/proto/catalog"
-	cusotmer_pb "github.com/tusmasoma/go-microservice-k8s/services/proto/customer"
-	pb "github.com/tusmasoma/go-microservice-k8s/services/proto/order"
 )
 
 func main() {

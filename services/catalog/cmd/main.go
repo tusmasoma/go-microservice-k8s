@@ -22,7 +22,7 @@ import (
 	"github.com/tusmasoma/go-microservice-k8s/services/catalog/repository/mysql"
 	"github.com/tusmasoma/go-microservice-k8s/services/catalog/usecase"
 
-	pb "github.com/tusmasoma/go-microservice-k8s/services/proto/catalog"
+	pb "github.com/tusmasoma/go-microservice-k8s/proto/catalog"
 )
 
 func main() {

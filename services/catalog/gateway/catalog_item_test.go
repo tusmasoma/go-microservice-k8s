@@ -14,7 +14,7 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/grpc/test/bufconn"
 
-	pb "github.com/tusmasoma/go-microservice-k8s/services/proto/catalog"
+	pb "github.com/tusmasoma/go-microservice-k8s/proto/catalog"
 
 	"github.com/tusmasoma/go-microservice-k8s/services/catalog/entity"
 	"github.com/tusmasoma/go-microservice-k8s/services/catalog/usecase/mock"

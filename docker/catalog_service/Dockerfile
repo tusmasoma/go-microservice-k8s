@@ -21,7 +21,7 @@ WORKDIR /app
 
 COPY --from=builder /app/main .
 
-COPY ./scripts/entrypoint.sh /usr/local/bin/
+COPY ./hack/entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 ENTRYPOINT ["entrypoint.sh"]

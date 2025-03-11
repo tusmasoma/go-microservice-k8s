@@ -18,8 +18,8 @@ import (
 
 	"github.com/tusmasoma/go-microservice-k8s/pkg/config"
 	pmysql "github.com/tusmasoma/go-microservice-k8s/pkg/repository/mysql"
-	catalog_pb "github.com/tusmasoma/go-microservice-k8s/proto/catalog"
-	cusotmer_pb "github.com/tusmasoma/go-microservice-k8s/proto/customer"
+	catalog "github.com/tusmasoma/go-microservice-k8s/proto/catalog"
+	cusotmer "github.com/tusmasoma/go-microservice-k8s/proto/customer"
 	pb "github.com/tusmasoma/go-microservice-k8s/proto/order"
 	"github.com/tusmasoma/go-microservice-k8s/services/order/gateway"
 	catalogservice "github.com/tusmasoma/go-microservice-k8s/services/order/repository/catalog_service"
@@ -115,12 +115,12 @@ func BuildContainer(ctx context.Context) (*dig.Container, error) {
 	return container, nil
 }
 
-func NewCatalogServiceClient() catalog_pb.CatalogServiceClient {
+func NewCatalogServiceClient() catalog.CatalogServiceClient {
 	conn, _ := grpc.Dial("catalog-service:8082", grpc.WithInsecure()) //nolint:staticcheck // ignore deprecation
-	return catalog_pb.NewCatalogServiceClient(conn)
+	return catalog.NewCatalogServiceClient(conn)
 }
 
-func NewCustomerServiceClient() cusotmer_pb.CustomerServiceClient {
+func NewCustomerServiceClient() cusotmer.CustomerServiceClient {
 	conn, _ := grpc.Dial("customer-service:8081", grpc.WithInsecure()) //nolint:staticcheck // ignore deprecation
-	return cusotmer_pb.NewCustomerServiceClient(conn)
+	return cusotmer.NewCustomerServiceClient(conn)
 }

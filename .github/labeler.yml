@@ -4,27 +4,27 @@ docs 📖:
 gateway 🚀:
   - changed-files:
       - any-glob-to-any-file: services/gateway/**/*
-order 🚀:
+order 📦:
   - changed-files:
       - any-glob-to-any-file: services/order/**/*
-customer 🚀:
+customer 🧑‍🤝‍🧑:
   - changed-files:
       - any-glob-to-any-file: services/customer/**/*
-catalog 🚀:
+catalog 📚:
   - changed-files:
       - any-glob-to-any-file: services/catalog/**/*
-pkg 🚀:
+pkg 🏗️:
   - changed-files:
       - any-glob-to-any-file: pkg/**/*
-proto 🚀:
+proto 📡:
   - changed-files:
       - any-glob-to-any-file: proto/**/*
-"github :octocat:":
+github :octocat::
   - changed-files:
       - any-glob-to-any-file: .github/**/*
-docker 🚀:
+docker 🐳:
   - changed-files:
       - any-glob-to-any-file: docker/**/*
-k8s 🚀:
+k8s ☸️:
   - changed-files:
       - any-glob-to-any-file: k8s/**/*

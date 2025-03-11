@@ -4,14 +4,13 @@
 // 	protoc        v5.29.2
 // source: customer.proto
 
-package proto
+package customer
 
 import (
-	reflect "reflect"
-	sync "sync"
-
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	reflect "reflect"
+	sync "sync"
 )
 
 const (
@@ -693,8 +692,8 @@ var file_customer_proto_rawDesc = []byte{
 	0x74, 0x65, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
 	0x74, 0x1a, 0x20, 0x2e, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x2e, 0x44, 0x65, 0x6c,
 	0x65, 0x74, 0x65, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x42, 0x08, 0x5a, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x62, 0x06, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x6e, 0x73, 0x65, 0x42, 0x10, 0x5a, 0x0e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x63, 0x75, 0x73,
+	0x74, 0x6f, 0x6d, 0x65, 0x72, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -709,23 +708,20 @@ func file_customer_proto_rawDescGZIP() []byte {
 	return file_customer_proto_rawDescData
 }
 
-var (
-	file_customer_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
-	file_customer_proto_goTypes  = []interface{}{
-		(*GetCustomerRequest)(nil),     // 0: customer.GetCustomerRequest
-		(*GetCustomerResponse)(nil),    // 1: customer.GetCustomerResponse
-		(*ListCustomersRequest)(nil),   // 2: customer.ListCustomersRequest
-		(*ListCustomersResponse)(nil),  // 3: customer.ListCustomersResponse
-		(*Customer)(nil),               // 4: customer.Customer
-		(*CreateCustomerRequest)(nil),  // 5: customer.CreateCustomerRequest
-		(*CreateCustomerResponse)(nil), // 6: customer.CreateCustomerResponse
-		(*UpdateCustomerRequest)(nil),  // 7: customer.UpdateCustomerRequest
-		(*UpdateCustomerResponse)(nil), // 8: customer.UpdateCustomerResponse
-		(*DeleteCustomerRequest)(nil),  // 9: customer.DeleteCustomerRequest
-		(*DeleteCustomerResponse)(nil), // 10: customer.DeleteCustomerResponse
-	}
-)
-
+var file_customer_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_customer_proto_goTypes = []interface{}{
+	(*GetCustomerRequest)(nil),     // 0: customer.GetCustomerRequest
+	(*GetCustomerResponse)(nil),    // 1: customer.GetCustomerResponse
+	(*ListCustomersRequest)(nil),   // 2: customer.ListCustomersRequest
+	(*ListCustomersResponse)(nil),  // 3: customer.ListCustomersResponse
+	(*Customer)(nil),               // 4: customer.Customer
+	(*CreateCustomerRequest)(nil),  // 5: customer.CreateCustomerRequest
+	(*CreateCustomerResponse)(nil), // 6: customer.CreateCustomerResponse
+	(*UpdateCustomerRequest)(nil),  // 7: customer.UpdateCustomerRequest
+	(*UpdateCustomerResponse)(nil), // 8: customer.UpdateCustomerResponse
+	(*DeleteCustomerRequest)(nil),  // 9: customer.DeleteCustomerRequest
+	(*DeleteCustomerResponse)(nil), // 10: customer.DeleteCustomerResponse
+}
 var file_customer_proto_depIdxs = []int32{
 	4,  // 0: customer.GetCustomerResponse.customer:type_name -> customer.Customer
 	4,  // 1: customer.ListCustomersResponse.customers:type_name -> customer.Customer

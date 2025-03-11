@@ -3,8 +3,8 @@ package gateway
 import (
 	"context"
 
-	pb "github.com/tusmasoma/go-microservice-k8s/services/order/proto"
 	"github.com/tusmasoma/go-microservice-k8s/services/order/usecase"
+	pb "github.com/tusmasoma/go-microservice-k8s/services/proto/order"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 

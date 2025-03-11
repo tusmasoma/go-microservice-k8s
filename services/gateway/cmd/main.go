@@ -18,9 +18,9 @@ import (
 	"github.com/tusmasoma/go-tech-dojo/pkg/log"
 	"google.golang.org/grpc"
 
-	catalog_pb "github.com/tusmasoma/go-microservice-k8s/services/catalog/proto"
-	cusotmer_pb "github.com/tusmasoma/go-microservice-k8s/services/customer/proto"
-	order_pb "github.com/tusmasoma/go-microservice-k8s/services/order/proto"
+	catalog_pb "github.com/tusmasoma/go-microservice-k8s/services/proto/catalog"
+	cusotmer_pb "github.com/tusmasoma/go-microservice-k8s/services/proto/customer"
+	order_pb "github.com/tusmasoma/go-microservice-k8s/services/proto/order"
 )
 
 func main() {

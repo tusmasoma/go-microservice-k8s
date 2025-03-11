@@ -9,7 +9,7 @@ import (
 
 	"github.com/tusmasoma/go-microservice-k8s/services/catalog/usecase"
 
-	pb "github.com/tusmasoma/go-microservice-k8s/services/catalog/proto"
+	pb "github.com/tusmasoma/go-microservice-k8s/services/proto/catalog"
 )
 
 type CatalogItemHandler interface {

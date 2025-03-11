@@ -4,11 +4,10 @@
 // - protoc             v5.29.2
 // source: order.proto
 
-package proto
+package order
 
 import (
 	context "context"
-
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -92,20 +91,18 @@ type OrderServiceServer interface {
 }
 
 // UnimplementedOrderServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedOrderServiceServer struct{}
+type UnimplementedOrderServiceServer struct {
+}
 
 func (UnimplementedOrderServiceServer) ListOrders(context.Context, *ListOrdersRequest) (*ListOrdersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListOrders not implemented")
 }
-
 func (UnimplementedOrderServiceServer) GetOrderCreationResources(context.Context, *GetOrderCreationResourcesRequest) (*GetOrderCreationResourcesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetOrderCreationResources not implemented")
 }
-
 func (UnimplementedOrderServiceServer) CreateOrder(context.Context, *CreateOrderRequest) (*CreateOrderResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateOrder not implemented")
 }
-
 func (UnimplementedOrderServiceServer) DeleteOrder(context.Context, *DeleteOrderRequest) (*DeleteOrderResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteOrder not implemented")
 }

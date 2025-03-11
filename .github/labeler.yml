@@ -1,0 +1,30 @@
+docs 📖:
+  - changed-files:
+      - any-glob-to-any-file: docs/**/*
+gateway 🚀:
+  - changed-files:
+      - any-glob-to-any-file: services/gateway/**/*
+order 🚀:
+  - changed-files:
+      - any-glob-to-any-file: services/order/**/*
+customer 🚀:
+  - changed-files:
+      - any-glob-to-any-file: services/customer/**/*
+catalog 🚀:
+  - changed-files:
+      - any-glob-to-any-file: services/catalog/**/*
+pkg 🚀:
+  - changed-files:
+      - any-glob-to-any-file: pkg/**/*
+proto 🚀:
+  - changed-files:
+      - any-glob-to-any-file: proto/**/*
+"github :octocat:":
+  - changed-files:
+      - any-glob-to-any-file: .github/**/*
+docker 🚀:
+  - changed-files:
+      - any-glob-to-any-file: docker/**/*
+k8s 🚀:
+  - changed-files:
+      - any-glob-to-any-file: k8s/**/*

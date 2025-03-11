@@ -4,12 +4,12 @@ RUN apt-get update && apt-get install -y default-mysql-client
 
 WORKDIR /app
 
-COPY ./services/catalog/go.mod ./
-COPY ./services/catalog/go.sum ./
+COPY go.mod ./
+COPY go.sum ./
 
 RUN go mod download
 
-COPY ./services/catalog/ .
+COPY ./services/order/ .
 
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main ./cmd/main.go
 

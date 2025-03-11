@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/tusmasoma/go-tech-dojo/pkg/log"
 
-	pb "github.com/tusmasoma/go-microservice-k8s/services/customer/proto"
+	pb "github.com/tusmasoma/go-microservice-k8s/services/proto/customer"
 )
 
 type CustomerHandler interface {

@@ -14,7 +14,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/tusmasoma/go-microservice-k8s/pkg/config"
-	"github.com/tusmasoma/go-microservice-k8s/services/gateway/web/handler"
+	"github.com/tusmasoma/go-microservice-k8s/services/gateway/web"
 	"github.com/tusmasoma/go-tech-dojo/pkg/log"
 	"google.golang.org/grpc"
 
@@ -92,9 +92,9 @@ func BuildContainer(ctx context.Context, addr string) (*http.Server, error) { //
 	customerClient := customer.NewCustomerServiceClient(customerConn)
 	orderClient := order.NewOrderServiceClient(orderConn)
 
-	catalogHandler := handler.NewCatalogItemHandler(catalogClient)
-	customerHandler := handler.NewCustomerHandler(customerClient)
-	orderHandler := handler.NewOrderHandler(orderClient)
+	catalogHandler := web.NewCatalogItemHandler(catalogClient)
+	customerHandler := web.NewCustomerHandler(customerClient)
+	orderHandler := web.NewOrderHandler(orderClient)
 
 	r := gin.Default()
 

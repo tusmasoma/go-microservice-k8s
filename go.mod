@@ -1,21 +1,19 @@
-module github.com/tusmasoma/go-microservice-k8s/services/customer
+module github.com/tusmasoma/go-microservice-k8s
 
 go 1.23.4
 
-replace github.com/tusmasoma/go-microservice-k8s/pkg/ => ../../pkg/
-
 require (
-	github.com/go-sql-driver/mysql v1.8.1
+	github.com/go-sql-driver/mysql v1.9.0
 	github.com/golang/mock v1.6.0
-	github.com/google/go-cmp v0.6.0
+	github.com/google/go-cmp v0.7.0
 	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
 	github.com/ory/dockertest v3.3.5+incompatible
-	github.com/tusmasoma/go-microservice-k8s/pkg v0.0.0-20250201142409-2fffeecb0b62
+	github.com/tusmasoma/go-microservice-k8s/pkg v0.0.0-20250202162424-637625ffd3a9
 	github.com/tusmasoma/go-tech-dojo v0.0.0-20240805120803-02e31d5c8a21
-	go.uber.org/dig v1.18.0
-	google.golang.org/grpc v1.66.0
-	google.golang.org/protobuf v1.34.2
+	go.uber.org/dig v1.18.1
+	google.golang.org/grpc v1.71.0
+	google.golang.org/protobuf v1.36.5
 )
 
 require (
@@ -35,8 +33,8 @@ require (
 	github.com/sethvargo/go-envconfig v1.1.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/slack-go/slack v0.13.1 // indirect
-	golang.org/x/net v0.27.0 // indirect
-	golang.org/x/sys v0.22.0 // indirect
-	golang.org/x/text v0.16.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240604185151-ef581f913117 // indirect
+	golang.org/x/net v0.34.0 // indirect
+	golang.org/x/sys v0.29.0 // indirect
+	golang.org/x/text v0.21.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20250115164207-1a7da9e5054f // indirect
 )

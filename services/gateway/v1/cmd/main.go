@@ -107,8 +107,8 @@ func BuildContainer(ctx context.Context, addr string) (*http.Server, error) { //
 		MaxAge:           time.Duration(serverConfig.PreflightCacheDurationSec) * time.Second,
 	}))
 
-	r.LoadHTMLFiles("gateway/web/templates/index.html")
-	r.LoadHTMLGlob("gateway/web/templates/**/*")
+	r.LoadHTMLFiles("gateway/v1/web/templates/index.html")
+	r.LoadHTMLGlob("gateway/v1/web/templates/**/*")
 
 	api := r.Group("/")
 	{

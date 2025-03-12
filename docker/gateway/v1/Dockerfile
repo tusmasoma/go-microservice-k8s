@@ -20,5 +20,6 @@ RUN apk add --no-cache mysql-client
 WORKDIR /app
 
 COPY --from=builder /app/main .
+COPY gateway/web/templates /app/gateway/web/templates
 
 CMD ["/app/main"]

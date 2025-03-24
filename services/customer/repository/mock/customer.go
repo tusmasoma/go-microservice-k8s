@@ -36,7 +36,7 @@ func (m *MockCustomerRepository) EXPECT() *MockCustomerRepositoryMockRecorder {
 }
 
 // Create mocks base method.
-func (m *MockCustomerRepository) Create(ctx context.Context, customer entity.Customer) error {
+func (m *MockCustomerRepository) Create(ctx context.Context, customer *entity.Customer) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", ctx, customer)
 	ret0, _ := ret[0].(error)
@@ -79,10 +79,10 @@ func (mr *MockCustomerRepositoryMockRecorder) Get(ctx, id interface{}) *gomock.C
 }
 
 // List mocks base method.
-func (m *MockCustomerRepository) List(ctx context.Context) ([]entity.Customer, error) {
+func (m *MockCustomerRepository) List(ctx context.Context) (entity.Customers, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", ctx)
-	ret0, _ := ret[0].([]entity.Customer)
+	ret0, _ := ret[0].(entity.Customers)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -94,7 +94,7 @@ func (mr *MockCustomerRepositoryMockRecorder) List(ctx interface{}) *gomock.Call
 }
 
 // Update mocks base method.
-func (m *MockCustomerRepository) Update(ctx context.Context, customer entity.Customer) error {
+func (m *MockCustomerRepository) Update(ctx context.Context, customer *entity.Customer) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", ctx, customer)
 	ret0, _ := ret[0].(error)

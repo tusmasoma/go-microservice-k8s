@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package order;
+option go_package = "proto/order";
+
+import "proto/order/order.proto";
+
+service OrderService {
+    rpc ListOrders(ListOrdersRequest) returns (ListOrdersResponse);
+    rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
+    rpc DeleteOrder(DeleteOrderRequest) returns (DeleteOrderResponse);
+}
+
+message ListOrdersRequest {}
+message ListOrdersResponse {
+    repeated Order orders = 1;
+}
+
+message CreateOrderRequest {
+    string customer_id = 1;
+    repeated OrderLine order_lines = 2;
+}
+message CreateOrderResponse {}
+
+message DeleteOrderRequest {
+    string order_id = 1;
+}
+message DeleteOrderResponse {}

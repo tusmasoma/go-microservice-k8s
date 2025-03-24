@@ -12,27 +12,25 @@ func Test_CatalogItemRepository(t *testing.T) {
 	ctx := context.Background()
 	repo := NewCatalogItemRepository(db)
 
-	item1, err := entity.NewCatalogItem(
-		"",
+	item1, err := entity.CreateCatalogItem(
 		"item1",
 		100,
 	)
 	ValidateErr(t, err, nil)
-	item2, err := entity.NewCatalogItem(
-		"",
+	item2, err := entity.CreateCatalogItem(
 		"item2",
 		200,
 	)
 	ValidateErr(t, err, nil)
 
 	// Create
-	err = repo.Create(ctx, *item1)
+	err = repo.Create(ctx, item1)
 	ValidateErr(t, err, nil)
-	err = repo.Create(ctx, *item2)
+	err = repo.Create(ctx, item2)
 	ValidateErr(t, err, nil)
 
 	// Get
-	gotItem, err := repo.Get(ctx, item1.ID)
+	gotItem, err := repo.Get(ctx, item1.GetId())
 	ValidateErr(t, err, nil)
 	if !reflect.DeepEqual(gotItem, item1) {
 		t.Errorf("want: %v, got: %v", item1, gotItem)
@@ -53,7 +51,7 @@ func Test_CatalogItemRepository(t *testing.T) {
 	}
 
 	// ListByIDs
-	gotItems, err = repo.ListByIDs(ctx, []string{item1.ID, item2.ID})
+	gotItems, err = repo.ListByIDs(ctx, []string{item1.GetId(), item2.GetId()})
 	ValidateErr(t, err, nil)
 	if len(gotItems) != 2 {
 		t.Errorf("want: 2, got: %d", len(gotItems))
@@ -62,20 +60,20 @@ func Test_CatalogItemRepository(t *testing.T) {
 	// Update
 	item1.Name = "item1-updated"
 	item1.Price = 150
-	err = repo.Update(ctx, *item1)
+	err = repo.Update(ctx, item1)
 	ValidateErr(t, err, nil)
 
-	gotItem, err = repo.Get(ctx, item1.ID)
+	gotItem, err = repo.Get(ctx, item1.GetId())
 	ValidateErr(t, err, nil)
 	if !reflect.DeepEqual(gotItem, item1) {
 		t.Errorf("want: %v, got: %v", item1, gotItem)
 	}
 
 	// Delete
-	err = repo.Delete(ctx, item1.ID)
+	err = repo.Delete(ctx, item1.GetId())
 	ValidateErr(t, err, nil)
 
-	_, err = repo.Get(ctx, item1.ID)
+	_, err = repo.Get(ctx, item1.GetId())
 	if err == nil {
 		t.Errorf("want: error, got: nil")
 	}

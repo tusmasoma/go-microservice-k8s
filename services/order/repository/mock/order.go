@@ -36,7 +36,7 @@ func (m *MockOrderRepository) EXPECT() *MockOrderRepositoryMockRecorder {
 }
 
 // Create mocks base method.
-func (m *MockOrderRepository) Create(ctx context.Context, order entity.Order) error {
+func (m *MockOrderRepository) Create(ctx context.Context, order *entity.Order) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", ctx, order)
 	ret0, _ := ret[0].(error)
@@ -79,10 +79,10 @@ func (mr *MockOrderRepositoryMockRecorder) Get(ctx, id interface{}) *gomock.Call
 }
 
 // List mocks base method.
-func (m *MockOrderRepository) List(ctx context.Context) ([]*entity.Order, error) {
+func (m *MockOrderRepository) List(ctx context.Context) (entity.Orders, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", ctx)
-	ret0, _ := ret[0].([]*entity.Order)
+	ret0, _ := ret[0].(entity.Orders)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

@@ -36,7 +36,7 @@ func (m *MockCatalogItemRepository) EXPECT() *MockCatalogItemRepositoryMockRecor
 }
 
 // Create mocks base method.
-func (m *MockCatalogItemRepository) Create(ctx context.Context, item entity.CatalogItem) error {
+func (m *MockCatalogItemRepository) Create(ctx context.Context, item *entity.CatalogItem) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", ctx, item)
 	ret0, _ := ret[0].(error)
@@ -79,10 +79,10 @@ func (mr *MockCatalogItemRepositoryMockRecorder) Get(ctx, id interface{}) *gomoc
 }
 
 // List mocks base method.
-func (m *MockCatalogItemRepository) List(ctx context.Context) ([]entity.CatalogItem, error) {
+func (m *MockCatalogItemRepository) List(ctx context.Context) (entity.CatalogItems, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", ctx)
-	ret0, _ := ret[0].([]entity.CatalogItem)
+	ret0, _ := ret[0].(entity.CatalogItems)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -94,10 +94,10 @@ func (mr *MockCatalogItemRepositoryMockRecorder) List(ctx interface{}) *gomock.C
 }
 
 // ListByIDs mocks base method.
-func (m *MockCatalogItemRepository) ListByIDs(ctx context.Context, ids []string) ([]entity.CatalogItem, error) {
+func (m *MockCatalogItemRepository) ListByIDs(ctx context.Context, ids []string) (entity.CatalogItems, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListByIDs", ctx, ids)
-	ret0, _ := ret[0].([]entity.CatalogItem)
+	ret0, _ := ret[0].(entity.CatalogItems)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -109,10 +109,10 @@ func (mr *MockCatalogItemRepositoryMockRecorder) ListByIDs(ctx, ids interface{})
 }
 
 // ListByName mocks base method.
-func (m *MockCatalogItemRepository) ListByName(ctx context.Context, name string) ([]entity.CatalogItem, error) {
+func (m *MockCatalogItemRepository) ListByName(ctx context.Context, name string) (entity.CatalogItems, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListByName", ctx, name)
-	ret0, _ := ret[0].([]entity.CatalogItem)
+	ret0, _ := ret[0].(entity.CatalogItems)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -124,7 +124,7 @@ func (mr *MockCatalogItemRepositoryMockRecorder) ListByName(ctx, name interface{
 }
 
 // Update mocks base method.
-func (m *MockCatalogItemRepository) Update(ctx context.Context, item entity.CatalogItem) error {
+func (m *MockCatalogItemRepository) Update(ctx context.Context, item *entity.CatalogItem) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", ctx, item)
 	ret0, _ := ret[0].(error)

@@ -11,7 +11,7 @@ import (
 )
 
 type catalogItemRepository struct {
-	db mysql.SQLExecutor
+	db mysql.DB
 }
 
 func NewCatalogItemRepository(db *sql.DB) repository.CatalogItemRepository {
@@ -21,22 +21,16 @@ func NewCatalogItemRepository(db *sql.DB) repository.CatalogItemRepository {
 }
 
 func (cr *catalogItemRepository) Get(ctx context.Context, id string) (*entity.CatalogItem, error) {
-	executor := cr.db
-	if tx := mysql.TxFromCtx(ctx); tx != nil {
-		executor = tx
-	}
-
 	query := `
 	SELECT id, name, price
 	FROM CatalogItems
 	WHERE id = ?
 	LIMIT 1
 	`
-
-	row := executor.QueryRowContext(ctx, query, id)
+	row := cr.db.QueryRowContext(ctx, query, id)
 	var item entity.CatalogItem
 	if err := row.Scan(
-		&item.ID,
+		&item.Id,
 		&item.Name,
 		&item.Price,
 	); err != nil {
@@ -45,166 +39,129 @@ func (cr *catalogItemRepository) Get(ctx context.Context, id string) (*entity.Ca
 	return &item, nil
 }
 
-func (cr *catalogItemRepository) List(ctx context.Context) ([]entity.CatalogItem, error) {
-	executor := cr.db
-	if tx := mysql.TxFromCtx(ctx); tx != nil {
-		executor = tx
-	}
-
+func (cr *catalogItemRepository) List(ctx context.Context) (entity.CatalogItems, error) {
 	query := `
 	SELECT id, name, price
 	FROM CatalogItems
 	`
-
-	rows, err := executor.QueryContext(ctx, query)
+	rows, err := cr.db.QueryContext(ctx, query)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-
-	var items []entity.CatalogItem
+	var items entity.CatalogItems
 	for rows.Next() {
 		var item entity.CatalogItem
 		if err = rows.Scan(
-			&item.ID,
+			&item.Id,
 			&item.Name,
 			&item.Price,
 		); err != nil {
 			return nil, err
 		}
-		items = append(items, item)
+		items = append(items, &item)
 	}
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
-
 	return items, nil
 }
 
-func (cr *catalogItemRepository) ListByName(ctx context.Context, name string) ([]entity.CatalogItem, error) {
-	executor := cr.db
-	if tx := mysql.TxFromCtx(ctx); tx != nil {
-		executor = tx
-	}
-
+func (cr *catalogItemRepository) ListByName(ctx context.Context, name string) (entity.CatalogItems, error) {
 	query := `
 	SELECT id, name, price
 	FROM CatalogItems
 	WHERE name LIKE ?
 	`
-
-	rows, err := executor.QueryContext(ctx, query, "%"+name+"%")
+	rows, err := cr.db.QueryContext(ctx, query, "%"+name+"%")
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-
-	var items []entity.CatalogItem
+	var items entity.CatalogItems
 	for rows.Next() {
 		var item entity.CatalogItem
 		if err = rows.Scan(
-			&item.ID,
+			&item.Id,
 			&item.Name,
 			&item.Price,
 		); err != nil {
 			return nil, err
 		}
-		items = append(items, item)
+		items = append(items, &item)
 	}
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
-
 	return items, nil
 }
 
-func (cr *catalogItemRepository) ListByIDs(ctx context.Context, ids []string) ([]entity.CatalogItem, error) {
-	executor := cr.db
-	if tx := mysql.TxFromCtx(ctx); tx != nil {
-		executor = tx
-	}
-
+func (cr *catalogItemRepository) ListByIDs(ctx context.Context, ids []string) (entity.CatalogItems, error) {
 	placeholders := make([]string, len(ids))
 	args := make([]interface{}, len(ids))
 	for i, id := range ids {
 		placeholders[i] = "?"
 		args[i] = id
 	}
-
 	query := `
 	SELECT id, name, price
 	FROM CatalogItems
 	WHERE id IN (` + strings.Join(placeholders, ",") + `)
 	`
-
-	rows, err := executor.QueryContext(ctx, query, args...)
+	rows, err := cr.db.QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-
-	var items []entity.CatalogItem
+	var items entity.CatalogItems
 	for rows.Next() {
 		var item entity.CatalogItem
 		if err = rows.Scan(
-			&item.ID,
+			&item.Id,
 			&item.Name,
 			&item.Price,
 		); err != nil {
 			return nil, err
 		}
-		items = append(items, item)
+		items = append(items, &item)
 	}
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
-
 	return items, nil
 }
 
-func (cr *catalogItemRepository) Create(ctx context.Context, item entity.CatalogItem) error {
-	executor := cr.db
-	if tx := mysql.TxFromCtx(ctx); tx != nil {
-		executor = tx
-	}
-
+func (cr *catalogItemRepository) Create(ctx context.Context, item *entity.CatalogItem) error {
 	query := `
 	INSERT INTO CatalogItems (
 	id, name, price
 	)
 	VALUES (?, ?, ?)
 	`
-
-	if _, err := executor.ExecContext(
+	if _, err := cr.db.ExecContext(
 		ctx,
 		query,
-		item.ID,
-		item.Name,
-		item.Price,
+		item.GetId(),
+		item.GetName(),
+		item.GetPrice(),
 	); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (cr *catalogItemRepository) Update(ctx context.Context, item entity.CatalogItem) error {
-	executor := cr.db
-	if tx := mysql.TxFromCtx(ctx); tx != nil {
-		executor = tx
-	}
-
+func (cr *catalogItemRepository) Update(ctx context.Context, item *entity.CatalogItem) error {
 	query := `
 	UPDATE CatalogItems
 	SET name = ?, price = ?
 	WHERE id = ?
 	`
-
-	if _, err := executor.ExecContext(
+	if _, err := cr.db.ExecContext(
 		ctx,
 		query,
-		item.Name,
-		item.Price,
-		item.ID,
+		item.GetName(),
+		item.GetPrice(),
+		item.GetId(),
 	); err != nil {
 		return err
 	}
@@ -212,17 +169,11 @@ func (cr *catalogItemRepository) Update(ctx context.Context, item entity.Catalog
 }
 
 func (cr *catalogItemRepository) Delete(ctx context.Context, id string) error {
-	executor := cr.db
-	if tx := mysql.TxFromCtx(ctx); tx != nil {
-		executor = tx
-	}
-
 	query := `
 	DELETE FROM CatalogItems
 	WHERE id = ?
 	`
-
-	if _, err := executor.ExecContext(ctx, query, id); err != nil {
+	if _, err := cr.db.ExecContext(ctx, query, id); err != nil {
 		return err
 	}
 	return nil

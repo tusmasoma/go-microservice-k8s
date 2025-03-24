@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package gateway;
+option go_package = "proto/gateway";
+
+import "google/protobuf/timestamp.proto";
+import "proto/gateway/customer.proto";
+import "proto/gateway/catalog.proto";
+
+message ListOrdersRequest {}
+message ListOrdersResponse {
+    repeated Order orders = 1;
+}
+
+message CreateOrderFormRequest {}
+message CreateOrderFormResponse {
+    repeated Customer customers = 1;
+    repeated CatalogItem items = 2;
+}
+
+message CreateOrderRequest {
+    string customer_id = 1;
+    repeated OrderLine order_lines = 2;
+}
+message CreateOrderResponse {}
+
+message DeleteOrderRequest {
+    string order_id = 1;
+}
+message DeleteOrderResponse {}
+
+message Order {
+    string id = 1;
+    string customer_id = 2;
+    google.protobuf.Timestamp order_date = 3;
+    repeated OrderLine order_lines = 4;
+    double total_price = 5;
+}
+
+message OrderLine {
+    int64 count = 1;
+    string catalog_item_id = 2;
+}

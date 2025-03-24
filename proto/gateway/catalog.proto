@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package gateway;
+option go_package = "proto/gateway";
+
+message GetCatalogItemRequest {
+    string id = 1;
+}
+message GetCatalogItemResponse {
+    CatalogItem item = 1;
+}
+
+message ListCatalogItemsRequest {}
+message ListCatalogItemsResponse {
+    repeated CatalogItem items = 1;
+}
+
+message ListCatalogItemsByNameRequest {
+    string name = 1;
+}
+message ListCatalogItemsByNameResponse {
+    repeated CatalogItem items = 1;
+}
+
+message ListCatalogItemsByIDsRequest {
+    repeated string ids = 1;
+}
+message ListCatalogItemsByIDsResponse {
+    repeated CatalogItem items = 1;
+}
+
+message CreateCatalogItemRequest {
+    string name = 1;
+    double price = 2;
+}
+message CreateCatalogItemResponse {}
+
+message UpdateCatalogItemRequest {
+    string id = 1;
+    string name = 2;
+    double price = 3;
+}
+message UpdateCatalogItemResponse {}
+
+message DeleteCatalogItemRequest {
+  string id = 1;
+}
+message DeleteCatalogItemResponse {}
+
+message CatalogItem {
+    string id = 1;
+    string name = 2;
+    double price = 3;
+}

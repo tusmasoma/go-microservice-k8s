@@ -5,60 +5,98 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/tusmasoma/go-microservice-k8s/proto/order"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-// domain model
 type Order struct {
-	ID         string       `json:"id"`
-	CustomerID string       `json:"customer_id"`
-	OrderDate  *time.Time   `json:"order_date"`
-	OrderLines []*OrderLine `json:"order_lines"`
-	TotalPrice float64      `json:"total_price"`
+	order.Order
+}
+
+func (o *Order) Proto() *order.Order {
+	if o == nil {
+		return nil
+	}
+	return &o.Order
+}
+
+func (o *Order) GetOrderLines() OrderLines {
+	if o == nil || o.Order.OrderLines == nil {
+		return nil
+	}
+	lines := make(OrderLines, len(o.Order.OrderLines))
+	for i, line := range o.Order.OrderLines {
+		lines[i] = &OrderLine{OrderLine: line}
+	}
+	return lines
+}
+
+type Orders []*Order
+
+func (os Orders) Proto() []*order.Order {
+	orders := make([]*order.Order, len(os))
+	for i, order := range os {
+		orders[i] = order.Proto()
+	}
+	return orders
 }
 
 type OrderLine struct {
-	Count         int    `json:"count"`
-	CatalogItemID string `json:"catalog_item_id"`
+	*order.OrderLine
 }
 
-func NewOrder(id, customerID string, orderDate *time.Time, orderLines []*OrderLine) (*Order, error) {
+func (ol *OrderLine) Proto() *order.OrderLine {
+	if ol == nil {
+		return nil
+	}
+	return ol.OrderLine
+}
+
+type OrderLines []*OrderLine
+
+func (ols OrderLines) Proto() []*order.OrderLine {
+	lines := make([]*order.OrderLine, len(ols))
+	for i, line := range ols {
+		lines[i] = line.Proto()
+	}
+	return lines
+}
+
+func NewOrder(id, customerID string, orderDate time.Time, orderLines OrderLines, totalPrice float64) (*Order, error) {
 	if id == "" {
-		id = uuid.New().String()
+		return nil, errors.New("id is required")
 	}
 	if customerID == "" {
 		return nil, errors.New("customerID is required")
 	}
-	if orderDate == nil {
-		orderDate = new(time.Time)
+	if len(orderLines) == 0 {
+		return nil, errors.New("order lines is required")
 	}
-	order := &Order{
-		ID:         id,
-		CustomerID: customerID,
-		OrderDate:  orderDate,
-		OrderLines: orderLines,
-	}
-
-	// order.TotalPrice = order.GetTotalPrice()
-	return order, nil
-}
-
-func NewOrderLine(count int, itemID string) (*OrderLine, error) {
-	if count <= 0 {
-		return nil, errors.New("count must be greater than 0")
-	}
-	if itemID == "" {
-		return nil, errors.New("catalogItemID is required")
-	}
-	return &OrderLine{
-		Count:         count,
-		CatalogItemID: itemID,
+	return &Order{
+		Order: order.Order{
+			Id:         id,
+			CustomerId: customerID,
+			OrderDate:  timestamppb.New(orderDate),
+			OrderLines: orderLines.Proto(),
+			TotalPrice: totalPrice,
+		},
 	}, nil
 }
 
-// func (o *Order) GetTotalPrice() float64 {
-// 	var total float64
-// 	for _, ol := range o.OrderLines {
-// 		total += ol.CatalogItem.Price * float64(ol.Count)
-// 	}
-// 	return total
-// }
+func CreateOrder(customerID string, orderLines OrderLines, totalPrice float64) (*Order, error) {
+	if customerID == "" {
+		return nil, errors.New("customerID is required")
+	}
+	if len(orderLines) == 0 {
+		return nil, errors.New("order lines is required")
+	}
+	return &Order{
+		Order: order.Order{
+			Id:         uuid.NewString(),
+			CustomerId: customerID,
+			OrderDate:  timestamppb.New(time.Now()),
+			OrderLines: orderLines.Proto(),
+			TotalPrice: totalPrice,
+		},
+	}, nil
+}

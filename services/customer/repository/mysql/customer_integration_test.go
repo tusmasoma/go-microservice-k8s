@@ -12,8 +12,7 @@ func Test_CustomerRepository(t *testing.T) {
 	ctx := context.Background()
 	repo := NewCustomerRepository(db)
 
-	customer1, err := entity.NewCustomer(
-		"",
+	customer1, err := entity.CreateCustomer(
 		"John Doe",
 		"john.doe@example.com",
 		"123 Maple Street",
@@ -21,8 +20,7 @@ func Test_CustomerRepository(t *testing.T) {
 		"USA",
 	)
 	ValidateErr(t, err, nil)
-	customer2, err := entity.NewCustomer(
-		"",
+	customer2, err := entity.CreateCustomer(
 		"Jane Smith",
 		"jane.smith@example.com",
 		"456 Oak Avenue",
@@ -32,13 +30,13 @@ func Test_CustomerRepository(t *testing.T) {
 	ValidateErr(t, err, nil)
 
 	// Create
-	err = repo.Create(ctx, *customer1)
+	err = repo.Create(ctx, customer1)
 	ValidateErr(t, err, nil)
-	err = repo.Create(ctx, *customer2)
+	err = repo.Create(ctx, customer2)
 	ValidateErr(t, err, nil)
 
 	// Get
-	gotCustomer, err := repo.Get(ctx, customer1.ID)
+	gotCustomer, err := repo.Get(ctx, customer1.GetId())
 	ValidateErr(t, err, nil)
 	if !reflect.DeepEqual(gotCustomer, customer1) {
 		t.Errorf("expected: %v, got: %v", customer1, gotCustomer)
@@ -53,19 +51,19 @@ func Test_CustomerRepository(t *testing.T) {
 
 	// Update
 	customer1.Name = "John Smith"
-	err = repo.Update(ctx, *customer1)
+	err = repo.Update(ctx, customer1)
 	ValidateErr(t, err, nil)
-	gotCustomer, err = repo.Get(ctx, customer1.ID)
+	gotCustomer, err = repo.Get(ctx, customer1.GetId())
 	ValidateErr(t, err, nil)
 	if !reflect.DeepEqual(gotCustomer, customer1) {
 		t.Errorf("expected: %v, got: %v", customer1, gotCustomer)
 	}
 
 	// Delete
-	err = repo.Delete(ctx, customer1.ID)
+	err = repo.Delete(ctx, customer1.GetId())
 	ValidateErr(t, err, nil)
 
-	_, err = repo.Get(ctx, customer1.ID)
+	_, err = repo.Get(ctx, customer1.GetId())
 	if err == nil {
 		t.Errorf("expected: error, got: nil")
 	}

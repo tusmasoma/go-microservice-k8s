@@ -9,7 +9,7 @@ import (
 
 type OrderRepository interface {
 	Get(ctx context.Context, id string) (*entity.Order, error)
-	List(ctx context.Context) ([]*entity.Order, error)
-	Create(ctx context.Context, order entity.Order) error
+	List(ctx context.Context) (entity.Orders, error)
+	Create(ctx context.Context, order *entity.Order) error
 	Delete(ctx context.Context, id string) error
 }

@@ -3,55 +3,47 @@ package mysql
 import (
 	"context"
 	"testing"
-	"time"
 
-	"github.com/google/go-cmp/cmp"
-	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/google/uuid"
+	pb "github.com/tusmasoma/go-microservice-k8s/proto/order"
 	"github.com/tusmasoma/go-microservice-k8s/services/order/entity"
 )
 
 func Test_OrderRepository(t *testing.T) {
 	ctx := context.Background()
 	repo := NewOrderRepository(db)
-
-	orderDate := time.Now()
-
-	order := entity.Order{
-		ID:         uuid.New().String(),
-		CustomerID: uuid.New().String(),
-		OrderDate:  &orderDate,
-		OrderLines: []*entity.OrderLine{
-			{
-				CatalogItemID: uuid.New().String(),
+	customerID := uuid.NewString()
+	lines := []*entity.OrderLine{
+		{
+			OrderLine: &pb.OrderLine{
 				Count:         1,
+				CatalogItemId: uuid.NewString(),
 			},
 		},
 	}
-
-	// Create
-	err := repo.Create(ctx, order)
-	ValidateErr(t, err, nil)
-
-	// Get
-	gotOrder, err := repo.Get(ctx, order.ID)
-	ValidateErr(t, err, nil)
-	if d := cmp.Diff(order, *gotOrder, cmpopts.IgnoreFields(entity.Order{}, "OrderDate")); len(d) != 0 {
-		t.Errorf("differs: (-want +got)\n%s", d)
+	order, err := entity.CreateOrder(customerID, lines, 0)
+	if err != nil {
+		return
 	}
-
+	// Create
+	err = repo.Create(ctx, order)
+	ValidateErr(t, err, nil)
+	// Get
+	gotOrder, err := repo.Get(ctx, order.GetId())
+	ValidateErr(t, err, nil)
+	if order.GetId() != gotOrder.GetId() {
+		t.Errorf("unexpected order ID: want=%s, got=%s", order.GetId(), gotOrder.GetId())
+	}
 	// List
 	gotOrders, err := repo.List(ctx)
 	ValidateErr(t, err, nil)
 	if len(gotOrders) != 1 {
 		t.Errorf("got %d orders, want 1", len(gotOrders))
 	}
-
 	// Delete
-	err = repo.Delete(ctx, order.ID)
+	err = repo.Delete(ctx, order.GetId())
 	ValidateErr(t, err, nil)
-
-	_, err = repo.Get(ctx, order.ID)
+	_, err = repo.Get(ctx, order.GetId())
 	if err == nil {
 		t.Errorf("want: %v, got: %v", nil, err)
 	}

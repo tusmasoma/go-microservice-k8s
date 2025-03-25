@@ -1,5 +1,5 @@
 //go:generate mockgen -source=$GOFILE -package=mock -destination=./mock/$GOFILE
-package repository
+package database
 
 import (
 	"context"
@@ -7,7 +7,11 @@ import (
 	"github.com/tusmasoma/go-microservice-k8s/services/catalog/entity"
 )
 
-type CatalogItemRepository interface {
+type Database struct {
+	CatalogItem CatalogItem
+}
+
+type CatalogItem interface {
 	Get(ctx context.Context, id string) (*entity.CatalogItem, error)
 	List(ctx context.Context) (entity.CatalogItems, error)
 	ListByName(ctx context.Context, name string) (entity.CatalogItems, error)

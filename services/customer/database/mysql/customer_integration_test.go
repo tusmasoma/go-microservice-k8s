@@ -10,7 +10,7 @@ import (
 
 func Test_CustomerRepository(t *testing.T) {
 	ctx := context.Background()
-	repo := NewCustomerRepository(db)
+	repo := NewCustomer(db)
 
 	customer1, err := entity.CreateCustomer(
 		"John Doe",

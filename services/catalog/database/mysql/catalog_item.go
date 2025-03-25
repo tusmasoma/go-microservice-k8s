@@ -5,22 +5,21 @@ import (
 	"database/sql"
 	"strings"
 
-	"github.com/tusmasoma/go-microservice-k8s/pkg/repository/mysql"
+	"github.com/tusmasoma/go-microservice-k8s/services/catalog/database"
 	"github.com/tusmasoma/go-microservice-k8s/services/catalog/entity"
-	"github.com/tusmasoma/go-microservice-k8s/services/catalog/repository"
 )
 
-type catalogItemRepository struct {
-	db mysql.DB
+type catalogItem struct {
+	db *sql.DB
 }
 
-func NewCatalogItemRepository(db *sql.DB) repository.CatalogItemRepository {
-	return &catalogItemRepository{
+func NewCatalogItem(db *sql.DB) database.CatalogItem {
+	return &catalogItem{
 		db: db,
 	}
 }
 
-func (cr *catalogItemRepository) Get(ctx context.Context, id string) (*entity.CatalogItem, error) {
+func (cr *catalogItem) Get(ctx context.Context, id string) (*entity.CatalogItem, error) {
 	query := `
 	SELECT id, name, price
 	FROM CatalogItems
@@ -39,7 +38,7 @@ func (cr *catalogItemRepository) Get(ctx context.Context, id string) (*entity.Ca
 	return &item, nil
 }
 
-func (cr *catalogItemRepository) List(ctx context.Context) (entity.CatalogItems, error) {
+func (cr *catalogItem) List(ctx context.Context) (entity.CatalogItems, error) {
 	query := `
 	SELECT id, name, price
 	FROM CatalogItems
@@ -67,7 +66,7 @@ func (cr *catalogItemRepository) List(ctx context.Context) (entity.CatalogItems,
 	return items, nil
 }
 
-func (cr *catalogItemRepository) ListByName(ctx context.Context, name string) (entity.CatalogItems, error) {
+func (cr *catalogItem) ListByName(ctx context.Context, name string) (entity.CatalogItems, error) {
 	query := `
 	SELECT id, name, price
 	FROM CatalogItems
@@ -96,7 +95,7 @@ func (cr *catalogItemRepository) ListByName(ctx context.Context, name string) (e
 	return items, nil
 }
 
-func (cr *catalogItemRepository) ListByIDs(ctx context.Context, ids []string) (entity.CatalogItems, error) {
+func (cr *catalogItem) ListByIDs(ctx context.Context, ids []string) (entity.CatalogItems, error) {
 	placeholders := make([]string, len(ids))
 	args := make([]interface{}, len(ids))
 	for i, id := range ids {
@@ -131,7 +130,7 @@ func (cr *catalogItemRepository) ListByIDs(ctx context.Context, ids []string) (e
 	return items, nil
 }
 
-func (cr *catalogItemRepository) Create(ctx context.Context, item *entity.CatalogItem) error {
+func (cr *catalogItem) Create(ctx context.Context, item *entity.CatalogItem) error {
 	query := `
 	INSERT INTO CatalogItems (
 	id, name, price
@@ -150,7 +149,7 @@ func (cr *catalogItemRepository) Create(ctx context.Context, item *entity.Catalo
 	return nil
 }
 
-func (cr *catalogItemRepository) Update(ctx context.Context, item *entity.CatalogItem) error {
+func (cr *catalogItem) Update(ctx context.Context, item *entity.CatalogItem) error {
 	query := `
 	UPDATE CatalogItems
 	SET name = ?, price = ?
@@ -168,7 +167,7 @@ func (cr *catalogItemRepository) Update(ctx context.Context, item *entity.Catalo
 	return nil
 }
 
-func (cr *catalogItemRepository) Delete(ctx context.Context, id string) error {
+func (cr *catalogItem) Delete(ctx context.Context, id string) error {
 	query := `
 	DELETE FROM CatalogItems
 	WHERE id = ?

@@ -4,22 +4,21 @@ import (
 	"context"
 	"database/sql"
 
-	"github.com/tusmasoma/go-microservice-k8s/pkg/repository/mysql"
+	"github.com/tusmasoma/go-microservice-k8s/services/customer/database"
 	"github.com/tusmasoma/go-microservice-k8s/services/customer/entity"
-	"github.com/tusmasoma/go-microservice-k8s/services/customer/repository"
 )
 
-type customerRepository struct {
-	db mysql.DB
+type customer struct {
+	db *sql.DB
 }
 
-func NewCustomerRepository(db *sql.DB) repository.CustomerRepository {
-	return &customerRepository{
+func NewCustomer(db *sql.DB) database.Customer {
+	return &customer{
 		db: db,
 	}
 }
 
-func (cr *customerRepository) Get(ctx context.Context, id string) (*entity.Customer, error) {
+func (cr *customer) Get(ctx context.Context, id string) (*entity.Customer, error) {
 	query := `
 	SELECT id, name, email, street, city, country
 	FROM Customers
@@ -41,7 +40,7 @@ func (cr *customerRepository) Get(ctx context.Context, id string) (*entity.Custo
 	return &customer, nil
 }
 
-func (cr *customerRepository) List(ctx context.Context) (entity.Customers, error) {
+func (cr *customer) List(ctx context.Context) (entity.Customers, error) {
 	query := `
 	SELECT id, name, email, street, city, country
 	FROM Customers
@@ -72,7 +71,7 @@ func (cr *customerRepository) List(ctx context.Context) (entity.Customers, error
 	return customers, nil
 }
 
-func (cr *customerRepository) Create(ctx context.Context, customer *entity.Customer) error {
+func (cr *customer) Create(ctx context.Context, customer *entity.Customer) error {
 	query := `
 	INSERT INTO Customers (
 	id, name, email, street, city, country
@@ -94,7 +93,7 @@ func (cr *customerRepository) Create(ctx context.Context, customer *entity.Custo
 	return nil
 }
 
-func (cr *customerRepository) Update(ctx context.Context, customer *entity.Customer) error {
+func (cr *customer) Update(ctx context.Context, customer *entity.Customer) error {
 	query := `
 	UPDATE Customers
 	SET name = ?, email = ?, street = ?, city = ?, country = ?
@@ -115,7 +114,7 @@ func (cr *customerRepository) Update(ctx context.Context, customer *entity.Custo
 	return nil
 }
 
-func (cr *customerRepository) Delete(ctx context.Context, id string) error {
+func (cr *customer) Delete(ctx context.Context, id string) error {
 	query := `
 	DELETE FROM Customers
 	WHERE id = ?

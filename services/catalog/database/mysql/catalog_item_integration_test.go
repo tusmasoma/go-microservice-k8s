@@ -10,7 +10,7 @@ import (
 
 func Test_CatalogItemRepository(t *testing.T) {
 	ctx := context.Background()
-	repo := NewCatalogItemRepository(db)
+	repo := NewCatalogItem(db)
 
 	item1, err := entity.CreateCatalogItem(
 		"item1",

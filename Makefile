@@ -9,7 +9,7 @@ GOPATH := $(shell go env GOPATH)
 
 # maicroservices
 SERVICES := catalog customer order gateway
-SERVICE_PATH_PREFIX := services
+SERVICE_PATH_PREFIX := go/services
 
 # proto
 PROTOS := catalog customer order web
@@ -78,7 +78,7 @@ test:
 ifdef SERVICE
 	$(GO) test -v -count=1 ./$(SERVICE_PATH_PREFIX)/$(SERVICE)/...
 else
-	$(GO) test -v -count=1 $(foreach service,$(SERVICES),./$(SERVICE_PATH_PREFIX)/$(service)/...) ./pkg/...
+	$(GO) test -v -count=1 $(foreach service,$(SERVICES),./$(SERVICE_PATH_PREFIX)/$(service)/...) ./go/pkg/...
 endif
 
 # golangci-lint: lint for all under the PKG
@@ -87,12 +87,12 @@ lint: $(BIN)/golangci-lint-$(GOLANGCI_LINT_VERSION)
 ifdef SERVICE
 	@echo "Running lint for service: $(SERVICE)"
 	cd ./$(SERVICE_PATH_PREFIX)/$(SERVICE) && \
-	$(BIN)/golangci-lint run -c ../../.golangci.yml ./...
+	$(BIN)/golangci-lint run -c ../../../.golangci.yml ./...
 else
 	@for service in $(SERVICES); do \
 		echo "Running lint for service: $$service"; \
 		(cd ./$(SERVICE_PATH_PREFIX)/$$service && \
-		$(BIN)/golangci-lint run -c ../../.golangci.yml ./...) || true; \
+		$(BIN)/golangci-lint run -c ../../../.golangci.yml ./...) || true; \
 	done
 	@echo "Running lint for pkg/"
 	(cd ./pkg && $(BIN)/golangci-lint run -c ../.golangci.yml ./...) || true;
@@ -103,12 +103,12 @@ lint-diff: $(BIN)/golangci-lint-$(GOLANGCI_LINT_VERSION)
 ifdef SERVICE
 	@echo "Running lint-diff for service: $(SERVICE)"
 	cd $(SERVICE_PATH_PREFIX)/$(SERVICE) && \
-	$(BIN)/golangci-lint run -c ../../.golangci.yml ./... | reviewdog -f=golangci-lint -diff="git diff origin/main"
+	$(BIN)/golangci-lint run -c ../../../.golangci.yml ./... | reviewdog -f=golangci-lint -diff="git diff origin/main"
 else
 	@for service in $(SERVICES); do \
 		echo "Running lint-diff for service: $$service"; \
 		(cd $(SERVICE_PATH_PREFIX)/$$service && \
-		$(BIN)/golangci-lint run -c ../../.golangci.yml ./... | reviewdog -f=golangci-lint -diff="git diff origin/main") || true; \
+		$(BIN)/golangci-lint run -c ../../../.golangci.yml ./... | reviewdog -f=golangci-lint -diff="git diff origin/main") || true; \
 	done
 	@echo "Running lint-diff for pkg/"
 	(cd ./pkg && $(BIN)/golangci-lint run -c ../.golangci.yml ./... | reviewdog -f=golangci-lint -diff="git diff origin/main") || true;
@@ -131,7 +131,7 @@ else
 		${GO_ENV} $(BIN)/gofumpt -l -w $${FILES}; \
 	done
 	@echo "Running fmt for pkg/"
-	FILES=$$(find ./pkg -type f -name "*.go") && \
+	FILES=$$(find ./go/pkg -type f -name "*.go") && \
 	${GO_ENV} $(BIN)/goimports -local "github.com/tusmasoma/pkg" -w $${FILES} && \
 	${GO_ENV} $(BIN)/gofumpt -l -w $${FILES};
 endif

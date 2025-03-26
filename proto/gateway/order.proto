@@ -7,6 +7,12 @@ import "google/protobuf/timestamp.proto";
 import "proto/gateway/customer.proto";
 import "proto/gateway/catalog.proto";
 
+
+message GetOrderRequest {}
+message GetOrderResponse {
+    Order order = 1;
+}
+
 message ListOrdersRequest {}
 message ListOrdersResponse {
     repeated Order orders = 1;
@@ -31,13 +37,13 @@ message DeleteOrderResponse {}
 
 message Order {
     string id = 1;
-    string customer_id = 2;
+    Customer customer = 2;
     google.protobuf.Timestamp order_date = 3;
     repeated OrderLine order_lines = 4;
-    double total_price = 5;
+    int64 total_price = 5;
 }
 
 message OrderLine {
     int64 count = 1;
-    string catalog_item_id = 2;
+    CatalogItem catalog_item = 2;
 }

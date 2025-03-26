@@ -11,7 +11,7 @@ import (
 
 func Test_OrderRepository(t *testing.T) {
 	ctx := context.Background()
-	repo := NewOrderRepository(db)
+	repo := NewOrder(db)
 	customerID := uuid.NewString()
 	lines := []*entity.OrderLine{
 		{
@@ -21,7 +21,7 @@ func Test_OrderRepository(t *testing.T) {
 			},
 		},
 	}
-	order, err := entity.CreateOrder(customerID, lines, 0)
+	order, err := entity.CreateOrder(customerID, lines)
 	if err != nil {
 		return
 	}

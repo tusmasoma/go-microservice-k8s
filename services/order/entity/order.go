@@ -62,7 +62,7 @@ func (ols OrderLines) Proto() []*order.OrderLine {
 	return lines
 }
 
-func NewOrder(id, customerID string, orderDate time.Time, orderLines OrderLines, totalPrice float64) (*Order, error) {
+func NewOrder(id, customerID string, orderDate time.Time, orderLines OrderLines) (*Order, error) {
 	if id == "" {
 		return nil, errors.New("id is required")
 	}
@@ -78,12 +78,11 @@ func NewOrder(id, customerID string, orderDate time.Time, orderLines OrderLines,
 			CustomerId: customerID,
 			OrderDate:  timestamppb.New(orderDate),
 			OrderLines: orderLines.Proto(),
-			TotalPrice: totalPrice,
 		},
 	}, nil
 }
 
-func CreateOrder(customerID string, orderLines OrderLines, totalPrice float64) (*Order, error) {
+func CreateOrder(customerID string, orderLines OrderLines) (*Order, error) {
 	if customerID == "" {
 		return nil, errors.New("customerID is required")
 	}
@@ -96,7 +95,6 @@ func CreateOrder(customerID string, orderLines OrderLines, totalPrice float64) (
 			CustomerId: customerID,
 			OrderDate:  timestamppb.New(time.Now()),
 			OrderLines: orderLines.Proto(),
-			TotalPrice: totalPrice,
 		},
 	}, nil
 }

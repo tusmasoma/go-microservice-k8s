@@ -10,7 +10,6 @@ message Order {
     string customer_id = 2;
     google.protobuf.Timestamp order_date = 3;
     repeated OrderLine order_lines = 4;
-    double total_price = 5;
 }
 
 message OrderLine {

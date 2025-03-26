@@ -5,25 +5,24 @@ import (
 	"database/sql"
 	"time"
 
-	"github.com/tusmasoma/go-microservice-k8s/pkg/repository/mysql"
 	pb "github.com/tusmasoma/go-microservice-k8s/proto/order"
+	"github.com/tusmasoma/go-microservice-k8s/services/order/database"
 	"github.com/tusmasoma/go-microservice-k8s/services/order/entity"
-	"github.com/tusmasoma/go-microservice-k8s/services/order/repository"
 	"github.com/tusmasoma/go-tech-dojo/pkg/log"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-type orderRepository struct {
-	db mysql.DB
+type order struct {
+	db *sql.DB
 }
 
-func NewOrderRepository(db *sql.DB) repository.OrderRepository {
-	return &orderRepository{
+func NewOrder(db *sql.DB) database.Order {
+	return &order{
 		db: db,
 	}
 }
 
-func (or *orderRepository) Get(ctx context.Context, id string) (*entity.Order, error) {
+func (or *order) Get(ctx context.Context, id string) (*entity.Order, error) {
 	query := `
 	SELECT id, customer_id, order_date
 	FROM Orders
@@ -70,7 +69,7 @@ func (or *orderRepository) Get(ctx context.Context, id string) (*entity.Order, e
 	return &order, nil
 }
 
-func (or *orderRepository) List(ctx context.Context) (entity.Orders, error) {
+func (or *order) List(ctx context.Context) (entity.Orders, error) {
 	query := `
 	SELECT
 		Orders.id,
@@ -133,7 +132,7 @@ func (or *orderRepository) List(ctx context.Context) (entity.Orders, error) {
 	return orders, nil
 }
 
-func (or *orderRepository) Create(ctx context.Context, order *entity.Order) error {
+func (or *order) Create(ctx context.Context, order *entity.Order) error {
 	if err := or.transaction(ctx, func(ctx context.Context, tx *sql.Tx) error {
 		if err := or.createOrder(ctx, tx, order); err != nil {
 			return err
@@ -148,7 +147,7 @@ func (or *orderRepository) Create(ctx context.Context, order *entity.Order) erro
 	return nil
 }
 
-func (or *orderRepository) createOrder(ctx context.Context, tx *sql.Tx, order *entity.Order) error {
+func (or *order) createOrder(ctx context.Context, tx *sql.Tx, order *entity.Order) error {
 	query := `
 	INSERT INTO Orders (id, customer_id, order_date)
 	VALUES (?, ?, ?)
@@ -165,7 +164,7 @@ func (or *orderRepository) createOrder(ctx context.Context, tx *sql.Tx, order *e
 	return nil
 }
 
-func (or *orderRepository) createOrderLines(ctx context.Context, tx *sql.Tx, orderID string, lines entity.OrderLines) error {
+func (or *order) createOrderLines(ctx context.Context, tx *sql.Tx, orderID string, lines entity.OrderLines) error {
 	query := `
 	INSERT INTO OrderLines (order_id, catalog_item_id, count) VALUES`
 	values := make([]interface{}, 0, len(lines)*3) //nolint:mnd // 3 is the number of columns.
@@ -182,7 +181,7 @@ func (or *orderRepository) createOrderLines(ctx context.Context, tx *sql.Tx, ord
 	return nil
 }
 
-func (or *orderRepository) Delete(ctx context.Context, id string) error {
+func (or *order) Delete(ctx context.Context, id string) error {
 	if err := or.transaction(ctx, func(ctx context.Context, tx *sql.Tx) error {
 		if err := or.batchDeleteOrderLines(ctx, tx, id); err != nil {
 			return err
@@ -197,7 +196,7 @@ func (or *orderRepository) Delete(ctx context.Context, id string) error {
 	return nil
 }
 
-func (or *orderRepository) batchDeleteOrderLines(ctx context.Context, tx *sql.Tx, orderID string) error {
+func (or *order) batchDeleteOrderLines(ctx context.Context, tx *sql.Tx, orderID string) error {
 	query := "DELETE FROM OrderLines WHERE order_id = ?"
 	if _, err := tx.ExecContext(ctx, query, orderID); err != nil {
 		return err
@@ -205,7 +204,7 @@ func (or *orderRepository) batchDeleteOrderLines(ctx context.Context, tx *sql.Tx
 	return nil
 }
 
-func (or *orderRepository) deleteOrders(ctx context.Context, tx *sql.Tx, orderID string) error {
+func (or *order) deleteOrders(ctx context.Context, tx *sql.Tx, orderID string) error {
 	query := "DELETE FROM Orders WHERE id = ?"
 	if _, err := tx.ExecContext(ctx, query, orderID); err != nil {
 		return err
@@ -213,7 +212,7 @@ func (or *orderRepository) deleteOrders(ctx context.Context, tx *sql.Tx, orderID
 	return nil
 }
 
-func (or *orderRepository) transaction(ctx context.Context, fn func(ctx context.Context, tx *sql.Tx) error) error {
+func (or *order) transaction(ctx context.Context, fn func(ctx context.Context, tx *sql.Tx) error) error {
 	tx, err := or.db.BeginTx(ctx, &sql.TxOptions{Isolation: sql.LevelRepeatableRead})
 	if err != nil {
 		return err

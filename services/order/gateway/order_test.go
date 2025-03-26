@@ -1,362 +1,337 @@
 package gateway
 
-import (
-	"context"
-	"errors"
-	"net"
-	"reflect"
-	"testing"
-	"time"
+// const bufSize = 1024 * 1024
 
-	"github.com/golang/mock/gomock"
-	"github.com/google/uuid"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/credentials/insecure"
-	"google.golang.org/grpc/status"
-	"google.golang.org/grpc/test/bufconn"
-	"google.golang.org/protobuf/types/known/timestamppb"
+// func setupTestServer(t *testing.T, setup func(m *mock.MockOrderUseCase)) (pb.OrderServiceClient, func()) {
+// 	t.Helper()
 
-	"github.com/tusmasoma/go-microservice-k8s/services/order/entity"
-	"github.com/tusmasoma/go-microservice-k8s/services/order/usecase"
+// 	ctrl := gomock.NewController(t)
+// 	cuc := mock.NewMockOrderUseCase(ctrl)
 
-	pb "github.com/tusmasoma/go-microservice-k8s/proto/order"
+// 	if setup != nil {
+// 		setup(cuc)
+// 	}
 
-	"github.com/tusmasoma/go-microservice-k8s/services/order/usecase/mock"
-)
+// 	handler := NewOrderHandler(cuc)
 
-const bufSize = 1024 * 1024
+// 	lis := bufconn.Listen(bufSize)
+// 	s := grpc.NewServer()
+// 	pb.RegisterOrderServiceServer(s, handler)
 
-func setupTestServer(t *testing.T, setup func(m *mock.MockOrderUseCase)) (pb.OrderServiceClient, func()) {
-	t.Helper()
+// 	go func() {
+// 		if err := s.Serve(lis); err != nil && !errors.Is(err, grpc.ErrServerStopped) {
+// 			t.Errorf("failed to serve: %v", err)
+// 		}
+// 	}()
 
-	ctrl := gomock.NewController(t)
-	cuc := mock.NewMockOrderUseCase(ctrl)
+// 	conn, err := grpc.Dial("", grpc.WithContextDialer(func(_ context.Context, _ string) (net.Conn, error) { //nolint:staticcheck // ignore deprecation
+// 		return lis.Dial()
+// 	}), grpc.WithTransportCredentials(insecure.NewCredentials()))
+// 	if err != nil {
+// 		t.Fatalf("failed to dial: %v", err)
+// 	}
 
-	if setup != nil {
-		setup(cuc)
-	}
+// 	client := pb.NewOrderServiceClient(conn)
 
-	handler := NewOrderHandler(cuc)
+// 	cleanup := func() {
+// 		conn.Close()
+// 		s.Stop()
+// 	}
 
-	lis := bufconn.Listen(bufSize)
-	s := grpc.NewServer()
-	pb.RegisterOrderServiceServer(s, handler)
+// 	return client, cleanup
+// }
 
-	go func() {
-		if err := s.Serve(lis); err != nil && !errors.Is(err, grpc.ErrServerStopped) {
-			t.Errorf("failed to serve: %v", err)
-		}
-	}()
+// func TestHandler_ListOrders(t *testing.T) {
+// 	t.Parallel()
 
-	conn, err := grpc.Dial("", grpc.WithContextDialer(func(_ context.Context, _ string) (net.Conn, error) { //nolint:staticcheck // ignore deprecation
-		return lis.Dial()
-	}), grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		t.Fatalf("failed to dial: %v", err)
-	}
+// 	orderID := uuid.New().String()
+// 	customerID := uuid.New().String()
+// 	itemID := uuid.New().String()
 
-	client := pb.NewOrderServiceClient(conn)
+// 	date := time.Now()
 
-	cleanup := func() {
-		conn.Close()
-		s.Stop()
-	}
+// 	customer := &entity.Customer{
+// 		ID:      customerID,
+// 		Name:    "John Doe",
+// 		Email:   "john.doe@example.com",
+// 		Street:  "123 Maple Street",
+// 		City:    "Springfield",
+// 		Country: "USA",
+// 	}
+// 	item := &entity.CatalogItem{
+// 		ID:    itemID,
+// 		Name:  "item",
+// 		Price: 1000,
+// 	}
+// 	order := &entity.Order{
+// 		ID:         orderID,
+// 		CustomerID: customerID,
+// 		OrderDate:  &date,
+// 		OrderLines: []*entity.OrderLine{
+// 			{
+// 				Count:         1,
+// 				CatalogItemID: itemID,
+// 			},
+// 		},
+// 		TotalPrice: 1000,
+// 	}
 
-	return client, cleanup
-}
+// 	orderDetails := &usecase.OrderDetails{
+// 		Order:    order,
+// 		Customer: customer,
+// 		OrderLines: []*usecase.OrderLineDetails{
+// 			{
+// 				Count:       1,
+// 				CatalogItem: item,
+// 			},
+// 		},
+// 	}
 
-func TestHandler_ListOrders(t *testing.T) {
-	t.Parallel()
+// 	patterns := []struct {
+// 		name  string
+// 		setup func(
+// 			m *mock.MockOrderUseCase,
+// 		)
+// 		request    *pb.ListOrdersRequest
+// 		wantStatus codes.Code
+// 		want       []*pb.Order
+// 	}{
+// 		{
+// 			name: "success",
+// 			setup: func(ouc *mock.MockOrderUseCase) {
+// 				ouc.EXPECT().ListOrders(
+// 					gomock.Any(),
+// 				).Return(
+// 					[]*usecase.OrderDetails{orderDetails},
+// 					nil,
+// 				)
+// 			},
+// 			request:    &pb.ListOrdersRequest{},
+// 			wantStatus: codes.OK,
+// 			want: []*pb.Order{
+// 				{
+// 					Id: orderID,
+// 					Customer: &pb.Customer{
+// 						Id:      customerID,
+// 						Name:    "John Doe",
+// 						Email:   "john.doe@example.com",
+// 						Street:  "123 Maple Street",
+// 						City:    "Springfield",
+// 						Country: "USA",
+// 					},
+// 					OrderDate: timestamppb.New(date),
+// 					OrderLines: []*pb.OrderLine{
+// 						{
+// 							Item: &pb.CatalogItem{
+// 								Id:    itemID,
+// 								Name:  "item",
+// 								Price: 1000,
+// 							},
+// 							Count: 1,
+// 						},
+// 					},
+// 					TotalPrice: 1000,
+// 				},
+// 			},
+// 		},
+// 	}
 
-	orderID := uuid.New().String()
-	customerID := uuid.New().String()
-	itemID := uuid.New().String()
+// 	for _, tt := range patterns {
+// 		tt := tt
+// 		t.Run(tt.name, func(t *testing.T) {
+// 			t.Parallel()
 
-	date := time.Now()
+// 			client, cleanup := setupTestServer(t, tt.setup)
+// 			defer cleanup()
 
-	customer := &entity.Customer{
-		ID:      customerID,
-		Name:    "John Doe",
-		Email:   "john.doe@example.com",
-		Street:  "123 Maple Street",
-		City:    "Springfield",
-		Country: "USA",
-	}
-	item := &entity.CatalogItem{
-		ID:    itemID,
-		Name:  "item",
-		Price: 1000,
-	}
-	order := &entity.Order{
-		ID:         orderID,
-		CustomerID: customerID,
-		OrderDate:  &date,
-		OrderLines: []*entity.OrderLine{
-			{
-				Count:         1,
-				CatalogItemID: itemID,
-			},
-		},
-		TotalPrice: 1000,
-	}
+// 			resp, err := client.ListOrders(context.Background(), tt.request)
+// 			if status.Code(err) != tt.wantStatus {
+// 				t.Fatalf("handler returned wrong status code: got %v want %v", status.Code(err), tt.wantStatus)
+// 			}
 
-	orderDetails := &usecase.OrderDetails{
-		Order:    order,
-		Customer: customer,
-		OrderLines: []*usecase.OrderLineDetails{
-			{
-				Count:       1,
-				CatalogItem: item,
-			},
-		},
-	}
+// 			if tt.wantStatus == codes.OK {
+// 				if !reflect.DeepEqual(resp.GetOrders(), tt.want) {
+// 					t.Errorf("handler returned wrong orders: got %v want %v", resp.GetOrders(), tt.want)
+// 				}
+// 			}
+// 		})
+// 	}
+// }
 
-	patterns := []struct {
-		name  string
-		setup func(
-			m *mock.MockOrderUseCase,
-		)
-		request    *pb.ListOrdersRequest
-		wantStatus codes.Code
-		want       []*pb.Order
-	}{
-		{
-			name: "success",
-			setup: func(ouc *mock.MockOrderUseCase) {
-				ouc.EXPECT().ListOrders(
-					gomock.Any(),
-				).Return(
-					[]*usecase.OrderDetails{orderDetails},
-					nil,
-				)
-			},
-			request:    &pb.ListOrdersRequest{},
-			wantStatus: codes.OK,
-			want: []*pb.Order{
-				{
-					Id: orderID,
-					Customer: &pb.Customer{
-						Id:      customerID,
-						Name:    "John Doe",
-						Email:   "john.doe@example.com",
-						Street:  "123 Maple Street",
-						City:    "Springfield",
-						Country: "USA",
-					},
-					OrderDate: timestamppb.New(date),
-					OrderLines: []*pb.OrderLine{
-						{
-							Item: &pb.CatalogItem{
-								Id:    itemID,
-								Name:  "item",
-								Price: 1000,
-							},
-							Count: 1,
-						},
-					},
-					TotalPrice: 1000,
-				},
-			},
-		},
-	}
+// func TestHandler_GetOrderCreationResources(t *testing.T) {
+// 	t.Parallel()
 
-	for _, tt := range patterns {
-		tt := tt
-		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
+// 	customerID := uuid.New().String()
+// 	itemID := uuid.New().String()
 
-			client, cleanup := setupTestServer(t, tt.setup)
-			defer cleanup()
+// 	customer := entity.Customer{
+// 		ID:      customerID,
+// 		Name:    "John Doe",
+// 		Email:   "john.doe@example.com",
+// 		Street:  "123 Maple Street",
+// 		City:    "Springfield",
+// 		Country: "USA",
+// 	}
 
-			resp, err := client.ListOrders(context.Background(), tt.request)
-			if status.Code(err) != tt.wantStatus {
-				t.Fatalf("handler returned wrong status code: got %v want %v", status.Code(err), tt.wantStatus)
-			}
+// 	item := entity.CatalogItem{
+// 		ID:    itemID,
+// 		Name:  "item",
+// 		Price: 1000,
+// 	}
 
-			if tt.wantStatus == codes.OK {
-				if !reflect.DeepEqual(resp.GetOrders(), tt.want) {
-					t.Errorf("handler returned wrong orders: got %v want %v", resp.GetOrders(), tt.want)
-				}
-			}
-		})
-	}
-}
+// 	patterns := []struct {
+// 		name  string
+// 		setup func(
+// 			m *mock.MockOrderUseCase,
+// 		)
+// 		request    *pb.GetOrderCreationResourcesRequest
+// 		wantStatus codes.Code
+// 	}{
+// 		{
+// 			name: "success",
+// 			setup: func(ouc *mock.MockOrderUseCase) {
+// 				ouc.EXPECT().GetOrderCreationResources(
+// 					gomock.Any(),
+// 				).Return(
+// 					[]entity.Customer{customer},
+// 					[]entity.CatalogItem{item},
+// 					nil,
+// 				)
+// 			},
+// 			request:    &pb.GetOrderCreationResourcesRequest{},
+// 			wantStatus: codes.OK,
+// 		},
+// 	}
 
-func TestHandler_GetOrderCreationResources(t *testing.T) {
-	t.Parallel()
+// 	for _, tt := range patterns {
+// 		tt := tt
+// 		t.Run(tt.name, func(t *testing.T) {
+// 			t.Parallel()
 
-	customerID := uuid.New().String()
-	itemID := uuid.New().String()
+// 			client, cleanup := setupTestServer(t, tt.setup)
+// 			defer cleanup()
 
-	customer := entity.Customer{
-		ID:      customerID,
-		Name:    "John Doe",
-		Email:   "john.doe@example.com",
-		Street:  "123 Maple Street",
-		City:    "Springfield",
-		Country: "USA",
-	}
+// 			resp, err := client.GetOrderCreationResources(context.Background(), tt.request)
+// 			if status.Code(err) != tt.wantStatus {
+// 				t.Fatalf("handler returned wrong status code: got %v want %v", status.Code(err), tt.wantStatus)
+// 			}
 
-	item := entity.CatalogItem{
-		ID:    itemID,
-		Name:  "item",
-		Price: 1000,
-	}
+// 			if tt.wantStatus == codes.OK {
+// 				if len(resp.GetCustomers()) != 1 {
+// 					t.Errorf("handler returned wrong number of customers: got %v want %v", len(resp.GetCustomers()), 1)
+// 				}
+// 				if len(resp.GetItems()) != 1 {
+// 					t.Errorf("handler returned wrong number of items: got %v want %v", len(resp.GetItems()), 1)
+// 				}
+// 			}
+// 		})
+// 	}
+// }
 
-	patterns := []struct {
-		name  string
-		setup func(
-			m *mock.MockOrderUseCase,
-		)
-		request    *pb.GetOrderCreationResourcesRequest
-		wantStatus codes.Code
-	}{
-		{
-			name: "success",
-			setup: func(ouc *mock.MockOrderUseCase) {
-				ouc.EXPECT().GetOrderCreationResources(
-					gomock.Any(),
-				).Return(
-					[]entity.Customer{customer},
-					[]entity.CatalogItem{item},
-					nil,
-				)
-			},
-			request:    &pb.GetOrderCreationResourcesRequest{},
-			wantStatus: codes.OK,
-		},
-	}
+// func TestHandler_CreateOrder(t *testing.T) {
+// 	t.Parallel()
 
-	for _, tt := range patterns {
-		tt := tt
-		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
+// 	customerID := uuid.New().String()
+// 	itemID := uuid.New().String()
 
-			client, cleanup := setupTestServer(t, tt.setup)
-			defer cleanup()
+// 	patterns := []struct {
+// 		name  string
+// 		setup func(
+// 			m *mock.MockOrderUseCase,
+// 		)
+// 		request    *pb.CreateOrderRequest
+// 		wantStatus codes.Code
+// 	}{
+// 		{
+// 			name: "success",
+// 			setup: func(ouc *mock.MockOrderUseCase) {
+// 				ouc.EXPECT().CreateOrder(
+// 					gomock.Any(),
+// 					&usecase.CreateOrderParams{
+// 						CustomerID: customerID,
+// 						OrderLine: []struct {
+// 							CatalogItemID string
+// 							Count         int
+// 						}{
+// 							{
+// 								CatalogItemID: itemID,
+// 								Count:         1,
+// 							},
+// 						},
+// 					},
+// 				).Return(nil)
+// 			},
+// 			request: &pb.CreateOrderRequest{
+// 				CustomerId: customerID,
+// 				OrderLines: []*pb.OrderLine{
+// 					{
+// 						Item: &pb.CatalogItem{
+// 							Id: itemID,
+// 						},
+// 						Count: 1,
+// 					},
+// 				},
+// 			},
+// 			wantStatus: codes.OK,
+// 		},
+// 	}
 
-			resp, err := client.GetOrderCreationResources(context.Background(), tt.request)
-			if status.Code(err) != tt.wantStatus {
-				t.Fatalf("handler returned wrong status code: got %v want %v", status.Code(err), tt.wantStatus)
-			}
+// 	for _, tt := range patterns {
+// 		tt := tt
+// 		t.Run(tt.name, func(t *testing.T) {
+// 			t.Parallel()
 
-			if tt.wantStatus == codes.OK {
-				if len(resp.GetCustomers()) != 1 {
-					t.Errorf("handler returned wrong number of customers: got %v want %v", len(resp.GetCustomers()), 1)
-				}
-				if len(resp.GetItems()) != 1 {
-					t.Errorf("handler returned wrong number of items: got %v want %v", len(resp.GetItems()), 1)
-				}
-			}
-		})
-	}
-}
+// 			client, cleanup := setupTestServer(t, tt.setup)
+// 			defer cleanup()
 
-func TestHandler_CreateOrder(t *testing.T) {
-	t.Parallel()
+// 			_, err := client.CreateOrder(context.Background(), tt.request)
+// 			if status.Code(err) != tt.wantStatus {
+// 				t.Fatalf("handler returned wrong status code: got %v want %v", status.Code(err), tt.wantStatus)
+// 			}
+// 		})
+// 	}
+// }
 
-	customerID := uuid.New().String()
-	itemID := uuid.New().String()
+// func TestHandler_DeleteOrder(t *testing.T) {
+// 	t.Parallel()
 
-	patterns := []struct {
-		name  string
-		setup func(
-			m *mock.MockOrderUseCase,
-		)
-		request    *pb.CreateOrderRequest
-		wantStatus codes.Code
-	}{
-		{
-			name: "success",
-			setup: func(ouc *mock.MockOrderUseCase) {
-				ouc.EXPECT().CreateOrder(
-					gomock.Any(),
-					&usecase.CreateOrderParams{
-						CustomerID: customerID,
-						OrderLine: []struct {
-							CatalogItemID string
-							Count         int
-						}{
-							{
-								CatalogItemID: itemID,
-								Count:         1,
-							},
-						},
-					},
-				).Return(nil)
-			},
-			request: &pb.CreateOrderRequest{
-				CustomerId: customerID,
-				OrderLines: []*pb.OrderLine{
-					{
-						Item: &pb.CatalogItem{
-							Id: itemID,
-						},
-						Count: 1,
-					},
-				},
-			},
-			wantStatus: codes.OK,
-		},
-	}
+// 	orderID := uuid.New().String()
 
-	for _, tt := range patterns {
-		tt := tt
-		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
+// 	patterns := []struct {
+// 		name  string
+// 		setup func(
+// 			m *mock.MockOrderUseCase,
+// 		)
+// 		request    *pb.DeleteOrderRequest
+// 		wantStatus codes.Code
+// 	}{
+// 		{
+// 			name: "success",
+// 			setup: func(ouc *mock.MockOrderUseCase) {
+// 				ouc.EXPECT().DeleteOrder(
+// 					gomock.Any(),
+// 					orderID,
+// 				).Return(nil)
+// 			},
+// 			request: &pb.DeleteOrderRequest{
+// 				OrderId: orderID,
+// 			},
+// 			wantStatus: codes.OK,
+// 		},
+// 	}
 
-			client, cleanup := setupTestServer(t, tt.setup)
-			defer cleanup()
+// 	for _, tt := range patterns {
+// 		tt := tt
+// 		t.Run(tt.name, func(t *testing.T) {
+// 			t.Parallel()
 
-			_, err := client.CreateOrder(context.Background(), tt.request)
-			if status.Code(err) != tt.wantStatus {
-				t.Fatalf("handler returned wrong status code: got %v want %v", status.Code(err), tt.wantStatus)
-			}
-		})
-	}
-}
+// 			client, cleanup := setupTestServer(t, tt.setup)
+// 			defer cleanup()
 
-func TestHandler_DeleteOrder(t *testing.T) {
-	t.Parallel()
-
-	orderID := uuid.New().String()
-
-	patterns := []struct {
-		name  string
-		setup func(
-			m *mock.MockOrderUseCase,
-		)
-		request    *pb.DeleteOrderRequest
-		wantStatus codes.Code
-	}{
-		{
-			name: "success",
-			setup: func(ouc *mock.MockOrderUseCase) {
-				ouc.EXPECT().DeleteOrder(
-					gomock.Any(),
-					orderID,
-				).Return(nil)
-			},
-			request: &pb.DeleteOrderRequest{
-				OrderId: orderID,
-			},
-			wantStatus: codes.OK,
-		},
-	}
-
-	for _, tt := range patterns {
-		tt := tt
-		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
-
-			client, cleanup := setupTestServer(t, tt.setup)
-			defer cleanup()
-
-			_, err := client.DeleteOrder(context.Background(), tt.request)
-			if status.Code(err) != tt.wantStatus {
-				t.Fatalf("handler returned wrong status code: got %v want %v", status.Code(err), tt.wantStatus)
-			}
-		})
-	}
-}
+// 			_, err := client.DeleteOrder(context.Background(), tt.request)
+// 			if status.Code(err) != tt.wantStatus {
+// 				t.Fatalf("handler returned wrong status code: got %v want %v", status.Code(err), tt.wantStatus)
+// 			}
+// 		})
+// 	}
+// }

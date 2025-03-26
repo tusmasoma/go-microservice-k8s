@@ -1,4 +1,4 @@
-package gateway
+package api
 
 import (
 	"context"
@@ -7,38 +7,18 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/tusmasoma/go-microservice-k8s/services/customer/database"
 	"github.com/tusmasoma/go-microservice-k8s/services/customer/entity"
 
 	pb "github.com/tusmasoma/go-microservice-k8s/proto/customer"
 )
 
-type CustomerHandler interface {
-	GetCustomer(ctx context.Context, req *pb.GetCustomerRequest) (*pb.GetCustomerResponse, error)
-	ListCustomers(ctx context.Context, req *pb.ListCustomersRequest) (*pb.ListCustomersResponse, error)
-	CreateCustomer(ctx context.Context, req *pb.CreateCustomerRequest) (*pb.CreateCustomerResponse, error)
-	UpdateCustomer(ctx context.Context, req *pb.UpdateCustomerRequest) (*pb.UpdateCustomerResponse, error)
-	DeleteCustomer(ctx context.Context, req *pb.DeleteCustomerRequest) (*pb.DeleteCustomerResponse, error)
-}
-
-type customerHandler struct {
-	db *database.Database
-	pb.UnimplementedCustomerServiceServer
-}
-
-func NewCustomerHandler(db *database.Database) pb.CustomerServiceServer {
-	return &customerHandler{
-		db: db,
-	}
-}
-
-func (ch *customerHandler) GetCustomer(ctx context.Context, req *pb.GetCustomerRequest) (*pb.GetCustomerResponse, error) {
+func (c *customerService) GetCustomer(ctx context.Context, req *pb.GetCustomerRequest) (*pb.GetCustomerResponse, error) {
 	id := req.GetId()
 	if id == "" {
 		log.Warn("ID is required")
 		return nil, status.Errorf(codes.InvalidArgument, "ID is required")
 	}
-	customer, err := ch.db.Customer.Get(ctx, id)
+	customer, err := c.db.Customer.Get(ctx, id)
 	if err != nil {
 		log.Error("Failed to get customer", log.Ferror(err))
 		return nil, status.Errorf(codes.Internal, "Failed to get customer")
@@ -48,8 +28,8 @@ func (ch *customerHandler) GetCustomer(ctx context.Context, req *pb.GetCustomerR
 	}, nil
 }
 
-func (ch *customerHandler) ListCustomers(ctx context.Context, _ *pb.ListCustomersRequest) (*pb.ListCustomersResponse, error) {
-	customers, err := ch.db.Customer.List(ctx)
+func (c *customerService) ListCustomers(ctx context.Context, _ *pb.ListCustomersRequest) (*pb.ListCustomersResponse, error) {
+	customers, err := c.db.Customer.List(ctx)
 	if err != nil {
 		log.Error("Failed to list customers", log.Ferror(err))
 		return nil, status.Errorf(codes.Internal, "Failed to list customers")
@@ -59,8 +39,8 @@ func (ch *customerHandler) ListCustomers(ctx context.Context, _ *pb.ListCustomer
 	}, nil
 }
 
-func (ch *customerHandler) CreateCustomer(ctx context.Context, req *pb.CreateCustomerRequest) (*pb.CreateCustomerResponse, error) {
-	if !ch.isValidCreateCustomerRequest(req) {
+func (c *customerService) CreateCustomer(ctx context.Context, req *pb.CreateCustomerRequest) (*pb.CreateCustomerResponse, error) {
+	if !c.isValidCreateCustomerRequest(req) {
 		return nil, status.Errorf(codes.InvalidArgument, "Invalid request")
 	}
 	customer, err := entity.CreateCustomer(
@@ -73,14 +53,14 @@ func (ch *customerHandler) CreateCustomer(ctx context.Context, req *pb.CreateCus
 	if err != nil {
 		return nil, err
 	}
-	if err := ch.db.Customer.Create(ctx, customer); err != nil {
+	if err := c.db.Customer.Create(ctx, customer); err != nil {
 		log.Error("Failed to create customer", log.Ferror(err))
 		return nil, status.Errorf(codes.Internal, "Failed to create customer")
 	}
 	return &pb.CreateCustomerResponse{}, nil
 }
 
-func (ch *customerHandler) isValidCreateCustomerRequest(req *pb.CreateCustomerRequest) bool {
+func (c *customerService) isValidCreateCustomerRequest(req *pb.CreateCustomerRequest) bool {
 	if req.GetName() == "" ||
 		req.GetEmail() == "" ||
 		req.GetStreet() == "" ||
@@ -99,11 +79,11 @@ func (ch *customerHandler) isValidCreateCustomerRequest(req *pb.CreateCustomerRe
 	return true
 }
 
-func (ch *customerHandler) UpdateCustomer(ctx context.Context, req *pb.UpdateCustomerRequest) (*pb.UpdateCustomerResponse, error) {
-	if !ch.isValidUpdateCustomerRequest(req) {
+func (c *customerService) UpdateCustomer(ctx context.Context, req *pb.UpdateCustomerRequest) (*pb.UpdateCustomerResponse, error) {
+	if !c.isValidUpdateCustomerRequest(req) {
 		return nil, status.Errorf(codes.InvalidArgument, "Invalid request")
 	}
-	customer, err := ch.db.Customer.Get(ctx, req.GetId())
+	customer, err := c.db.Customer.Get(ctx, req.GetId())
 	if err != nil {
 		log.Error("failed to get customer", log.Ferror(err))
 		return nil, err
@@ -113,13 +93,13 @@ func (ch *customerHandler) UpdateCustomer(ctx context.Context, req *pb.UpdateCus
 	customer.Street = req.GetStreet()
 	customer.City = req.GetCity()
 	customer.Country = req.GetCountry()
-	if err = ch.db.Customer.Update(ctx, customer); err != nil {
+	if err = c.db.Customer.Update(ctx, customer); err != nil {
 		return nil, status.Errorf(codes.Internal, "Failed to update customer")
 	}
 	return &pb.UpdateCustomerResponse{}, nil
 }
 
-func (ch *customerHandler) isValidUpdateCustomerRequest(req *pb.UpdateCustomerRequest) bool {
+func (c *customerService) isValidUpdateCustomerRequest(req *pb.UpdateCustomerRequest) bool {
 	if req.GetId() == "" ||
 		req.GetName() == "" ||
 		req.GetEmail() == "" ||
@@ -132,13 +112,13 @@ func (ch *customerHandler) isValidUpdateCustomerRequest(req *pb.UpdateCustomerRe
 	return true
 }
 
-func (ch *customerHandler) DeleteCustomer(ctx context.Context, req *pb.DeleteCustomerRequest) (*pb.DeleteCustomerResponse, error) {
+func (c *customerService) DeleteCustomer(ctx context.Context, req *pb.DeleteCustomerRequest) (*pb.DeleteCustomerResponse, error) {
 	id := req.GetId()
 	if id == "" {
 		log.Warn("ID is required")
 		return nil, status.Errorf(codes.InvalidArgument, "ID is required")
 	}
-	if err := ch.db.Customer.Delete(ctx, id); err != nil {
+	if err := c.db.Customer.Delete(ctx, id); err != nil {
 		log.Error("Failed to delete customer", log.Ferror(err))
 		return nil, status.Errorf(codes.Internal, "Failed to delete customer")
 	}

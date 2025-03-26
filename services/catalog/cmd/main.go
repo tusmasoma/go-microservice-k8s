@@ -18,8 +18,8 @@ import (
 
 	"github.com/tusmasoma/go-microservice-k8s/pkg/config"
 	pmysql "github.com/tusmasoma/go-microservice-k8s/pkg/repository/mysql"
+	"github.com/tusmasoma/go-microservice-k8s/services/catalog/api"
 	"github.com/tusmasoma/go-microservice-k8s/services/catalog/database/mysql"
-	"github.com/tusmasoma/go-microservice-k8s/services/catalog/gateway"
 
 	pb "github.com/tusmasoma/go-microservice-k8s/proto/catalog"
 )
@@ -78,7 +78,7 @@ func BuildContainer(ctx context.Context) (*dig.Container, error) {
 		config.NewDBConfig,
 		pmysql.NewMySQLDB,
 		mysql.NewCatalogItem,
-		gateway.NewCatalogItemHandler,
+		api.NewCatalogService,
 	}
 	for _, provider := range providers {
 		if err := container.Provide(provider); err != nil {

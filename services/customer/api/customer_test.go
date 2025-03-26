@@ -1,4 +1,4 @@
-package gateway
+package api
 
 // const bufSize = 1024 * 1024
 

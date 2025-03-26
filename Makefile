@@ -5,10 +5,14 @@ GOOS := $(shell $(GO) env GOOS)
 GOARCH := $(shell $(GO) env GOARCH)
 BIN := $(abspath ./bin/$(GOOS)_$(GOARCH))
 GO_ENV ?= GOPRIVATE=github.com/tusmasoma GOBIN=$(BIN)
+GOPATH := $(shell go env GOPATH)
 
 # maicroservices
 SERVICES := catalog customer order gateway
 SERVICE_PATH_PREFIX := services
+
+# proto
+PROTOS := catalog customer order web
 
 # tools
 $(shell mkdir -p $(BIN))
@@ -135,9 +139,10 @@ endif
 # proto: generate proto files
 .PHONY: proto_gen
 proto_gen: proto_tools
-	@for service in $(SERVICES); do \
+	@for service in $(PROTOS); do \
 		echo "Running proto_gen for service: $$service"; \
 		protoc --proto_path=. \
+			--proto_path=${GOPATH}/pkg/mod/github.com/gogo/protobuf@v1.3.2 \
 			--go_out=. --go_opt=paths=source_relative \
 			--go-grpc_out=. --go-grpc_opt=paths=source_relative \
 			./proto/$$service/*.proto; \

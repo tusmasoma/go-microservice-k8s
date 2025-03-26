@@ -1,11 +1,9 @@
 syntax = "proto3";
 
-package gateway;
-option go_package = "proto/gateway";
+package web;
+option go_package = "proto/web";
 
-message GetCustomerRequest {
-    string id = 1;
-}
+message GetCustomerRequest {}
 message GetCustomerResponse {
     Customer customer = 1;
 }
@@ -25,7 +23,6 @@ message CreateCustomerRequest {
 message CreateCustomerResponse {}
 
 message UpdateCustomerRequest {
-    string id = 1;
     string name = 2;
     string email = 3;
     string street = 4;
@@ -34,9 +31,7 @@ message UpdateCustomerRequest {
 }
 message UpdateCustomerResponse {}
 
-message DeleteCustomerRequest {
-  string id = 1;
-}
+message DeleteCustomerRequest {}
 message DeleteCustomerResponse {}
 
 message Customer {

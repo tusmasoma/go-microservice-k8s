@@ -8,7 +8,7 @@ import (
 )
 
 func (o *orderService) GetOrder(ctx context.Context, req *pb.GetOrderRequest) (*pb.GetOrderResponse, error) {
-	order, err := o.db.Order.Get(ctx, req.GetOrderId())
+	order, err := o.db.Order.Get(ctx, req.GetId())
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +45,7 @@ func (o *orderService) CreateOrder(ctx context.Context, req *pb.CreateOrderReque
 }
 
 func (o *orderService) DeleteOrder(ctx context.Context, req *pb.DeleteOrderRequest) (*pb.DeleteOrderResponse, error) {
-	if err := o.db.Order.Delete(ctx, req.GetOrderId()); err != nil {
+	if err := o.db.Order.Delete(ctx, req.GetId()); err != nil {
 		return nil, err
 	}
 	return &pb.DeleteOrderResponse{}, nil

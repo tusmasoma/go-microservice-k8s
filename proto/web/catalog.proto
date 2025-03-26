@@ -1,11 +1,9 @@
 syntax = "proto3";
 
-package gateway;
-option go_package = "proto/gateway";
+package web;
+option go_package = "proto/web";
 
-message GetCatalogItemRequest {
-    string id = 1;
-}
+message GetCatalogItemRequest {}
 message GetCatalogItemResponse {
     CatalogItem item = 1;
 }
@@ -36,15 +34,12 @@ message CreateCatalogItemRequest {
 message CreateCatalogItemResponse {}
 
 message UpdateCatalogItemRequest {
-    string id = 1;
     string name = 2;
     double price = 3;
 }
 message UpdateCatalogItemResponse {}
 
-message DeleteCatalogItemRequest {
-  string id = 1;
-}
+message DeleteCatalogItemRequest {}
 message DeleteCatalogItemResponse {}
 
 message CatalogItem {

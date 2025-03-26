@@ -2,9 +2,9 @@
 // versions:
 // 	protoc-gen-go v1.28.1
 // 	protoc        v5.29.2
-// source: proto/gateway/customer.proto
+// source: proto/web/customer.proto
 
-package gateway
+package web
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -24,14 +24,12 @@ type GetCustomerRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
-
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 }
 
 func (x *GetCustomerRequest) Reset() {
 	*x = GetCustomerRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_gateway_customer_proto_msgTypes[0]
+		mi := &file_proto_web_customer_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -44,7 +42,7 @@ func (x *GetCustomerRequest) String() string {
 func (*GetCustomerRequest) ProtoMessage() {}
 
 func (x *GetCustomerRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_gateway_customer_proto_msgTypes[0]
+	mi := &file_proto_web_customer_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -57,14 +55,7 @@ func (x *GetCustomerRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCustomerRequest.ProtoReflect.Descriptor instead.
 func (*GetCustomerRequest) Descriptor() ([]byte, []int) {
-	return file_proto_gateway_customer_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *GetCustomerRequest) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
+	return file_proto_web_customer_proto_rawDescGZIP(), []int{0}
 }
 
 type GetCustomerResponse struct {
@@ -78,7 +69,7 @@ type GetCustomerResponse struct {
 func (x *GetCustomerResponse) Reset() {
 	*x = GetCustomerResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_gateway_customer_proto_msgTypes[1]
+		mi := &file_proto_web_customer_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -91,7 +82,7 @@ func (x *GetCustomerResponse) String() string {
 func (*GetCustomerResponse) ProtoMessage() {}
 
 func (x *GetCustomerResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_gateway_customer_proto_msgTypes[1]
+	mi := &file_proto_web_customer_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -104,7 +95,7 @@ func (x *GetCustomerResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCustomerResponse.ProtoReflect.Descriptor instead.
 func (*GetCustomerResponse) Descriptor() ([]byte, []int) {
-	return file_proto_gateway_customer_proto_rawDescGZIP(), []int{1}
+	return file_proto_web_customer_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *GetCustomerResponse) GetCustomer() *Customer {
@@ -123,7 +114,7 @@ type ListCustomersRequest struct {
 func (x *ListCustomersRequest) Reset() {
 	*x = ListCustomersRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_gateway_customer_proto_msgTypes[2]
+		mi := &file_proto_web_customer_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -136,7 +127,7 @@ func (x *ListCustomersRequest) String() string {
 func (*ListCustomersRequest) ProtoMessage() {}
 
 func (x *ListCustomersRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_gateway_customer_proto_msgTypes[2]
+	mi := &file_proto_web_customer_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -149,7 +140,7 @@ func (x *ListCustomersRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCustomersRequest.ProtoReflect.Descriptor instead.
 func (*ListCustomersRequest) Descriptor() ([]byte, []int) {
-	return file_proto_gateway_customer_proto_rawDescGZIP(), []int{2}
+	return file_proto_web_customer_proto_rawDescGZIP(), []int{2}
 }
 
 type ListCustomersResponse struct {
@@ -163,7 +154,7 @@ type ListCustomersResponse struct {
 func (x *ListCustomersResponse) Reset() {
 	*x = ListCustomersResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_gateway_customer_proto_msgTypes[3]
+		mi := &file_proto_web_customer_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -176,7 +167,7 @@ func (x *ListCustomersResponse) String() string {
 func (*ListCustomersResponse) ProtoMessage() {}
 
 func (x *ListCustomersResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_gateway_customer_proto_msgTypes[3]
+	mi := &file_proto_web_customer_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -189,7 +180,7 @@ func (x *ListCustomersResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCustomersResponse.ProtoReflect.Descriptor instead.
 func (*ListCustomersResponse) Descriptor() ([]byte, []int) {
-	return file_proto_gateway_customer_proto_rawDescGZIP(), []int{3}
+	return file_proto_web_customer_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *ListCustomersResponse) GetCustomers() []*Customer {
@@ -214,7 +205,7 @@ type CreateCustomerRequest struct {
 func (x *CreateCustomerRequest) Reset() {
 	*x = CreateCustomerRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_gateway_customer_proto_msgTypes[4]
+		mi := &file_proto_web_customer_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -227,7 +218,7 @@ func (x *CreateCustomerRequest) String() string {
 func (*CreateCustomerRequest) ProtoMessage() {}
 
 func (x *CreateCustomerRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_gateway_customer_proto_msgTypes[4]
+	mi := &file_proto_web_customer_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -240,7 +231,7 @@ func (x *CreateCustomerRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateCustomerRequest.ProtoReflect.Descriptor instead.
 func (*CreateCustomerRequest) Descriptor() ([]byte, []int) {
-	return file_proto_gateway_customer_proto_rawDescGZIP(), []int{4}
+	return file_proto_web_customer_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *CreateCustomerRequest) GetName() string {
@@ -287,7 +278,7 @@ type CreateCustomerResponse struct {
 func (x *CreateCustomerResponse) Reset() {
 	*x = CreateCustomerResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_gateway_customer_proto_msgTypes[5]
+		mi := &file_proto_web_customer_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -300,7 +291,7 @@ func (x *CreateCustomerResponse) String() string {
 func (*CreateCustomerResponse) ProtoMessage() {}
 
 func (x *CreateCustomerResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_gateway_customer_proto_msgTypes[5]
+	mi := &file_proto_web_customer_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -313,7 +304,7 @@ func (x *CreateCustomerResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateCustomerResponse.ProtoReflect.Descriptor instead.
 func (*CreateCustomerResponse) Descriptor() ([]byte, []int) {
-	return file_proto_gateway_customer_proto_rawDescGZIP(), []int{5}
+	return file_proto_web_customer_proto_rawDescGZIP(), []int{5}
 }
 
 type UpdateCustomerRequest struct {
@@ -321,7 +312,6 @@ type UpdateCustomerRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id      string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Name    string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	Email   string `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
 	Street  string `protobuf:"bytes,4,opt,name=street,proto3" json:"street,omitempty"`
@@ -332,7 +322,7 @@ type UpdateCustomerRequest struct {
 func (x *UpdateCustomerRequest) Reset() {
 	*x = UpdateCustomerRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_gateway_customer_proto_msgTypes[6]
+		mi := &file_proto_web_customer_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -345,7 +335,7 @@ func (x *UpdateCustomerRequest) String() string {
 func (*UpdateCustomerRequest) ProtoMessage() {}
 
 func (x *UpdateCustomerRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_gateway_customer_proto_msgTypes[6]
+	mi := &file_proto_web_customer_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -358,14 +348,7 @@ func (x *UpdateCustomerRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateCustomerRequest.ProtoReflect.Descriptor instead.
 func (*UpdateCustomerRequest) Descriptor() ([]byte, []int) {
-	return file_proto_gateway_customer_proto_rawDescGZIP(), []int{6}
-}
-
-func (x *UpdateCustomerRequest) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
+	return file_proto_web_customer_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *UpdateCustomerRequest) GetName() string {
@@ -412,7 +395,7 @@ type UpdateCustomerResponse struct {
 func (x *UpdateCustomerResponse) Reset() {
 	*x = UpdateCustomerResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_gateway_customer_proto_msgTypes[7]
+		mi := &file_proto_web_customer_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -425,7 +408,7 @@ func (x *UpdateCustomerResponse) String() string {
 func (*UpdateCustomerResponse) ProtoMessage() {}
 
 func (x *UpdateCustomerResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_gateway_customer_proto_msgTypes[7]
+	mi := &file_proto_web_customer_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -438,21 +421,19 @@ func (x *UpdateCustomerResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateCustomerResponse.ProtoReflect.Descriptor instead.
 func (*UpdateCustomerResponse) Descriptor() ([]byte, []int) {
-	return file_proto_gateway_customer_proto_rawDescGZIP(), []int{7}
+	return file_proto_web_customer_proto_rawDescGZIP(), []int{7}
 }
 
 type DeleteCustomerRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
-
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 }
 
 func (x *DeleteCustomerRequest) Reset() {
 	*x = DeleteCustomerRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_gateway_customer_proto_msgTypes[8]
+		mi := &file_proto_web_customer_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -465,7 +446,7 @@ func (x *DeleteCustomerRequest) String() string {
 func (*DeleteCustomerRequest) ProtoMessage() {}
 
 func (x *DeleteCustomerRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_gateway_customer_proto_msgTypes[8]
+	mi := &file_proto_web_customer_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -478,14 +459,7 @@ func (x *DeleteCustomerRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteCustomerRequest.ProtoReflect.Descriptor instead.
 func (*DeleteCustomerRequest) Descriptor() ([]byte, []int) {
-	return file_proto_gateway_customer_proto_rawDescGZIP(), []int{8}
-}
-
-func (x *DeleteCustomerRequest) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
+	return file_proto_web_customer_proto_rawDescGZIP(), []int{8}
 }
 
 type DeleteCustomerResponse struct {
@@ -497,7 +471,7 @@ type DeleteCustomerResponse struct {
 func (x *DeleteCustomerResponse) Reset() {
 	*x = DeleteCustomerResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_gateway_customer_proto_msgTypes[9]
+		mi := &file_proto_web_customer_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -510,7 +484,7 @@ func (x *DeleteCustomerResponse) String() string {
 func (*DeleteCustomerResponse) ProtoMessage() {}
 
 func (x *DeleteCustomerResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_gateway_customer_proto_msgTypes[9]
+	mi := &file_proto_web_customer_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -523,7 +497,7 @@ func (x *DeleteCustomerResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteCustomerResponse.ProtoReflect.Descriptor instead.
 func (*DeleteCustomerResponse) Descriptor() ([]byte, []int) {
-	return file_proto_gateway_customer_proto_rawDescGZIP(), []int{9}
+	return file_proto_web_customer_proto_rawDescGZIP(), []int{9}
 }
 
 type Customer struct {
@@ -542,7 +516,7 @@ type Customer struct {
 func (x *Customer) Reset() {
 	*x = Customer{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_gateway_customer_proto_msgTypes[10]
+		mi := &file_proto_web_customer_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -555,7 +529,7 @@ func (x *Customer) String() string {
 func (*Customer) ProtoMessage() {}
 
 func (x *Customer) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_gateway_customer_proto_msgTypes[10]
+	mi := &file_proto_web_customer_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -568,7 +542,7 @@ func (x *Customer) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Customer.ProtoReflect.Descriptor instead.
 func (*Customer) Descriptor() ([]byte, []int) {
-	return file_proto_gateway_customer_proto_rawDescGZIP(), []int{10}
+	return file_proto_web_customer_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *Customer) GetId() string {
@@ -613,24 +587,22 @@ func (x *Customer) GetCountry() string {
 	return ""
 }
 
-var File_proto_gateway_customer_proto protoreflect.FileDescriptor
+var File_proto_web_customer_proto protoreflect.FileDescriptor
 
-var file_proto_gateway_customer_proto_rawDesc = []byte{
-	0x0a, 0x1c, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x61, 0x74, 0x65, 0x77, 0x61, 0x79, 0x2f,
-	0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x07,
-	0x67, 0x61, 0x74, 0x65, 0x77, 0x61, 0x79, 0x22, 0x24, 0x0a, 0x12, 0x47, 0x65, 0x74, 0x43, 0x75,
-	0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a,
-	0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x22, 0x44, 0x0a,
-	0x13, 0x47, 0x65, 0x74, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2d, 0x0a, 0x08, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x11, 0x2e, 0x67, 0x61, 0x74, 0x65, 0x77, 0x61, 0x79,
-	0x2e, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52, 0x08, 0x63, 0x75, 0x73, 0x74, 0x6f,
-	0x6d, 0x65, 0x72, 0x22, 0x16, 0x0a, 0x14, 0x4c, 0x69, 0x73, 0x74, 0x43, 0x75, 0x73, 0x74, 0x6f,
-	0x6d, 0x65, 0x72, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x48, 0x0a, 0x15, 0x4c,
-	0x69, 0x73, 0x74, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x73, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2f, 0x0a, 0x09, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72,
-	0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x11, 0x2e, 0x67, 0x61, 0x74, 0x65, 0x77, 0x61,
-	0x79, 0x2e, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52, 0x09, 0x63, 0x75, 0x73, 0x74,
+var file_proto_web_customer_proto_rawDesc = []byte{
+	0x0a, 0x18, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x77, 0x65, 0x62, 0x2f, 0x63, 0x75, 0x73, 0x74,
+	0x6f, 0x6d, 0x65, 0x72, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x03, 0x77, 0x65, 0x62, 0x22,
+	0x14, 0x0a, 0x12, 0x47, 0x65, 0x74, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x40, 0x0a, 0x13, 0x47, 0x65, 0x74, 0x43, 0x75, 0x73, 0x74,
+	0x6f, 0x6d, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x29, 0x0a, 0x08,
+	0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0d,
+	0x2e, 0x77, 0x65, 0x62, 0x2e, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52, 0x08, 0x63,
+	0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x22, 0x16, 0x0a, 0x14, 0x4c, 0x69, 0x73, 0x74, 0x43,
+	0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22,
+	0x44, 0x0a, 0x15, 0x4c, 0x69, 0x73, 0x74, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x73,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2b, 0x0a, 0x09, 0x63, 0x75, 0x73, 0x74,
+	0x6f, 0x6d, 0x65, 0x72, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0d, 0x2e, 0x77, 0x65,
+	0x62, 0x2e, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52, 0x09, 0x63, 0x75, 0x73, 0x74,
 	0x6f, 0x6d, 0x65, 0x72, 0x73, 0x22, 0x87, 0x01, 0x0a, 0x15, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65,
 	0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12,
 	0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e,
@@ -641,10 +613,9 @@ var file_proto_gateway_customer_proto_rawDesc = []byte{
 	0x04, 0x63, 0x69, 0x74, 0x79, 0x12, 0x18, 0x0a, 0x07, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x72, 0x79,
 	0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x72, 0x79, 0x22,
 	0x18, 0x0a, 0x16, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65,
-	0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x97, 0x01, 0x0a, 0x15, 0x55, 0x70,
+	0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x87, 0x01, 0x0a, 0x15, 0x55, 0x70,
 	0x64, 0x61, 0x74, 0x65, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x65, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28,
 	0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c,
 	0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x12, 0x16, 0x0a,
 	0x06, 0x73, 0x74, 0x72, 0x65, 0x65, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73,
@@ -652,10 +623,9 @@ var file_proto_gateway_customer_proto_rawDesc = []byte{
 	0x01, 0x28, 0x09, 0x52, 0x04, 0x63, 0x69, 0x74, 0x79, 0x12, 0x18, 0x0a, 0x07, 0x63, 0x6f, 0x75,
 	0x6e, 0x74, 0x72, 0x79, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x63, 0x6f, 0x75, 0x6e,
 	0x74, 0x72, 0x79, 0x22, 0x18, 0x0a, 0x16, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x43, 0x75, 0x73,
-	0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x27, 0x0a,
+	0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x17, 0x0a,
 	0x15, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x22, 0x18, 0x0a, 0x16, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x18, 0x0a, 0x16, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65,
 	0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
 	0x22, 0x8a, 0x01, 0x0a, 0x08, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x12, 0x0e, 0x0a,
 	0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a,
@@ -665,40 +635,40 @@ var file_proto_gateway_customer_proto_rawDesc = []byte{
 	0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x74, 0x72, 0x65, 0x65, 0x74, 0x12,
 	0x12, 0x0a, 0x04, 0x63, 0x69, 0x74, 0x79, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x63,
 	0x69, 0x74, 0x79, 0x12, 0x18, 0x0a, 0x07, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x72, 0x79, 0x18, 0x06,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x72, 0x79, 0x42, 0x0f, 0x5a,
-	0x0d, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x61, 0x74, 0x65, 0x77, 0x61, 0x79, 0x62, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x72, 0x79, 0x42, 0x0b, 0x5a,
+	0x09, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x77, 0x65, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x33,
 }
 
 var (
-	file_proto_gateway_customer_proto_rawDescOnce sync.Once
-	file_proto_gateway_customer_proto_rawDescData = file_proto_gateway_customer_proto_rawDesc
+	file_proto_web_customer_proto_rawDescOnce sync.Once
+	file_proto_web_customer_proto_rawDescData = file_proto_web_customer_proto_rawDesc
 )
 
-func file_proto_gateway_customer_proto_rawDescGZIP() []byte {
-	file_proto_gateway_customer_proto_rawDescOnce.Do(func() {
-		file_proto_gateway_customer_proto_rawDescData = protoimpl.X.CompressGZIP(file_proto_gateway_customer_proto_rawDescData)
+func file_proto_web_customer_proto_rawDescGZIP() []byte {
+	file_proto_web_customer_proto_rawDescOnce.Do(func() {
+		file_proto_web_customer_proto_rawDescData = protoimpl.X.CompressGZIP(file_proto_web_customer_proto_rawDescData)
 	})
-	return file_proto_gateway_customer_proto_rawDescData
+	return file_proto_web_customer_proto_rawDescData
 }
 
-var file_proto_gateway_customer_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
-var file_proto_gateway_customer_proto_goTypes = []interface{}{
-	(*GetCustomerRequest)(nil),     // 0: gateway.GetCustomerRequest
-	(*GetCustomerResponse)(nil),    // 1: gateway.GetCustomerResponse
-	(*ListCustomersRequest)(nil),   // 2: gateway.ListCustomersRequest
-	(*ListCustomersResponse)(nil),  // 3: gateway.ListCustomersResponse
-	(*CreateCustomerRequest)(nil),  // 4: gateway.CreateCustomerRequest
-	(*CreateCustomerResponse)(nil), // 5: gateway.CreateCustomerResponse
-	(*UpdateCustomerRequest)(nil),  // 6: gateway.UpdateCustomerRequest
-	(*UpdateCustomerResponse)(nil), // 7: gateway.UpdateCustomerResponse
-	(*DeleteCustomerRequest)(nil),  // 8: gateway.DeleteCustomerRequest
-	(*DeleteCustomerResponse)(nil), // 9: gateway.DeleteCustomerResponse
-	(*Customer)(nil),               // 10: gateway.Customer
+var file_proto_web_customer_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_proto_web_customer_proto_goTypes = []interface{}{
+	(*GetCustomerRequest)(nil),     // 0: web.GetCustomerRequest
+	(*GetCustomerResponse)(nil),    // 1: web.GetCustomerResponse
+	(*ListCustomersRequest)(nil),   // 2: web.ListCustomersRequest
+	(*ListCustomersResponse)(nil),  // 3: web.ListCustomersResponse
+	(*CreateCustomerRequest)(nil),  // 4: web.CreateCustomerRequest
+	(*CreateCustomerResponse)(nil), // 5: web.CreateCustomerResponse
+	(*UpdateCustomerRequest)(nil),  // 6: web.UpdateCustomerRequest
+	(*UpdateCustomerResponse)(nil), // 7: web.UpdateCustomerResponse
+	(*DeleteCustomerRequest)(nil),  // 8: web.DeleteCustomerRequest
+	(*DeleteCustomerResponse)(nil), // 9: web.DeleteCustomerResponse
+	(*Customer)(nil),               // 10: web.Customer
 }
-var file_proto_gateway_customer_proto_depIdxs = []int32{
-	10, // 0: gateway.GetCustomerResponse.customer:type_name -> gateway.Customer
-	10, // 1: gateway.ListCustomersResponse.customers:type_name -> gateway.Customer
+var file_proto_web_customer_proto_depIdxs = []int32{
+	10, // 0: web.GetCustomerResponse.customer:type_name -> web.Customer
+	10, // 1: web.ListCustomersResponse.customers:type_name -> web.Customer
 	2,  // [2:2] is the sub-list for method output_type
 	2,  // [2:2] is the sub-list for method input_type
 	2,  // [2:2] is the sub-list for extension type_name
@@ -706,13 +676,13 @@ var file_proto_gateway_customer_proto_depIdxs = []int32{
 	0,  // [0:2] is the sub-list for field type_name
 }
 
-func init() { file_proto_gateway_customer_proto_init() }
-func file_proto_gateway_customer_proto_init() {
-	if File_proto_gateway_customer_proto != nil {
+func init() { file_proto_web_customer_proto_init() }
+func file_proto_web_customer_proto_init() {
+	if File_proto_web_customer_proto != nil {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_proto_gateway_customer_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+		file_proto_web_customer_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GetCustomerRequest); i {
 			case 0:
 				return &v.state
@@ -724,7 +694,7 @@ func file_proto_gateway_customer_proto_init() {
 				return nil
 			}
 		}
-		file_proto_gateway_customer_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+		file_proto_web_customer_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GetCustomerResponse); i {
 			case 0:
 				return &v.state
@@ -736,7 +706,7 @@ func file_proto_gateway_customer_proto_init() {
 				return nil
 			}
 		}
-		file_proto_gateway_customer_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+		file_proto_web_customer_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ListCustomersRequest); i {
 			case 0:
 				return &v.state
@@ -748,7 +718,7 @@ func file_proto_gateway_customer_proto_init() {
 				return nil
 			}
 		}
-		file_proto_gateway_customer_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+		file_proto_web_customer_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ListCustomersResponse); i {
 			case 0:
 				return &v.state
@@ -760,7 +730,7 @@ func file_proto_gateway_customer_proto_init() {
 				return nil
 			}
 		}
-		file_proto_gateway_customer_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+		file_proto_web_customer_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*CreateCustomerRequest); i {
 			case 0:
 				return &v.state
@@ -772,7 +742,7 @@ func file_proto_gateway_customer_proto_init() {
 				return nil
 			}
 		}
-		file_proto_gateway_customer_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+		file_proto_web_customer_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*CreateCustomerResponse); i {
 			case 0:
 				return &v.state
@@ -784,7 +754,7 @@ func file_proto_gateway_customer_proto_init() {
 				return nil
 			}
 		}
-		file_proto_gateway_customer_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+		file_proto_web_customer_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UpdateCustomerRequest); i {
 			case 0:
 				return &v.state
@@ -796,7 +766,7 @@ func file_proto_gateway_customer_proto_init() {
 				return nil
 			}
 		}
-		file_proto_gateway_customer_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+		file_proto_web_customer_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UpdateCustomerResponse); i {
 			case 0:
 				return &v.state
@@ -808,7 +778,7 @@ func file_proto_gateway_customer_proto_init() {
 				return nil
 			}
 		}
-		file_proto_gateway_customer_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+		file_proto_web_customer_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*DeleteCustomerRequest); i {
 			case 0:
 				return &v.state
@@ -820,7 +790,7 @@ func file_proto_gateway_customer_proto_init() {
 				return nil
 			}
 		}
-		file_proto_gateway_customer_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+		file_proto_web_customer_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*DeleteCustomerResponse); i {
 			case 0:
 				return &v.state
@@ -832,7 +802,7 @@ func file_proto_gateway_customer_proto_init() {
 				return nil
 			}
 		}
-		file_proto_gateway_customer_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
+		file_proto_web_customer_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Customer); i {
 			case 0:
 				return &v.state
@@ -849,18 +819,18 @@ func file_proto_gateway_customer_proto_init() {
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_proto_gateway_customer_proto_rawDesc,
+			RawDescriptor: file_proto_web_customer_proto_rawDesc,
 			NumEnums:      0,
 			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_proto_gateway_customer_proto_goTypes,
-		DependencyIndexes: file_proto_gateway_customer_proto_depIdxs,
-		MessageInfos:      file_proto_gateway_customer_proto_msgTypes,
+		GoTypes:           file_proto_web_customer_proto_goTypes,
+		DependencyIndexes: file_proto_web_customer_proto_depIdxs,
+		MessageInfos:      file_proto_web_customer_proto_msgTypes,
 	}.Build()
-	File_proto_gateway_customer_proto = out.File
-	file_proto_gateway_customer_proto_rawDesc = nil
-	file_proto_gateway_customer_proto_goTypes = nil
-	file_proto_gateway_customer_proto_depIdxs = nil
+	File_proto_web_customer_proto = out.File
+	file_proto_web_customer_proto_rawDesc = nil
+	file_proto_web_customer_proto_goTypes = nil
+	file_proto_web_customer_proto_depIdxs = nil
 }

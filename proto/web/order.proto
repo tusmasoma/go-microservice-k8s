@@ -1,12 +1,11 @@
 syntax = "proto3";
 
-package gateway;
-option go_package = "proto/gateway";
+package web;
+option go_package = "proto/web";
 
 import "google/protobuf/timestamp.proto";
-import "proto/gateway/customer.proto";
-import "proto/gateway/catalog.proto";
-
+import "proto/web/customer.proto";
+import "proto/web/catalog.proto";
 
 message GetOrderRequest {}
 message GetOrderResponse {
@@ -30,9 +29,7 @@ message CreateOrderRequest {
 }
 message CreateOrderResponse {}
 
-message DeleteOrderRequest {
-    string order_id = 1;
-}
+message DeleteOrderRequest {}
 message DeleteOrderResponse {}
 
 message Order {
@@ -40,7 +37,6 @@ message Order {
     Customer customer = 2;
     google.protobuf.Timestamp order_date = 3;
     repeated OrderLine order_lines = 4;
-    int64 total_price = 5;
 }
 
 message OrderLine {

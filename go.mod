@@ -3,7 +3,9 @@ module github.com/tusmasoma/go-microservice-k8s
 go 1.23.4
 
 require (
+	github.com/go-chi/chi v1.5.5
 	github.com/go-sql-driver/mysql v1.9.0
+	github.com/gogo/protobuf v1.3.2
 	github.com/golang/mock v1.6.0
 	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1

@@ -60,13 +60,13 @@ jobs:
       - name: Download Go modules
         shell: bash
         if: ${{ steps.setup-go.outputs.cache-hit != 'true' }}
-        working-directory: ./services/${{ matrix.service }}
+        working-directory: ./go/services/${{ matrix.service }}
         run: |
           go mod download
           go mod verify
 
       - name: Build
-        working-directory: ./services/${{ matrix.service }}
+        working-directory: ./go/services/${{ matrix.service }}
         run: |
           go build -v -o app ./cmd/
 
@@ -74,7 +74,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: app-${{ matrix.service }}
-          path: ./services/${{ matrix.service }}/app
+          path: ./go/services/${{ matrix.service }}/app
 
   test:
     needs: build
@@ -87,15 +87,15 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: app-${{ matrix.service }}
-          path: ./services/${{ matrix.service }}/app
+          path: ./go/services/${{ matrix.service }}/app
 
       # - name: Setup .env file
-      #   run: echo "${{ secrets.LOCAL_ENV_FILE }}" > ./services/.env
+      #   run: echo "${{ secrets.LOCAL_ENV_FILE }}" > ./go/services/.env
       #   env:
       #     LOCAL_ENV_FILE: ${{ secrets.LOCAL_ENV_FILE }}
 
       - name: Test
-        working-directory: ./services/${{ matrix.service }}
+        working-directory: ./go/services/${{ matrix.service }}
         run: go test -v ./...
 
   lint:
@@ -109,7 +109,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: app-${{ matrix.service }}
-          path: ./services/${{ matrix.service }}/app
+          path: ./go/services/${{ matrix.service }}/app
 
       - name: Lint
         run: make lint SERVICE=${{ matrix.service }}
@@ -124,7 +124,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
          name: app-${{ matrix.service }}
-         path: ./services/${{ matrix.service }}/app
+         path: ./go/services/${{ matrix.service }}/app
 
       - name: Generate and check for changes
         run: |

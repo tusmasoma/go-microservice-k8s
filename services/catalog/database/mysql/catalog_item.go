@@ -102,6 +102,7 @@ func (cr *catalogItem) ListByIDs(ctx context.Context, ids []string) (entity.Cata
 		placeholders[i] = "?"
 		args[i] = id
 	}
+	//nolint: gosec // ignore SQL string concatenation
 	query := `
 	SELECT id, name, price
 	FROM CatalogItems

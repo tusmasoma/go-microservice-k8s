@@ -70,7 +70,7 @@ func (w *web) createOrder(rw http.ResponseWriter, r *http.Request) {
 	}
 	in := &order.CreateOrderRequest{
 		CustomerId: req.GetCustomerId(),
-		OrderLines: nil, //TODO: 後で実装
+		OrderLines: nil, // TODO: 後で実装
 	}
 	if _, err := w.order.CreateOrder(ctx, in); err != nil {
 		response.Error(err, rw, r)

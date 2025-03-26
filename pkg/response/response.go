@@ -10,7 +10,7 @@ import (
 	"github.com/tusmasoma/go-tech-dojo/pkg/log"
 )
 
-func Send(status int, msg proto.Message, w http.ResponseWriter, r *http.Request) {
+func Send(status int, msg proto.Message, w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
 	data, err := json.Marshal(msg)

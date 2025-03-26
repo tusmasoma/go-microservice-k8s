@@ -24,8 +24,8 @@ func (o *Order) GetOrderLines() OrderLines {
 	if o == nil || o.Order.OrderLines == nil {
 		return nil
 	}
-	lines := make(OrderLines, len(o.Order.OrderLines))
-	for i, line := range o.Order.OrderLines {
+	lines := make(OrderLines, len(o.Order.GetOrderLines()))
+	for i, line := range o.Order.GetOrderLines() {
 		lines[i] = &OrderLine{OrderLine: line}
 	}
 	return lines

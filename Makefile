@@ -5,10 +5,14 @@ GOOS := $(shell $(GO) env GOOS)
 GOARCH := $(shell $(GO) env GOARCH)
 BIN := $(abspath ./bin/$(GOOS)_$(GOARCH))
 GO_ENV ?= GOPRIVATE=github.com/tusmasoma GOBIN=$(BIN)
+GOPATH := $(shell go env GOPATH)
 
 # maicroservices
 SERVICES := catalog customer order gateway
-SERVICE_PATH_PREFIX := services
+SERVICE_PATH_PREFIX := go/services
+
+# proto
+PROTOS := catalog customer order web
 
 # tools
 $(shell mkdir -p $(BIN))
@@ -74,7 +78,7 @@ test:
 ifdef SERVICE
 	$(GO) test -v -count=1 ./$(SERVICE_PATH_PREFIX)/$(SERVICE)/...
 else
-	$(GO) test -v -count=1 $(foreach service,$(SERVICES),./$(SERVICE_PATH_PREFIX)/$(service)/...) ./pkg/...
+	$(GO) test -v -count=1 $(foreach service,$(SERVICES),./$(SERVICE_PATH_PREFIX)/$(service)/...) ./go/pkg/...
 endif
 
 # golangci-lint: lint for all under the PKG
@@ -83,12 +87,12 @@ lint: $(BIN)/golangci-lint-$(GOLANGCI_LINT_VERSION)
 ifdef SERVICE
 	@echo "Running lint for service: $(SERVICE)"
 	cd ./$(SERVICE_PATH_PREFIX)/$(SERVICE) && \
-	$(BIN)/golangci-lint run -c ../../.golangci.yml ./...
+	$(BIN)/golangci-lint run -c ../../../.golangci.yml ./...
 else
 	@for service in $(SERVICES); do \
 		echo "Running lint for service: $$service"; \
 		(cd ./$(SERVICE_PATH_PREFIX)/$$service && \
-		$(BIN)/golangci-lint run -c ../../.golangci.yml ./...) || true; \
+		$(BIN)/golangci-lint run -c ../../../.golangci.yml ./...) || true; \
 	done
 	@echo "Running lint for pkg/"
 	(cd ./pkg && $(BIN)/golangci-lint run -c ../.golangci.yml ./...) || true;
@@ -99,12 +103,12 @@ lint-diff: $(BIN)/golangci-lint-$(GOLANGCI_LINT_VERSION)
 ifdef SERVICE
 	@echo "Running lint-diff for service: $(SERVICE)"
 	cd $(SERVICE_PATH_PREFIX)/$(SERVICE) && \
-	$(BIN)/golangci-lint run -c ../../.golangci.yml ./... | reviewdog -f=golangci-lint -diff="git diff origin/main"
+	$(BIN)/golangci-lint run -c ../../../.golangci.yml ./... | reviewdog -f=golangci-lint -diff="git diff origin/main"
 else
 	@for service in $(SERVICES); do \
 		echo "Running lint-diff for service: $$service"; \
 		(cd $(SERVICE_PATH_PREFIX)/$$service && \
-		$(BIN)/golangci-lint run -c ../../.golangci.yml ./... | reviewdog -f=golangci-lint -diff="git diff origin/main") || true; \
+		$(BIN)/golangci-lint run -c ../../../.golangci.yml ./... | reviewdog -f=golangci-lint -diff="git diff origin/main") || true; \
 	done
 	@echo "Running lint-diff for pkg/"
 	(cd ./pkg && $(BIN)/golangci-lint run -c ../.golangci.yml ./... | reviewdog -f=golangci-lint -diff="git diff origin/main") || true;
@@ -127,7 +131,7 @@ else
 		${GO_ENV} $(BIN)/gofumpt -l -w $${FILES}; \
 	done
 	@echo "Running fmt for pkg/"
-	FILES=$$(find ./pkg -type f -name "*.go") && \
+	FILES=$$(find ./go/pkg -type f -name "*.go") && \
 	${GO_ENV} $(BIN)/goimports -local "github.com/tusmasoma/pkg" -w $${FILES} && \
 	${GO_ENV} $(BIN)/gofumpt -l -w $${FILES};
 endif
@@ -135,16 +139,13 @@ endif
 # proto: generate proto files
 .PHONY: proto_gen
 proto_gen: proto_tools
-	@for service in $(SERVICES); do \
-		if [ "$$service" != "gateway" ]; then \
-			echo "Running proto_gen for service: $$service"; \
-			(cd proto/$$service && \
-			protoc --go_out=. --go_opt=paths=source_relative \
-			       --go-grpc_out=. --go-grpc_opt=paths=source_relative \
-			       ./$$service.proto); \
-		else \
-			echo "Skipping proto_gen for gateway"; \
-		fi \
+	@for service in $(PROTOS); do \
+		echo "Running proto_gen for service: $$service"; \
+		protoc --proto_path=. \
+			--proto_path=${GOPATH}/pkg/mod/github.com/gogo/protobuf@v1.3.2 \
+			--go_out=. --go_opt=paths=source_relative \
+			--go-grpc_out=. --go-grpc_opt=paths=source_relative \
+			./proto/$$service/*.proto; \
 	done
 
 # .PHONY: generate

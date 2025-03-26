@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.28.1
 // 	protoc        v5.29.2
-// source: customer.proto
+// source: proto/customer/customer.proto
 
 package customer
 
@@ -20,185 +20,6 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type GetCustomerRequest struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-}
-
-func (x *GetCustomerRequest) Reset() {
-	*x = GetCustomerRequest{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_customer_proto_msgTypes[0]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *GetCustomerRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*GetCustomerRequest) ProtoMessage() {}
-
-func (x *GetCustomerRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_customer_proto_msgTypes[0]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use GetCustomerRequest.ProtoReflect.Descriptor instead.
-func (*GetCustomerRequest) Descriptor() ([]byte, []int) {
-	return file_customer_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *GetCustomerRequest) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
-type GetCustomerResponse struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Customer *Customer `protobuf:"bytes,1,opt,name=customer,proto3" json:"customer,omitempty"`
-}
-
-func (x *GetCustomerResponse) Reset() {
-	*x = GetCustomerResponse{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_customer_proto_msgTypes[1]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *GetCustomerResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*GetCustomerResponse) ProtoMessage() {}
-
-func (x *GetCustomerResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_customer_proto_msgTypes[1]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use GetCustomerResponse.ProtoReflect.Descriptor instead.
-func (*GetCustomerResponse) Descriptor() ([]byte, []int) {
-	return file_customer_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *GetCustomerResponse) GetCustomer() *Customer {
-	if x != nil {
-		return x.Customer
-	}
-	return nil
-}
-
-type ListCustomersRequest struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *ListCustomersRequest) Reset() {
-	*x = ListCustomersRequest{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_customer_proto_msgTypes[2]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *ListCustomersRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ListCustomersRequest) ProtoMessage() {}
-
-func (x *ListCustomersRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_customer_proto_msgTypes[2]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ListCustomersRequest.ProtoReflect.Descriptor instead.
-func (*ListCustomersRequest) Descriptor() ([]byte, []int) {
-	return file_customer_proto_rawDescGZIP(), []int{2}
-}
-
-type ListCustomersResponse struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Customers []*Customer `protobuf:"bytes,1,rep,name=customers,proto3" json:"customers,omitempty"`
-}
-
-func (x *ListCustomersResponse) Reset() {
-	*x = ListCustomersResponse{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_customer_proto_msgTypes[3]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *ListCustomersResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ListCustomersResponse) ProtoMessage() {}
-
-func (x *ListCustomersResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_customer_proto_msgTypes[3]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ListCustomersResponse.ProtoReflect.Descriptor instead.
-func (*ListCustomersResponse) Descriptor() ([]byte, []int) {
-	return file_customer_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *ListCustomersResponse) GetCustomers() []*Customer {
-	if x != nil {
-		return x.Customers
-	}
-	return nil
-}
-
 type Customer struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -215,7 +36,7 @@ type Customer struct {
 func (x *Customer) Reset() {
 	*x = Customer{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_customer_proto_msgTypes[4]
+		mi := &file_proto_customer_customer_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -228,7 +49,7 @@ func (x *Customer) String() string {
 func (*Customer) ProtoMessage() {}
 
 func (x *Customer) ProtoReflect() protoreflect.Message {
-	mi := &file_customer_proto_msgTypes[4]
+	mi := &file_proto_customer_customer_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -241,7 +62,7 @@ func (x *Customer) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Customer.ProtoReflect.Descriptor instead.
 func (*Customer) Descriptor() ([]byte, []int) {
-	return file_customer_proto_rawDescGZIP(), []int{4}
+	return file_proto_customer_customer_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *Customer) GetId() string {
@@ -286,590 +107,56 @@ func (x *Customer) GetCountry() string {
 	return ""
 }
 
-type CreateCustomerRequest struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
+var File_proto_customer_customer_proto protoreflect.FileDescriptor
 
-	Name    string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Email   string `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
-	Street  string `protobuf:"bytes,3,opt,name=street,proto3" json:"street,omitempty"`
-	City    string `protobuf:"bytes,4,opt,name=city,proto3" json:"city,omitempty"`
-	Country string `protobuf:"bytes,5,opt,name=country,proto3" json:"country,omitempty"`
-}
-
-func (x *CreateCustomerRequest) Reset() {
-	*x = CreateCustomerRequest{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_customer_proto_msgTypes[5]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *CreateCustomerRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*CreateCustomerRequest) ProtoMessage() {}
-
-func (x *CreateCustomerRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_customer_proto_msgTypes[5]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use CreateCustomerRequest.ProtoReflect.Descriptor instead.
-func (*CreateCustomerRequest) Descriptor() ([]byte, []int) {
-	return file_customer_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *CreateCustomerRequest) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *CreateCustomerRequest) GetEmail() string {
-	if x != nil {
-		return x.Email
-	}
-	return ""
-}
-
-func (x *CreateCustomerRequest) GetStreet() string {
-	if x != nil {
-		return x.Street
-	}
-	return ""
-}
-
-func (x *CreateCustomerRequest) GetCity() string {
-	if x != nil {
-		return x.City
-	}
-	return ""
-}
-
-func (x *CreateCustomerRequest) GetCountry() string {
-	if x != nil {
-		return x.Country
-	}
-	return ""
-}
-
-type CreateCustomerResponse struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *CreateCustomerResponse) Reset() {
-	*x = CreateCustomerResponse{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_customer_proto_msgTypes[6]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *CreateCustomerResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*CreateCustomerResponse) ProtoMessage() {}
-
-func (x *CreateCustomerResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_customer_proto_msgTypes[6]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use CreateCustomerResponse.ProtoReflect.Descriptor instead.
-func (*CreateCustomerResponse) Descriptor() ([]byte, []int) {
-	return file_customer_proto_rawDescGZIP(), []int{6}
-}
-
-type UpdateCustomerRequest struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Id      string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name    string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Email   string `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
-	Street  string `protobuf:"bytes,4,opt,name=street,proto3" json:"street,omitempty"`
-	City    string `protobuf:"bytes,5,opt,name=city,proto3" json:"city,omitempty"`
-	Country string `protobuf:"bytes,6,opt,name=country,proto3" json:"country,omitempty"`
-}
-
-func (x *UpdateCustomerRequest) Reset() {
-	*x = UpdateCustomerRequest{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_customer_proto_msgTypes[7]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *UpdateCustomerRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*UpdateCustomerRequest) ProtoMessage() {}
-
-func (x *UpdateCustomerRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_customer_proto_msgTypes[7]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use UpdateCustomerRequest.ProtoReflect.Descriptor instead.
-func (*UpdateCustomerRequest) Descriptor() ([]byte, []int) {
-	return file_customer_proto_rawDescGZIP(), []int{7}
-}
-
-func (x *UpdateCustomerRequest) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
-func (x *UpdateCustomerRequest) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *UpdateCustomerRequest) GetEmail() string {
-	if x != nil {
-		return x.Email
-	}
-	return ""
-}
-
-func (x *UpdateCustomerRequest) GetStreet() string {
-	if x != nil {
-		return x.Street
-	}
-	return ""
-}
-
-func (x *UpdateCustomerRequest) GetCity() string {
-	if x != nil {
-		return x.City
-	}
-	return ""
-}
-
-func (x *UpdateCustomerRequest) GetCountry() string {
-	if x != nil {
-		return x.Country
-	}
-	return ""
-}
-
-type UpdateCustomerResponse struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *UpdateCustomerResponse) Reset() {
-	*x = UpdateCustomerResponse{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_customer_proto_msgTypes[8]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *UpdateCustomerResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*UpdateCustomerResponse) ProtoMessage() {}
-
-func (x *UpdateCustomerResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_customer_proto_msgTypes[8]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use UpdateCustomerResponse.ProtoReflect.Descriptor instead.
-func (*UpdateCustomerResponse) Descriptor() ([]byte, []int) {
-	return file_customer_proto_rawDescGZIP(), []int{8}
-}
-
-type DeleteCustomerRequest struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-}
-
-func (x *DeleteCustomerRequest) Reset() {
-	*x = DeleteCustomerRequest{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_customer_proto_msgTypes[9]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *DeleteCustomerRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*DeleteCustomerRequest) ProtoMessage() {}
-
-func (x *DeleteCustomerRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_customer_proto_msgTypes[9]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use DeleteCustomerRequest.ProtoReflect.Descriptor instead.
-func (*DeleteCustomerRequest) Descriptor() ([]byte, []int) {
-	return file_customer_proto_rawDescGZIP(), []int{9}
-}
-
-func (x *DeleteCustomerRequest) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
-type DeleteCustomerResponse struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *DeleteCustomerResponse) Reset() {
-	*x = DeleteCustomerResponse{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_customer_proto_msgTypes[10]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *DeleteCustomerResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*DeleteCustomerResponse) ProtoMessage() {}
-
-func (x *DeleteCustomerResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_customer_proto_msgTypes[10]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use DeleteCustomerResponse.ProtoReflect.Descriptor instead.
-func (*DeleteCustomerResponse) Descriptor() ([]byte, []int) {
-	return file_customer_proto_rawDescGZIP(), []int{10}
-}
-
-var File_customer_proto protoreflect.FileDescriptor
-
-var file_customer_proto_rawDesc = []byte{
-	0x0a, 0x0e, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x12, 0x08, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x22, 0x24, 0x0a, 0x12, 0x47, 0x65,
-	0x74, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64,
-	0x22, 0x45, 0x0a, 0x13, 0x47, 0x65, 0x74, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2e, 0x0a, 0x08, 0x63, 0x75, 0x73, 0x74, 0x6f,
-	0x6d, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x12, 0x2e, 0x63, 0x75, 0x73, 0x74,
-	0x6f, 0x6d, 0x65, 0x72, 0x2e, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52, 0x08, 0x63,
-	0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x22, 0x16, 0x0a, 0x14, 0x4c, 0x69, 0x73, 0x74, 0x43,
-	0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22,
-	0x49, 0x0a, 0x15, 0x4c, 0x69, 0x73, 0x74, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x73,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x30, 0x0a, 0x09, 0x63, 0x75, 0x73, 0x74,
-	0x6f, 0x6d, 0x65, 0x72, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x12, 0x2e, 0x63, 0x75,
-	0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x2e, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52,
-	0x09, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x73, 0x22, 0x8a, 0x01, 0x0a, 0x08, 0x43,
-	0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18,
-	0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x65,
-	0x6d, 0x61, 0x69, 0x6c, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x65, 0x6d, 0x61, 0x69,
-	0x6c, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x74, 0x72, 0x65, 0x65, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x06, 0x73, 0x74, 0x72, 0x65, 0x65, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x63, 0x69, 0x74,
-	0x79, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x63, 0x69, 0x74, 0x79, 0x12, 0x18, 0x0a,
-	0x07, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x72, 0x79, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07,
-	0x63, 0x6f, 0x75, 0x6e, 0x74, 0x72, 0x79, 0x22, 0x87, 0x01, 0x0a, 0x15, 0x43, 0x72, 0x65, 0x61,
-	0x74, 0x65, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x12, 0x16, 0x0a, 0x06, 0x73,
-	0x74, 0x72, 0x65, 0x65, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x74, 0x72,
-	0x65, 0x65, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x63, 0x69, 0x74, 0x79, 0x18, 0x04, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x04, 0x63, 0x69, 0x74, 0x79, 0x12, 0x18, 0x0a, 0x07, 0x63, 0x6f, 0x75, 0x6e, 0x74,
-	0x72, 0x79, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x72,
-	0x79, 0x22, 0x18, 0x0a, 0x16, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x75, 0x73, 0x74, 0x6f,
-	0x6d, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x97, 0x01, 0x0a, 0x15,
-	0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x65, 0x6d, 0x61,
-	0x69, 0x6c, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x12,
-	0x16, 0x0a, 0x06, 0x73, 0x74, 0x72, 0x65, 0x65, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x06, 0x73, 0x74, 0x72, 0x65, 0x65, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x63, 0x69, 0x74, 0x79, 0x18,
-	0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x63, 0x69, 0x74, 0x79, 0x12, 0x18, 0x0a, 0x07, 0x63,
-	0x6f, 0x75, 0x6e, 0x74, 0x72, 0x79, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x63, 0x6f,
-	0x75, 0x6e, 0x74, 0x72, 0x79, 0x22, 0x18, 0x0a, 0x16, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x43,
-	0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
-	0x27, 0x0a, 0x15, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65,
-	0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x22, 0x18, 0x0a, 0x16, 0x44, 0x65, 0x6c, 0x65,
-	0x74, 0x65, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x32, 0xae, 0x03, 0x0a, 0x0f, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x53,
-	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x4a, 0x0a, 0x0b, 0x47, 0x65, 0x74, 0x43, 0x75, 0x73,
-	0x74, 0x6f, 0x6d, 0x65, 0x72, 0x12, 0x1c, 0x2e, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72,
-	0x2e, 0x47, 0x65, 0x74, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x2e, 0x47,
-	0x65, 0x74, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x12, 0x50, 0x0a, 0x0d, 0x4c, 0x69, 0x73, 0x74, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d,
-	0x65, 0x72, 0x73, 0x12, 0x1e, 0x2e, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x2e, 0x4c,
-	0x69, 0x73, 0x74, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x73, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x1a, 0x1f, 0x2e, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x2e, 0x4c,
-	0x69, 0x73, 0x74, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x73, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x53, 0x0a, 0x0e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x75,
-	0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x12, 0x1f, 0x2e, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65,
-	0x72, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x20, 0x2e, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d,
-	0x65, 0x72, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65,
-	0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x53, 0x0a, 0x0e, 0x55, 0x70, 0x64,
-	0x61, 0x74, 0x65, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x12, 0x1f, 0x2e, 0x63, 0x75,
-	0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x43, 0x75, 0x73,
-	0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x20, 0x2e, 0x63,
-	0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x43, 0x75,
-	0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x53,
-	0x0a, 0x0e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72,
-	0x12, 0x1f, 0x2e, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x2e, 0x44, 0x65, 0x6c, 0x65,
-	0x74, 0x65, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x1a, 0x20, 0x2e, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x2e, 0x44, 0x65, 0x6c,
-	0x65, 0x74, 0x65, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x42, 0x10, 0x5a, 0x0e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x63, 0x75, 0x73,
-	0x74, 0x6f, 0x6d, 0x65, 0x72, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+var file_proto_customer_customer_proto_rawDesc = []byte{
+	0x0a, 0x1d, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72,
+	0x2f, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12,
+	0x08, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x22, 0x8a, 0x01, 0x0a, 0x08, 0x43, 0x75,
+	0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x65, 0x6d,
+	0x61, 0x69, 0x6c, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c,
+	0x12, 0x16, 0x0a, 0x06, 0x73, 0x74, 0x72, 0x65, 0x65, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x06, 0x73, 0x74, 0x72, 0x65, 0x65, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x63, 0x69, 0x74, 0x79,
+	0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x63, 0x69, 0x74, 0x79, 0x12, 0x18, 0x0a, 0x07,
+	0x63, 0x6f, 0x75, 0x6e, 0x74, 0x72, 0x79, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x63,
+	0x6f, 0x75, 0x6e, 0x74, 0x72, 0x79, 0x42, 0x10, 0x5a, 0x0e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f,
+	0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
-	file_customer_proto_rawDescOnce sync.Once
-	file_customer_proto_rawDescData = file_customer_proto_rawDesc
+	file_proto_customer_customer_proto_rawDescOnce sync.Once
+	file_proto_customer_customer_proto_rawDescData = file_proto_customer_customer_proto_rawDesc
 )
 
-func file_customer_proto_rawDescGZIP() []byte {
-	file_customer_proto_rawDescOnce.Do(func() {
-		file_customer_proto_rawDescData = protoimpl.X.CompressGZIP(file_customer_proto_rawDescData)
+func file_proto_customer_customer_proto_rawDescGZIP() []byte {
+	file_proto_customer_customer_proto_rawDescOnce.Do(func() {
+		file_proto_customer_customer_proto_rawDescData = protoimpl.X.CompressGZIP(file_proto_customer_customer_proto_rawDescData)
 	})
-	return file_customer_proto_rawDescData
+	return file_proto_customer_customer_proto_rawDescData
 }
 
-var file_customer_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
-var file_customer_proto_goTypes = []interface{}{
-	(*GetCustomerRequest)(nil),     // 0: customer.GetCustomerRequest
-	(*GetCustomerResponse)(nil),    // 1: customer.GetCustomerResponse
-	(*ListCustomersRequest)(nil),   // 2: customer.ListCustomersRequest
-	(*ListCustomersResponse)(nil),  // 3: customer.ListCustomersResponse
-	(*Customer)(nil),               // 4: customer.Customer
-	(*CreateCustomerRequest)(nil),  // 5: customer.CreateCustomerRequest
-	(*CreateCustomerResponse)(nil), // 6: customer.CreateCustomerResponse
-	(*UpdateCustomerRequest)(nil),  // 7: customer.UpdateCustomerRequest
-	(*UpdateCustomerResponse)(nil), // 8: customer.UpdateCustomerResponse
-	(*DeleteCustomerRequest)(nil),  // 9: customer.DeleteCustomerRequest
-	(*DeleteCustomerResponse)(nil), // 10: customer.DeleteCustomerResponse
+var file_proto_customer_customer_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_proto_customer_customer_proto_goTypes = []interface{}{
+	(*Customer)(nil), // 0: customer.Customer
 }
-var file_customer_proto_depIdxs = []int32{
-	4,  // 0: customer.GetCustomerResponse.customer:type_name -> customer.Customer
-	4,  // 1: customer.ListCustomersResponse.customers:type_name -> customer.Customer
-	0,  // 2: customer.CustomerService.GetCustomer:input_type -> customer.GetCustomerRequest
-	2,  // 3: customer.CustomerService.ListCustomers:input_type -> customer.ListCustomersRequest
-	5,  // 4: customer.CustomerService.CreateCustomer:input_type -> customer.CreateCustomerRequest
-	7,  // 5: customer.CustomerService.UpdateCustomer:input_type -> customer.UpdateCustomerRequest
-	9,  // 6: customer.CustomerService.DeleteCustomer:input_type -> customer.DeleteCustomerRequest
-	1,  // 7: customer.CustomerService.GetCustomer:output_type -> customer.GetCustomerResponse
-	3,  // 8: customer.CustomerService.ListCustomers:output_type -> customer.ListCustomersResponse
-	6,  // 9: customer.CustomerService.CreateCustomer:output_type -> customer.CreateCustomerResponse
-	8,  // 10: customer.CustomerService.UpdateCustomer:output_type -> customer.UpdateCustomerResponse
-	10, // 11: customer.CustomerService.DeleteCustomer:output_type -> customer.DeleteCustomerResponse
-	7,  // [7:12] is the sub-list for method output_type
-	2,  // [2:7] is the sub-list for method input_type
-	2,  // [2:2] is the sub-list for extension type_name
-	2,  // [2:2] is the sub-list for extension extendee
-	0,  // [0:2] is the sub-list for field type_name
+var file_proto_customer_customer_proto_depIdxs = []int32{
+	0, // [0:0] is the sub-list for method output_type
+	0, // [0:0] is the sub-list for method input_type
+	0, // [0:0] is the sub-list for extension type_name
+	0, // [0:0] is the sub-list for extension extendee
+	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_customer_proto_init() }
-func file_customer_proto_init() {
-	if File_customer_proto != nil {
+func init() { file_proto_customer_customer_proto_init() }
+func file_proto_customer_customer_proto_init() {
+	if File_proto_customer_customer_proto != nil {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_customer_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetCustomerRequest); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_customer_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetCustomerResponse); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_customer_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListCustomersRequest); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_customer_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListCustomersResponse); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_customer_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+		file_proto_customer_customer_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Customer); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_customer_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateCustomerRequest); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_customer_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateCustomerResponse); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_customer_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateCustomerRequest); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_customer_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateCustomerResponse); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_customer_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteCustomerRequest); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_customer_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteCustomerResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -885,18 +172,18 @@ func file_customer_proto_init() {
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_customer_proto_rawDesc,
+			RawDescriptor: file_proto_customer_customer_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   11,
+			NumMessages:   1,
 			NumExtensions: 0,
-			NumServices:   1,
+			NumServices:   0,
 		},
-		GoTypes:           file_customer_proto_goTypes,
-		DependencyIndexes: file_customer_proto_depIdxs,
-		MessageInfos:      file_customer_proto_msgTypes,
+		GoTypes:           file_proto_customer_customer_proto_goTypes,
+		DependencyIndexes: file_proto_customer_customer_proto_depIdxs,
+		MessageInfos:      file_proto_customer_customer_proto_msgTypes,
 	}.Build()
-	File_customer_proto = out.File
-	file_customer_proto_rawDesc = nil
-	file_customer_proto_goTypes = nil
-	file_customer_proto_depIdxs = nil
+	File_proto_customer_customer_proto = out.File
+	file_proto_customer_customer_proto_rawDesc = nil
+	file_proto_customer_customer_proto_goTypes = nil
+	file_proto_customer_customer_proto_depIdxs = nil
 }

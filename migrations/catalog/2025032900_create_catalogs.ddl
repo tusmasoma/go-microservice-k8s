@@ -1,0 +1,5 @@
+CREATE TABLE CatalogItems (
+    id CHAR(36) PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL
+);

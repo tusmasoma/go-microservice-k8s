@@ -1,26 +1,25 @@
-# Makefile
-
-# 各サービスのパス設定（リポジトリ直下にディレクトリがある場合）
 SERVICE_PATH_PREFIX := .
 SERVICES := catalog customer order
 
-# MySQL の設定
-DB_NAME   := test_db
 DB_USER   := root
 DB_PASS   := root
 CONTAINER := mysql_test
 
 .PHONY: all start migrate dump stop clean
 
-# 全体実行: コンテナ起動 → 差分検知を元にマイグレーション実行 → 最終DDLダンプ
+# 全体実行: コンテナ起動 → 差分検知を元にマイグレーション実行 → 各サービスの最終DDLダンプ
 all: start migrate dump
 
-# 1. DockerでMySQLコンテナを起動
+# 1. DockerでMySQLコンテナを起動し、各サービス用のデータベースを作成
 start:
 	@echo "Starting MySQL Docker container..."
-	docker run --name $(CONTAINER) -e MYSQL_ROOT_PASSWORD=$(DB_PASS) -e MYSQL_DATABASE=$(DB_NAME) -p 3306:3306 -d mysql:latest
+	docker run --name $(CONTAINER) -e MYSQL_ROOT_PASSWORD=$(DB_PASS) -p 3306:3306 -d mysql:latest
 	@echo "Waiting for MySQL to be ready..."
 	@sleep 20
+	@for service in $(SERVICES); do \
+	    echo "Creating database $$service..."; \
+	    docker exec -i $(CONTAINER) mysql -u$(DB_USER) -p$(DB_PASS) -e "CREATE DATABASE IF NOT EXISTS \`$$service\`;"; \
+	done
 
 # 2. Gitの差分検知で、変更のあったサービスのみマイグレーション実行
 migrate:
@@ -41,7 +40,7 @@ dump:
 	@echo "Dumping schemas for each service..."
 	@for service in $(SERVICES); do \
 	    echo "Dumping schema for $$service to $(SERVICE_PATH_PREFIX)/$$service/$$service.ddl..."; \
-	    docker exec $(CONTAINER) mysqldump -u$(DB_USER) -p$(DB_PASS) --no-data $$service > $(SERVICE_PATH_PREFIX)/$$service/$$service.ddl; \
+	    docker exec $(CONTAINER) mysqldump -u$(DB_USER) -p$(DB_PASS) --no-create-db --no-data $$service > $(SERVICE_PATH_PREFIX)/$$service/$$service.ddl; \
 	done
 	@echo "Schema dump completed."
 
@@ -49,7 +48,7 @@ dump:
 stop:
 	@echo "Stopping and removing Docker container..."
 	docker stop $(CONTAINER)
-	docker rm $(CONTAINER)
+	docker rm -v $(CONTAINER)
 
 # クリーンアップ：コンテナ停止＋生成ファイルの削除
 clean: stop
@@ -64,8 +63,8 @@ _migrate() { \
   if [ -n "$$(git diff --name-only origin/main -- $(SERVICE_PATH_PREFIX)/$$1)" ]; then \
       echo "Differences detected in $$1"; \
       for file in $$(ls $(SERVICE_PATH_PREFIX)/$$1/*.ddl | sort); do \
-          echo "Applying $$file..."; \
-          docker exec -i $(CONTAINER) mysql -u$(DB_USER) -p$(DB_PASS) $(DB_NAME) < $$file; \
+          echo "Applying $$file to database $$1..."; \
+          docker exec -i $(CONTAINER) mysql -u$(DB_USER) -p$(DB_PASS) -D$$1 < $$file; \
       done; \
   else \
       echo "No migration differences in $$1"; \

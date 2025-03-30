@@ -1,0 +1,75 @@
+# Makefile
+
+# 各サービスのパス設定（リポジトリ直下にディレクトリがある場合）
+SERVICE_PATH_PREFIX := .
+SERVICES := catalog customer order
+
+# MySQL の設定
+DB_NAME   := test_db
+DB_USER   := root
+DB_PASS   := root
+CONTAINER := mysql_test
+
+.PHONY: all start migrate dump stop clean
+
+# 全体実行: コンテナ起動 → 差分検知を元にマイグレーション実行 → 最終DDLダンプ
+all: start migrate dump
+
+# 1. DockerでMySQLコンテナを起動
+start:
+	@echo "Starting MySQL Docker container..."
+	docker run --name $(CONTAINER) -e MYSQL_ROOT_PASSWORD=$(DB_PASS) -e MYSQL_DATABASE=$(DB_NAME) -p 3306:3306 -d mysql:latest
+	@echo "Waiting for MySQL to be ready..."
+	@sleep 20
+
+# 2. Gitの差分検知で、変更のあったサービスのみマイグレーション実行
+migrate:
+ifdef SERVICE
+	@echo "Migrating for service: $(SERVICE)"; \
+	$(MIGRATE_FUNC); \
+	_migrate $(SERVICE)
+else
+	@for service in $(SERVICES); do \
+	    echo "Migrating for service: $$service"; \
+	    $(MIGRATE_FUNC); \
+	    _migrate $$service; \
+	done
+endif
+
+# 3. 各サービスごとに mysqldump でスキーマのみをダンプし、各ディレクトリの [service].ddl に出力
+dump:
+	@echo "Dumping schemas for each service..."
+	@for service in $(SERVICES); do \
+	    echo "Dumping schema for $$service to $(SERVICE_PATH_PREFIX)/$$service/$$service.ddl..."; \
+	    docker exec $(CONTAINER) mysqldump -u$(DB_USER) -p$(DB_PASS) --no-data $$service > $(SERVICE_PATH_PREFIX)/$$service/$$service.ddl; \
+	done
+	@echo "Schema dump completed."
+
+# コンテナの停止と削除
+stop:
+	@echo "Stopping and removing Docker container..."
+	docker stop $(CONTAINER)
+	docker rm $(CONTAINER)
+
+# クリーンアップ：コンテナ停止＋生成ファイルの削除
+clean: stop
+	@echo "Cleaning up generated dump files..."
+	@for service in $(SERVICES); do \
+	    rm -f $(SERVICE_PATH_PREFIX)/$$service/$$service.ddl; \
+	done
+
+define MIGRATE_FUNC
+_migrate() { \
+  echo "Running migration for service: $$1"; \
+  if [ -n "$$(git diff --name-only origin/main -- $(SERVICE_PATH_PREFIX)/$$1)" ]; then \
+      echo "Differences detected in $$1"; \
+      for file in $$(ls $(SERVICE_PATH_PREFIX)/$$1/*.ddl | sort); do \
+          echo "Applying $$file..."; \
+          docker exec -i $(CONTAINER) mysql -u$(DB_USER) -p$(DB_PASS) $(DB_NAME) < $$file; \
+      done; \
+  else \
+      echo "No migration differences in $$1"; \
+  fi; \
+}
+endef
+export MIGRATE_FUNC

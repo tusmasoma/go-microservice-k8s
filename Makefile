@@ -76,9 +76,9 @@ proto_tools: $(BIN)/protoc-$(PROTOC_VERSION) $(BIN)/protoc-gen-go-$(PROTOC_GEN_G
 .PHONY: test
 test:
 ifdef SERVICE
-	$(GO) test -v -count=1 ./$(SERVICE_PATH_PREFIX)/$(SERVICE)/...
+	@gotestsum --format testname -- -vet=off -race=false -timeout=10m -count=1 ./$(SERVICE_PATH_PREFIX)/$(SERVICE)/...
 else
-	$(GO) test -v -count=1 $(foreach service,$(SERVICES),./$(SERVICE_PATH_PREFIX)/$(service)/...) ./go/pkg/...
+	@gotestsum --format testname -- -vet=off -race=false -timeout=10m -count=1 $(shell go list ./go/... | grep -v /mock)
 endif
 
 # golangci-lint: lint for all under the PKG

@@ -7,8 +7,8 @@ CONTAINER := mysql_test
 
 .PHONY: all start migrate dump stop clean
 
-# 全体実行: コンテナ起動 → 差分検知を元にマイグレーション実行 → 各サービスの最終DDLダンプ
-all: start migrate dump
+# 全体実行: 初期化 → コンテナ起動 → 差分検知を元にマイグレーション実行 → 各サービスの最終DDLダンプ
+gen: clean start migrate dump
 
 # 1. DockerでMySQLコンテナを起動し、各サービス用のデータベースを作成
 start:

@@ -40,7 +40,8 @@ dump:
 	@echo "Dumping schemas for each service..."
 	@for service in $(SERVICES); do \
 	    echo "Dumping schema for $$service to $(SERVICE_PATH_PREFIX)/$$service/$$service.ddl..."; \
-	    docker exec $(CONTAINER) mysqldump -u$(DB_USER) -p$(DB_PASS) --no-create-db --no-data $$service > $(SERVICE_PATH_PREFIX)/$$service/$$service.ddl; \
+	    docker exec $(CONTAINER) mysqldump -u$(DB_USER) -p$(DB_PASS) --no-data --compact --skip-comments --skip-set-charset $$service | \
+	    sed '/^DROP TABLE/d' | sed '/^\/\*/d' | sed '/^--/d' | sed 's/ ENGINE=.*$$//' | sed 's/ DEFAULT CHARSET=.*$$//' | sed 's/`//g' > $(SERVICE_PATH_PREFIX)/$$service/$$service.ddl; \
 	done
 	@echo "Schema dump completed."
 

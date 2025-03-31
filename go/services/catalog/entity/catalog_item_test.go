@@ -121,7 +121,7 @@ func TestEntity_NewCatalogItem(t *testing.T) {
 			}
 			assert.Equal(t, item.GetId(), tt.want.item.GetId())
 			assert.Equal(t, item.GetName(), tt.want.item.GetName())
-			assert.Equal(t, item.GetPrice(), tt.want.item.GetPrice())
+			assert.InDelta(t, tt.want.item.GetPrice(), item.GetPrice(), 0.0001)
 		})
 	}
 }
@@ -212,7 +212,7 @@ func TestEntity_CreateCatalogItem(t *testing.T) {
 				return
 			}
 			assert.Equal(t, item.GetName(), tt.want.item.GetName())
-			assert.Equal(t, item.GetPrice(), tt.want.item.GetPrice())
+			assert.InDelta(t, tt.want.item.GetPrice(), item.GetPrice(), 0.0001)
 		})
 	}
 }

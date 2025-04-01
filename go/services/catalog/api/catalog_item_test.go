@@ -1,493 +1,332 @@
 package api
 
-// const bufSize = 1024 * 1024
+import (
+	"context"
+	"errors"
+	"testing"
 
-// func setupTestServer(t *testing.T, setup func(m *mock.MockCatalogItemUseCase)) (pb.CatalogServiceClient, func()) {
-// 	t.Helper()
+	"github.com/golang/mock/gomock"
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
+	"github.com/tusmasoma/go-microservice-k8s/go/services/catalog/database"
+	dbmock "github.com/tusmasoma/go-microservice-k8s/go/services/catalog/database/mock"
+	"github.com/tusmasoma/go-microservice-k8s/go/services/catalog/entity"
+	"github.com/tusmasoma/go-microservice-k8s/proto/catalog"
+)
 
-// 	ctrl := gomock.NewController(t)
-// 	cuc := mock.NewMockCatalogItemUseCase(ctrl)
+func Test_GetCatalogItem(t *testing.T) {
+	t.Parallel()
+	id := uuid.NewString()
+	errmock := errors.New("errors")
+	ctx := context.Background()
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	db := dbmock.NewMockCatalogItem(ctrl)
+	gomock.InOrder(
+		db.EXPECT().Get(ctx, id).Return(nil, errmock),
+		db.EXPECT().Get(ctx, id).Return(
+			&entity.CatalogItem{
+				CatalogItem: catalog.CatalogItem{
+					Id:    id,
+					Name:  "item",
+					Price: 100,
+				},
+			}, nil),
+	)
+	service := &catalogService{
+		db: &database.Database{
+			CatalogItem: db,
+		},
+	}
+	// bad request
+	req := &catalog.GetCatalogItemRequest{}
+	_, err := service.GetCatalogItem(ctx, req)
+	assert.Error(t, err)
+	// db error
+	req.Id = id
+	resp, err := service.GetCatalogItem(ctx, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	// success
+	resp, err = service.GetCatalogItem(ctx, req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+}
 
-// 	if setup != nil {
-// 		setup(cuc)
-// 	}
+func Test_ListCatalogItemsByName(t *testing.T) {
+	t.Parallel()
+	name := "item"
+	errmock := errors.New("errors")
+	ctx := context.Background()
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	db := dbmock.NewMockCatalogItem(ctrl)
+	gomock.InOrder(
+		db.EXPECT().ListByName(ctx, name).Return(nil, errmock),
+		db.EXPECT().ListByName(ctx, name).Return(
+			entity.CatalogItems{
+				&entity.CatalogItem{
+					CatalogItem: catalog.CatalogItem{
+						Id:    uuid.NewString(),
+						Name:  "item",
+						Price: 100,
+					},
+				},
+			}, nil),
+	)
+	service := &catalogService{
+		db: &database.Database{
+			CatalogItem: db,
+		},
+	}
+	// bad request
+	req := &catalog.ListCatalogItemsByNameRequest{}
+	_, err := service.ListCatalogItemsByName(ctx, req)
+	assert.Error(t, err)
+	// db error
+	req.Name = name
+	resp, err := service.ListCatalogItemsByName(ctx, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	// success
+	resp, err = service.ListCatalogItemsByName(ctx, req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+}
 
-// 	handler := NewCatalogItemHandler(cuc)
+func Test_ListCatalogItemsByIDs(t *testing.T) {
+	t.Parallel()
+	id := uuid.NewString()
+	ids := []string{id}
+	errmock := errors.New("errors")
+	ctx := context.Background()
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	db := dbmock.NewMockCatalogItem(ctrl)
+	gomock.InOrder(
+		db.EXPECT().ListByIDs(ctx, ids).Return(nil, errmock),
+		db.EXPECT().ListByIDs(ctx, ids).Return(
+			entity.CatalogItems{
+				&entity.CatalogItem{
+					CatalogItem: catalog.CatalogItem{
+						Id:    id,
+						Name:  "item",
+						Price: 100,
+					},
+				},
+			}, nil),
+	)
+	service := &catalogService{
+		db: &database.Database{
+			CatalogItem: db,
+		},
+	}
+	// bad request
+	req := &catalog.ListCatalogItemsByIDsRequest{}
+	_, err := service.ListCatalogItemsByIDs(ctx, req)
+	assert.Error(t, err)
+	// db error
+	req.Ids = ids
+	resp, err := service.ListCatalogItemsByIDs(ctx, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	// success
+	resp, err = service.ListCatalogItemsByIDs(ctx, req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+}
 
-// 	lis := bufconn.Listen(bufSize)
-// 	s := grpc.NewServer()
-// 	pb.RegisterCatalogServiceServer(s, handler)
+func Test_ListCatalogItems(t *testing.T) {
+	t.Parallel()
+	errmock := errors.New("errors")
+	ctx := context.Background()
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	db := dbmock.NewMockCatalogItem(ctrl)
+	gomock.InOrder(
+		db.EXPECT().List(ctx).Return(nil, errmock),
+		db.EXPECT().List(ctx).Return(
+			entity.CatalogItems{
+				&entity.CatalogItem{
+					CatalogItem: catalog.CatalogItem{
+						Id:    uuid.NewString(),
+						Name:  "item",
+						Price: 100,
+					},
+				},
+			}, nil),
+	)
+	service := &catalogService{
+		db: &database.Database{
+			CatalogItem: db,
+		},
+	}
+	// db error
+	req := &catalog.ListCatalogItemsRequest{}
+	resp, err := service.ListCatalogItems(ctx, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	// success
+	resp, err = service.ListCatalogItems(ctx, req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+}
 
-// 	go func() {
-// 		if err := s.Serve(lis); err != nil && !errors.Is(err, grpc.ErrServerStopped) {
-// 			t.Errorf("failed to serve: %v", err)
-// 		}
-// 	}()
+func Test_CreateCatalogItem(t *testing.T) {
+	t.Parallel()
+	item := &entity.CatalogItem{
+		CatalogItem: catalog.CatalogItem{
+			Id:    uuid.NewString(),
+			Name:  "item",
+			Price: 100,
+		},
+	}
+	errmock := errors.New("errors")
+	ctx := context.Background()
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	db := dbmock.NewMockCatalogItem(ctrl)
+	gomock.InOrder(
+		db.EXPECT().Create(
+			gomock.Any(),
+			gomock.Any(),
+		).Do(func(_ context.Context, item *entity.CatalogItem) {
+			if item.GetName() != "item" {
+				t.Errorf("unexpected Name: got %v, want %v", item.GetName(), "item")
+			}
+			if item.GetPrice() != 100 {
+				t.Errorf("unexpected Price: got %v, want %v", item.GetPrice(), 100)
+			}
+		}).Return(errmock),
+		db.EXPECT().Create(
+			gomock.Any(),
+			gomock.Any(),
+		).Do(func(_ context.Context, item *entity.CatalogItem) {
+			if item.GetName() != "item" {
+				t.Errorf("unexpected Name: got %v, want %v", item.GetName(), "item")
+			}
+			if item.GetPrice() != 100 {
+				t.Errorf("unexpected Price: got %v, want %v", item.GetPrice(), 100)
+			}
+		}).Return(nil),
+	)
+	service := &catalogService{
+		db: &database.Database{
+			CatalogItem: db,
+		},
+	}
+	// bad request
+	req := &catalog.CreateCatalogItemRequest{}
+	_, err := service.CreateCatalogItem(ctx, req)
+	assert.Error(t, err)
+	// db error
+	req.Name = item.GetName()
+	req.Price = item.GetPrice()
+	resp, err := service.CreateCatalogItem(ctx, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	// success
+	resp, err = service.CreateCatalogItem(ctx, req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+}
 
-// 	conn, err := grpc.Dial("", grpc.WithContextDialer(func(_ context.Context, _ string) (net.Conn, error) { //nolint:staticcheck // ignore deprecation
-// 		return lis.Dial()
-// 	}), grpc.WithTransportCredentials(insecure.NewCredentials()))
-// 	if err != nil {
-// 		t.Fatalf("failed to dial: %v", err)
-// 	}
+func Test_UpdateCatalogItem(t *testing.T) {
+	t.Parallel()
+	id := uuid.NewString()
+	item := &entity.CatalogItem{
+		CatalogItem: catalog.CatalogItem{
+			Id:    id,
+			Name:  "item",
+			Price: 100,
+		},
+	}
+	errmock := errors.New("errors")
+	ctx := context.Background()
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	db := dbmock.NewMockCatalogItem(ctrl)
+	gomock.InOrder(
+		db.EXPECT().Get(ctx, id).Return(nil, errmock),
+		db.EXPECT().Get(ctx, id).Return(item, nil),
+		db.EXPECT().Update(
+			gomock.Any(),
+			gomock.Any(),
+		).Do(func(_ context.Context, item *entity.CatalogItem) {
+			if item.GetName() != "item" {
+				t.Errorf("unexpected Name: got %v, want %v", item.GetName(), "item")
+			}
+			if item.GetPrice() != 100 {
+				t.Errorf("unexpected Price: got %v, want %v", item.GetPrice(), 100)
+			}
+		}).Return(errmock),
+		db.EXPECT().Get(ctx, id).Return(item, nil),
+		db.EXPECT().Update(
+			gomock.Any(),
+			gomock.Any(),
+		).Do(func(_ context.Context, item *entity.CatalogItem) {
+			if item.GetName() != "item" {
+				t.Errorf("unexpected Name: got %v, want %v", item.GetName(), "item")
+			}
+			if item.GetPrice() != 100 {
+				t.Errorf("unexpected Price: got %v, want %v", item.GetPrice(), 100)
+			}
+		}).Return(nil),
+	)
+	service := &catalogService{
+		db: &database.Database{
+			CatalogItem: db,
+		},
+	}
+	// bad request
+	req := &catalog.UpdateCatalogItemRequest{}
+	_, err := service.UpdateCatalogItem(ctx, req)
+	assert.Error(t, err)
+	// db error (Get)
+	req.Id = item.GetId()
+	req.Name = item.GetName()
+	req.Price = item.GetPrice()
+	resp, err := service.UpdateCatalogItem(ctx, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	// db error (Update)
+	resp, err = service.UpdateCatalogItem(ctx, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	// success
+	resp, err = service.UpdateCatalogItem(ctx, req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+}
 
-// 	client := pb.NewCatalogServiceClient(conn)
-
-// 	cleanup := func() {
-// 		conn.Close()
-// 		s.Stop()
-// 	}
-
-// 	return client, cleanup
-// }
-
-// func TestHandler_GetCatalogItem(t *testing.T) {
-// 	t.Parallel()
-
-// 	itemID := uuid.New().String()
-
-// 	item := entity.CatalogItem{
-// 		ID:    itemID,
-// 		Name:  "item1",
-// 		Price: float64(100),
-// 	}
-
-// 	patterns := []struct {
-// 		name  string
-// 		setup func(
-// 			m *mock.MockCatalogItemUseCase,
-// 		)
-// 		request    *pb.GetCatalogItemRequest
-// 		wantStatus codes.Code
-// 	}{
-// 		{
-// 			name: "success",
-// 			setup: func(cuc *mock.MockCatalogItemUseCase) {
-// 				cuc.EXPECT().GetCatalogItem(
-// 					gomock.Any(),
-// 					itemID,
-// 				).Return(&item, nil)
-// 			},
-// 			request: &pb.GetCatalogItemRequest{
-// 				Id: itemID,
-// 			},
-// 			wantStatus: codes.OK,
-// 		},
-// 		{
-// 			name:       "Fail: invalid request of id is empty",
-// 			request:    &pb.GetCatalogItemRequest{Id: ""},
-// 			wantStatus: codes.InvalidArgument,
-// 		},
-// 	}
-
-// 	for _, tt := range patterns {
-// 		tt := tt
-// 		t.Run(tt.name, func(t *testing.T) {
-// 			t.Parallel()
-
-// 			client, cleanup := setupTestServer(t, tt.setup)
-// 			defer cleanup()
-
-// 			resp, err := client.GetCatalogItem(context.Background(), tt.request)
-// 			if status.Code(err) != tt.wantStatus {
-// 				t.Fatalf("handler returned wrong status code: got %v want %v", status.Code(err), tt.wantStatus)
-// 			}
-
-// 			if tt.wantStatus == codes.OK {
-// 				if resp.GetItem().GetId() != item.ID {
-// 					t.Fatalf("handler returned wrong item data")
-// 				}
-// 			}
-// 		})
-// 	}
-// }
-
-// func TestHandler_ListCatalogItemsByName(t *testing.T) {
-// 	t.Parallel()
-
-// 	items := []entity.CatalogItem{
-// 		{
-// 			ID:    uuid.New().String(),
-// 			Name:  "item1",
-// 			Price: float64(100),
-// 		},
-// 		{
-// 			ID:    uuid.New().String(),
-// 			Name:  "item2",
-// 			Price: float64(200),
-// 		},
-// 	}
-
-// 	patterns := []struct {
-// 		name  string
-// 		setup func(
-// 			m *mock.MockCatalogItemUseCase,
-// 		)
-// 		request    *pb.ListCatalogItemsByNameRequest
-// 		wantStatus codes.Code
-// 	}{
-// 		{
-// 			name: "success",
-// 			setup: func(cuc *mock.MockCatalogItemUseCase) {
-// 				cuc.EXPECT().ListCatalogItemsByName(
-// 					gomock.Any(),
-// 					"item",
-// 				).Return(items, nil)
-// 			},
-// 			request: &pb.ListCatalogItemsByNameRequest{
-// 				Name: "item",
-// 			},
-// 			wantStatus: codes.OK,
-// 		},
-// 		{
-// 			name:       "Fail: invalid request of name is empty",
-// 			request:    &pb.ListCatalogItemsByNameRequest{Name: ""},
-// 			wantStatus: codes.InvalidArgument,
-// 		},
-// 	}
-
-// 	for _, tt := range patterns {
-// 		tt := tt
-// 		t.Run(tt.name, func(t *testing.T) {
-// 			t.Parallel()
-
-// 			client, cleanup := setupTestServer(t, tt.setup)
-// 			defer cleanup()
-
-// 			resp, err := client.ListCatalogItemsByName(context.Background(), tt.request)
-// 			if status.Code(err) != tt.wantStatus {
-// 				t.Fatalf("handler returned wrong status code: got %v want %v", status.Code(err), tt.wantStatus)
-// 			}
-
-// 			if tt.wantStatus == codes.OK {
-// 				if len(resp.GetItems()) != len(items) {
-// 					t.Fatalf("handler returned wrong item data")
-// 				}
-// 			}
-// 		})
-// 	}
-// }
-
-// func TestHandler_ListCatalogItemsByIDs(t *testing.T) {
-// 	t.Parallel()
-
-// 	items := []entity.CatalogItem{
-// 		{
-// 			ID:    uuid.New().String(),
-// 			Name:  "item1",
-// 			Price: float64(100),
-// 		},
-// 		{
-// 			ID:    uuid.New().String(),
-// 			Name:  "item2",
-// 			Price: float64(200),
-// 		},
-// 	}
-
-// 	patterns := []struct {
-// 		name  string
-// 		setup func(
-// 			m *mock.MockCatalogItemUseCase,
-// 		)
-// 		request    *pb.ListCatalogItemsByIDsRequest
-// 		wantStatus codes.Code
-// 	}{
-// 		{
-// 			name: "success",
-// 			setup: func(tuc *mock.MockCatalogItemUseCase) {
-// 				tuc.EXPECT().ListCatalogItemsByIDs(
-// 					gomock.Any(),
-// 					[]string{items[0].ID, items[1].ID},
-// 				).Return(items, nil)
-// 			},
-// 			request: &pb.ListCatalogItemsByIDsRequest{
-// 				Ids: []string{items[0].ID, items[1].ID},
-// 			},
-// 			wantStatus: codes.OK,
-// 		},
-// 		{
-// 			name:       "Fail: invalid request of ids is empty",
-// 			request:    &pb.ListCatalogItemsByIDsRequest{Ids: []string{}},
-// 			wantStatus: codes.InvalidArgument,
-// 		},
-// 	}
-
-// 	for _, tt := range patterns {
-// 		tt := tt
-// 		t.Run(tt.name, func(t *testing.T) {
-// 			t.Parallel()
-
-// 			client, cleanup := setupTestServer(t, tt.setup)
-// 			defer cleanup()
-
-// 			resp, err := client.ListCatalogItemsByIDs(context.Background(), tt.request)
-// 			if status.Code(err) != tt.wantStatus {
-// 				t.Fatalf("handler returned wrong status code: got %v want %v", status.Code(err), tt.wantStatus)
-// 			}
-
-// 			if tt.wantStatus == codes.OK {
-// 				if len(resp.GetItems()) != len(items) {
-// 					t.Fatalf("handler returned wrong item data")
-// 				}
-// 			}
-// 		})
-// 	}
-// }
-
-// func TestHandler_ListCatalogItems(t *testing.T) {
-// 	t.Parallel()
-
-// 	items := []entity.CatalogItem{
-// 		{
-// 			ID:    uuid.New().String(),
-// 			Name:  "item1",
-// 			Price: float64(100),
-// 		},
-// 		{
-// 			ID:    uuid.New().String(),
-// 			Name:  "item2",
-// 			Price: float64(200),
-// 		},
-// 	}
-
-// 	patterns := []struct {
-// 		name  string
-// 		setup func(
-// 			m *mock.MockCatalogItemUseCase,
-// 		)
-// 		request    *pb.ListCatalogItemsRequest
-// 		wantStatus codes.Code
-// 	}{
-// 		{
-// 			name: "success",
-// 			setup: func(tuc *mock.MockCatalogItemUseCase) {
-// 				tuc.EXPECT().ListCatalogItems(
-// 					gomock.Any(),
-// 				).Return(items, nil)
-// 			},
-// 			request:    &pb.ListCatalogItemsRequest{},
-// 			wantStatus: codes.OK,
-// 		},
-// 	}
-
-// 	for _, tt := range patterns {
-// 		tt := tt
-// 		t.Run(tt.name, func(t *testing.T) {
-// 			t.Parallel()
-
-// 			client, cleanup := setupTestServer(t, tt.setup)
-// 			defer cleanup()
-
-// 			resp, err := client.ListCatalogItems(context.Background(), tt.request)
-// 			if status.Code(err) != tt.wantStatus {
-// 				t.Fatalf("handler returned wrong status code: got %v want %v", status.Code(err), tt.wantStatus)
-// 			}
-
-// 			if tt.wantStatus == codes.OK {
-// 				if len(resp.GetItems()) != len(items) {
-// 					t.Fatalf("handler returned wrong item data")
-// 				}
-// 			}
-// 		})
-// 	}
-// }
-
-// func TestHandler_CreateCatalogItem(t *testing.T) {
-// 	t.Parallel()
-
-// 	patterns := []struct {
-// 		name  string
-// 		setup func(
-// 			m *mock.MockCatalogItemUseCase,
-// 		)
-// 		request    *pb.CreateCatalogItemRequest
-// 		wantStatus codes.Code
-// 	}{
-// 		{
-// 			name: "success",
-// 			setup: func(tuc *mock.MockCatalogItemUseCase) {
-// 				tuc.EXPECT().CreateCatalogItem(
-// 					gomock.Any(),
-// 					"item1",
-// 					float64(100),
-// 				).Return(nil)
-// 			},
-// 			request: &pb.CreateCatalogItemRequest{
-// 				Name:  "item1",
-// 				Price: float64(100),
-// 			},
-// 			wantStatus: codes.OK,
-// 		},
-// 		{
-// 			name: "Fail: invalid request of name is empty",
-// 			request: &pb.CreateCatalogItemRequest{
-// 				Name:  "",
-// 				Price: float64(100),
-// 			},
-// 			wantStatus: codes.InvalidArgument,
-// 		},
-// 		{
-// 			name: "Fail: invalid request of  price is less than 0",
-// 			request: &pb.CreateCatalogItemRequest{
-// 				Name:  "item1",
-// 				Price: float64(-1),
-// 			},
-// 			wantStatus: codes.InvalidArgument,
-// 		},
-// 	}
-
-// 	for _, tt := range patterns {
-// 		tt := tt
-// 		t.Run(tt.name, func(t *testing.T) {
-// 			t.Parallel()
-
-// 			client, cleanup := setupTestServer(t, tt.setup)
-// 			defer cleanup()
-
-// 			req, err := client.CreateCatalogItem(context.Background(), tt.request)
-// 			if status.Code(err) != tt.wantStatus {
-// 				t.Fatalf("handler returned wrong status code: got %v want %v", status.Code(err), tt.wantStatus)
-// 			}
-
-// 			if tt.wantStatus == codes.OK {
-// 				if req == nil {
-// 					t.Fatalf("handler returned wrong item data")
-// 				}
-// 			}
-// 		})
-// 	}
-// }
-
-// func TestHandler_UpdateCatalogItem(t *testing.T) {
-// 	t.Parallel()
-
-// 	itemID := uuid.New().String()
-
-// 	patterns := []struct {
-// 		name  string
-// 		setup func(
-// 			m *mock.MockCatalogItemUseCase,
-// 		)
-// 		request    *pb.UpdateCatalogItemRequest
-// 		wantStatus codes.Code
-// 	}{
-// 		{
-// 			name: "success",
-// 			setup: func(tuc *mock.MockCatalogItemUseCase) {
-// 				tuc.EXPECT().UpdateCatalogItem(
-// 					gomock.Any(),
-// 					itemID,
-// 					"updated name",
-// 					float64(100),
-// 				).Return(nil)
-// 			},
-// 			request: &pb.UpdateCatalogItemRequest{
-// 				Id:    itemID,
-// 				Name:  "updated name",
-// 				Price: float64(100),
-// 			},
-// 			wantStatus: codes.OK,
-// 		},
-// 		{
-// 			name: "Fail: invalid request of id is empty",
-// 			request: &pb.UpdateCatalogItemRequest{
-// 				Id:    "",
-// 				Name:  "updated name",
-// 				Price: float64(100),
-// 			},
-// 			wantStatus: codes.InvalidArgument,
-// 		},
-// 		{
-// 			name: "Fail: invalid request of name is empty",
-// 			request: &pb.UpdateCatalogItemRequest{
-// 				Id:    itemID,
-// 				Name:  "",
-// 				Price: float64(100),
-// 			},
-// 			wantStatus: codes.InvalidArgument,
-// 		},
-// 		{
-// 			name: "Fail: invalid request of price is less than 0",
-// 			request: &pb.UpdateCatalogItemRequest{
-// 				Id:    itemID,
-// 				Name:  "updated name",
-// 				Price: float64(-1),
-// 			},
-// 			wantStatus: codes.InvalidArgument,
-// 		},
-// 	}
-
-// 	for _, tt := range patterns {
-// 		tt := tt
-// 		t.Run(tt.name, func(t *testing.T) {
-// 			t.Parallel()
-
-// 			client, cleanup := setupTestServer(t, tt.setup)
-// 			defer cleanup()
-
-// 			req, err := client.UpdateCatalogItem(context.Background(), tt.request)
-// 			if status.Code(err) != tt.wantStatus {
-// 				t.Fatalf("handler returned wrong status code: got %v want %v", status.Code(err), tt.wantStatus)
-// 			}
-
-// 			if tt.wantStatus == codes.OK {
-// 				if req == nil {
-// 					t.Fatalf("handler returned wrong item data")
-// 				}
-// 			}
-// 		})
-// 	}
-// }
-
-// func TestHandler_DeleteCatalogItem(t *testing.T) {
-// 	t.Parallel()
-
-// 	itemID := uuid.New().String()
-
-// 	patterns := []struct {
-// 		name  string
-// 		setup func(
-// 			m *mock.MockCatalogItemUseCase,
-// 		)
-// 		request    *pb.DeleteCatalogItemRequest
-// 		wantStatus codes.Code
-// 	}{
-// 		{
-// 			name: "success",
-// 			setup: func(tuc *mock.MockCatalogItemUseCase) {
-// 				tuc.EXPECT().DeleteCatalogItem(
-// 					gomock.Any(),
-// 					itemID,
-// 				).Return(nil)
-// 			},
-// 			request:    &pb.DeleteCatalogItemRequest{Id: itemID},
-// 			wantStatus: codes.OK,
-// 		},
-// 		{
-// 			name:       "Fail: invalid request of id is empty",
-// 			request:    &pb.DeleteCatalogItemRequest{Id: ""},
-// 			wantStatus: codes.InvalidArgument,
-// 		},
-// 	}
-
-// 	for _, tt := range patterns {
-// 		tt := tt
-// 		t.Run(tt.name, func(t *testing.T) {
-// 			t.Parallel()
-
-// 			client, cleanup := setupTestServer(t, tt.setup)
-// 			defer cleanup()
-
-// 			req, err := client.DeleteCatalogItem(context.Background(), tt.request)
-// 			if status.Code(err) != tt.wantStatus {
-// 				t.Fatalf("handler returned wrong status code: got %v want %v", status.Code(err), tt.wantStatus)
-// 			}
-
-// 			if tt.wantStatus == codes.OK {
-// 				if req == nil {
-// 					t.Fatalf("handler returned wrong item data")
-// 				}
-// 			}
-// 		})
-// 	}
-// }
+func Test_DeleteCatalogItem(t *testing.T) {
+	t.Parallel()
+	id := uuid.NewString()
+	errmock := errors.New("errors")
+	ctx := context.Background()
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	db := dbmock.NewMockCatalogItem(ctrl)
+	gomock.InOrder(
+		db.EXPECT().Delete(ctx, id).Return(errmock),
+		db.EXPECT().Delete(ctx, id).Return(nil),
+	)
+	service := &catalogService{
+		db: &database.Database{
+			CatalogItem: db,
+		},
+	}
+	// bad request
+	req := &catalog.DeleteCatalogItemRequest{}
+	_, err := service.DeleteCatalogItem(ctx, req)
+	assert.Error(t, err)
+	// db error
+	req.Id = id
+	resp, err := service.DeleteCatalogItem(ctx, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	// success
+	resp, err = service.DeleteCatalogItem(ctx, req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+}

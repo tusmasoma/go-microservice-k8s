@@ -1,460 +1,263 @@
 package api
 
-// const bufSize = 1024 * 1024
+import (
+	"context"
+	"errors"
+	"testing"
 
-// func setupTestServer(t *testing.T, setup func(m *mock.MockCustomerUseCase)) (pb.CustomerServiceClient, func()) {
-// 	t.Helper()
+	"github.com/golang/mock/gomock"
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
+	"github.com/tusmasoma/go-microservice-k8s/go/services/customer/database"
+	dbmock "github.com/tusmasoma/go-microservice-k8s/go/services/customer/database/mock"
+	"github.com/tusmasoma/go-microservice-k8s/go/services/customer/entity"
+	"github.com/tusmasoma/go-microservice-k8s/proto/customer"
+)
 
-// 	ctrl := gomock.NewController(t)
-// 	cuc := mock.NewMockCustomerUseCase(ctrl)
+func Test_GetCustomer(t *testing.T) {
+	t.Parallel()
+	id := uuid.NewString()
+	errmock := errors.New("errors")
+	ctx := context.Background()
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	db := dbmock.NewMockCustomer(ctrl)
+	gomock.InOrder(
+		db.EXPECT().Get(ctx, id).Return(nil, errmock),
+		db.EXPECT().Get(ctx, id).Return(
+			&entity.Customer{
+				Customer: customer.Customer{
+					Id:   id,
+					Name: "person",
+				},
+			}, nil),
+	)
+	service := &customerService{
+		db: &database.Database{
+			Customer: db,
+		},
+	}
+	// bad request
+	req := &customer.GetCustomerRequest{}
+	_, err := service.GetCustomer(ctx, req)
+	assert.Error(t, err)
+	// db error
+	req.Id = id
+	resp, err := service.GetCustomer(ctx, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	// success
+	resp, err = service.GetCustomer(ctx, req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+}
 
-// 	if setup != nil {
-// 		setup(cuc)
-// 	}
+func Test_ListCustomers(t *testing.T) {
+	t.Parallel()
+	errmock := errors.New("errors")
+	ctx := context.Background()
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	db := dbmock.NewMockCustomer(ctrl)
+	gomock.InOrder(
+		db.EXPECT().List(ctx).Return(nil, errmock),
+		db.EXPECT().List(ctx).Return(
+			entity.Customers{
+				&entity.Customer{
+					Customer: customer.Customer{
+						Id:   uuid.NewString(),
+						Name: "person",
+					},
+				},
+			}, nil),
+	)
+	service := &customerService{
+		db: &database.Database{
+			Customer: db,
+		},
+	}
+	// db error
+	req := &customer.ListCustomersRequest{}
+	resp, err := service.ListCustomers(ctx, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	// success
+	resp, err = service.ListCustomers(ctx, req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+}
 
-// 	handler := NewCustomerHandler(cuc)
+func Test_CreateCustomer(t *testing.T) {
+	t.Parallel()
+	user := &entity.Customer{
+		Customer: customer.Customer{
+			Id:      uuid.NewString(),
+			Name:    "John Doe",
+			Email:   "john.doe@example.com",
+			Street:  "1600 Pennsylvania Avenue NW",
+			City:    "Washington",
+			Country: "USA",
+		},
+	}
+	errmock := errors.New("errors")
+	ctx := context.Background()
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	db := dbmock.NewMockCustomer(ctrl)
+	gomock.InOrder(
+		db.EXPECT().Create(
+			gomock.Any(),
+			gomock.Any(),
+		).Return(errmock),
+		db.EXPECT().Create(
+			gomock.Any(),
+			gomock.Any(),
+		).Do(func(_ context.Context, user *entity.Customer) {
+			if user.GetName() != "John Doe" {
+				t.Errorf("unexpected Name: got %v, want %v", user.GetName(), "John Doe")
+			}
+			if user.GetEmail() != "john.doe@example.com" {
+				t.Errorf("unexpected Email: got %v, want %v", user.GetEmail(), "john.doe@example.com")
+			}
+			if user.GetStreet() != "1600 Pennsylvania Avenue NW" {
+				t.Errorf("unexpected Street: got %v, want %v", user.GetStreet(), "1600 Pennsylvania Avenue NW")
+			}
+			if user.GetCity() != "Washington" {
+				t.Errorf("unexpected City: got %v, want %v", user.GetCity(), "Washington")
+			}
+			if user.GetCountry() != "USA" {
+				t.Errorf("unexpected Country: got %v, want %v", user.GetCountry(), "USA")
+			}
+		}).Return(nil),
+	)
+	service := &customerService{
+		db: &database.Database{
+			Customer: db,
+		},
+	}
+	// bad request
+	req := &customer.CreateCustomerRequest{}
+	_, err := service.CreateCustomer(ctx, req)
+	assert.Error(t, err)
+	// db error
+	req.Name = user.GetName()
+	req.Email = user.GetEmail()
+	req.Street = user.GetStreet()
+	req.City = user.GetCity()
+	req.Country = user.GetCountry()
+	resp, err := service.CreateCustomer(ctx, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	// success
+	resp, err = service.CreateCustomer(ctx, req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+}
 
-// 	lis := bufconn.Listen(bufSize)
-// 	s := grpc.NewServer()
-// 	pb.RegisterCustomerServiceServer(s, handler)
+func Test_UpdateCustomer(t *testing.T) {
+	t.Parallel()
+	id := uuid.NewString()
+	user := &entity.Customer{
+		Customer: customer.Customer{
+			Id:      id,
+			Name:    "John Doe",
+			Email:   "john.doe@example.com",
+			Street:  "1600 Pennsylvania Avenue NW",
+			City:    "Washington",
+			Country: "USA",
+		},
+	}
+	errmock := errors.New("errors")
+	ctx := context.Background()
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	db := dbmock.NewMockCustomer(ctrl)
+	gomock.InOrder(
+		db.EXPECT().Get(ctx, id).Return(nil, errmock),
+		db.EXPECT().Get(ctx, id).Return(user, nil),
+		db.EXPECT().Update(
+			gomock.Any(),
+			gomock.Any(),
+		).Return(errmock),
+		db.EXPECT().Get(ctx, id).Return(user, nil),
+		db.EXPECT().Update(
+			gomock.Any(),
+			gomock.Any(),
+		).Do(func(_ context.Context, user *entity.Customer) {
+			if user.GetName() != "John Doe" {
+				t.Errorf("unexpected Name: got %v, want %v", user.GetName(), "John Doe")
+			}
+			if user.GetEmail() != "john.doe@example.com" {
+				t.Errorf("unexpected Email: got %v, want %v", user.GetEmail(), "john.doe@example.com")
+			}
+			if user.GetStreet() != "1600 Pennsylvania Avenue NW" {
+				t.Errorf("unexpected Street: got %v, want %v", user.GetStreet(), "1600 Pennsylvania Avenue NW")
+			}
+			if user.GetCity() != "Washington" {
+				t.Errorf("unexpected City: got %v, want %v", user.GetCity(), "Washington")
+			}
+			if user.GetCountry() != "USA" {
+				t.Errorf("unexpected Country: got %v, want %v", user.GetCountry(), "USA")
+			}
+		}).Return(nil),
+	)
+	service := &customerService{
+		db: &database.Database{
+			Customer: db,
+		},
+	}
+	// bad request
+	req := &customer.UpdateCustomerRequest{}
+	_, err := service.UpdateCustomer(ctx, req)
+	assert.Error(t, err)
+	// db error (Get)
+	req.Id = user.GetId()
+	req.Name = user.GetName()
+	req.Email = user.GetEmail()
+	req.Street = user.GetStreet()
+	req.City = user.GetCity()
+	req.Country = user.GetCountry()
+	resp, err := service.UpdateCustomer(ctx, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	// db error (Update)
+	resp, err = service.UpdateCustomer(ctx, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	// success
+	resp, err = service.UpdateCustomer(ctx, req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+}
 
-// 	go func() {
-// 		if err := s.Serve(lis); err != nil && !errors.Is(err, grpc.ErrServerStopped) {
-// 			t.Errorf("failed to serve: %v", err)
-// 		}
-// 	}()
-
-// 	conn, err := grpc.Dial("", grpc.WithContextDialer(func(_ context.Context, _ string) (net.Conn, error) { //nolint:staticcheck // ignore deprecation
-// 		return lis.Dial()
-// 	}), grpc.WithTransportCredentials(insecure.NewCredentials()))
-// 	if err != nil {
-// 		t.Fatalf("failed to dial: %v", err)
-// 	}
-
-// 	client := pb.NewCustomerServiceClient(conn)
-
-// 	cleanup := func() {
-// 		conn.Close()
-// 		s.Stop()
-// 	}
-
-// 	return client, cleanup
-// }
-
-// func TestHandler_GetCustomer(t *testing.T) {
-// 	t.Parallel()
-
-// 	itemID := uuid.New().String()
-
-// 	customer := entity.Customer{
-// 		ID:      itemID,
-// 		Name:    "John Doe",
-// 		Email:   "john.doe@example.com",
-// 		Street:  "123 Maple Street",
-// 		City:    "Springfield",
-// 		Country: "USA",
-// 	}
-
-// 	patterns := []struct {
-// 		name  string
-// 		setup func(
-// 			m *mock.MockCustomerUseCase,
-// 		)
-// 		request    *pb.GetCustomerRequest
-// 		wantStatus codes.Code
-// 	}{
-// 		{
-// 			name: "success",
-// 			setup: func(tuc *mock.MockCustomerUseCase) {
-// 				tuc.EXPECT().GetCustomer(
-// 					gomock.Any(),
-// 					itemID,
-// 				).Return(&customer, nil)
-// 			},
-// 			request:    &pb.GetCustomerRequest{Id: itemID},
-// 			wantStatus: codes.OK,
-// 		},
-// 		{
-// 			name:       "Fail: invalid request of id is empty",
-// 			request:    &pb.GetCustomerRequest{Id: ""},
-// 			wantStatus: codes.InvalidArgument,
-// 		},
-// 	}
-
-// 	for _, tt := range patterns {
-// 		tt := tt
-// 		t.Run(tt.name, func(t *testing.T) {
-// 			t.Parallel()
-
-// 			client, cleanup := setupTestServer(t, tt.setup)
-// 			defer cleanup()
-
-// 			resp, err := client.GetCustomer(context.Background(), tt.request)
-// 			if status.Code(err) != tt.wantStatus {
-// 				t.Fatalf("handler returned wrong status code: got %v want %v", status.Code(err), tt.wantStatus)
-// 			}
-
-// 			if tt.wantStatus == codes.OK {
-// 				if resp.GetCustomer().GetId() != customer.ID {
-// 					t.Fatalf("handler returned wrong item data")
-// 				}
-// 			}
-// 		})
-// 	}
-// }
-
-// func TestHandler_ListCustomers(t *testing.T) {
-// 	t.Parallel()
-
-// 	customers := []entity.Customer{
-// 		{
-// 			ID:      uuid.New().String(),
-// 			Name:    "John Doe",
-// 			Email:   "john.doe@example.com",
-// 			Street:  "123 Maple Street",
-// 			City:    "Springfield",
-// 			Country: "USA",
-// 		},
-// 	}
-
-// 	patterns := []struct {
-// 		name  string
-// 		setup func(
-// 			m *mock.MockCustomerUseCase,
-// 		)
-// 		request    *pb.ListCustomersRequest
-// 		wantStatus codes.Code
-// 	}{
-// 		{
-// 			name: "success",
-// 			setup: func(tuc *mock.MockCustomerUseCase) {
-// 				tuc.EXPECT().ListCustomers(
-// 					gomock.Any(),
-// 				).Return(customers, nil)
-// 			},
-// 			request:    &pb.ListCustomersRequest{},
-// 			wantStatus: codes.OK,
-// 		},
-// 	}
-
-// 	for _, tt := range patterns {
-// 		tt := tt
-// 		t.Run(tt.name, func(t *testing.T) {
-// 			t.Parallel()
-
-// 			client, cleanup := setupTestServer(t, tt.setup)
-// 			defer cleanup()
-
-// 			resp, err := client.ListCustomers(context.Background(), tt.request)
-// 			if status.Code(err) != tt.wantStatus {
-// 				t.Fatalf("handler returned wrong status code: got %v want %v", status.Code(err), tt.wantStatus)
-// 			}
-
-// 			if tt.wantStatus == codes.OK {
-// 				if len(resp.GetCustomers()) != len(customers) {
-// 					t.Fatalf("handler returned wrong item data")
-// 				}
-// 			}
-// 		})
-// 	}
-// }
-
-// func TestHandler_CreateCustomer(t *testing.T) {
-// 	t.Parallel()
-
-// 	patterns := []struct {
-// 		name  string
-// 		setup func(
-// 			m *mock.MockCustomerUseCase,
-// 		)
-// 		request    *pb.CreateCustomerRequest
-// 		wantStatus codes.Code
-// 	}{
-// 		{
-// 			name: "success",
-// 			setup: func(tuc *mock.MockCustomerUseCase) {
-// 				tuc.EXPECT().CreateCustomer(
-// 					gomock.Any(),
-// 					&usecase.CreateCustomerParams{
-// 						Name:    "John Doe",
-// 						Email:   "john.doe@example.com",
-// 						Street:  "123 Maple Street",
-// 						City:    "Springfield",
-// 						Country: "USA",
-// 					},
-// 				).Return(nil)
-// 			},
-// 			request: &pb.CreateCustomerRequest{
-// 				Name:    "John Doe",
-// 				Email:   "john.doe@example.com",
-// 				Street:  "123 Maple Street",
-// 				City:    "Springfield",
-// 				Country: "USA",
-// 			},
-// 			wantStatus: codes.OK,
-// 		},
-// 		{
-// 			name: "Fail: invalid request of name is empty",
-// 			request: &pb.CreateCustomerRequest{
-// 				Name:    "",
-// 				Email:   "john.doe@example.com",
-// 				Street:  "123 Maple Street",
-// 				City:    "Springfield",
-// 				Country: "USA",
-// 			},
-// 			wantStatus: codes.InvalidArgument,
-// 		},
-// 		{
-// 			name: "Fail: invalid request of  email is empty",
-// 			request: &pb.CreateCustomerRequest{
-// 				Name:    "John Doe",
-// 				Email:   "",
-// 				Street:  "123 Maple Street",
-// 				City:    "Springfield",
-// 				Country: "USA",
-// 			},
-// 			wantStatus: codes.InvalidArgument,
-// 		},
-// 		{
-// 			name: "Fail: invalid request of street is empty",
-// 			request: &pb.CreateCustomerRequest{
-// 				Name:    "John Doe",
-// 				Email:   "john.doe@example.com",
-// 				Street:  "",
-// 				City:    "Springfield",
-// 				Country: "USA",
-// 			},
-// 			wantStatus: codes.InvalidArgument,
-// 		},
-// 		{
-// 			name: "Fail: invalid request of city is empty",
-// 			request: &pb.CreateCustomerRequest{
-// 				Name:    "John Doe",
-// 				Email:   "john.doe@example.com",
-// 				Street:  "123 Maple Street",
-// 				City:    "",
-// 				Country: "USA",
-// 			},
-// 			wantStatus: codes.InvalidArgument,
-// 		},
-// 		{
-// 			name: "Fail: invalid request of country is empty",
-// 			request: &pb.CreateCustomerRequest{
-// 				Name:    "John Doe",
-// 				Email:   "john.doe@example.com",
-// 				Street:  "123 Maple Street",
-// 				City:    "Springfield",
-// 				Country: "",
-// 			},
-// 			wantStatus: codes.InvalidArgument,
-// 		},
-// 	}
-
-// 	for _, tt := range patterns {
-// 		tt := tt
-// 		t.Run(tt.name, func(t *testing.T) {
-// 			t.Parallel()
-
-// 			client, cleanup := setupTestServer(t, tt.setup)
-// 			defer cleanup()
-
-// 			req, err := client.CreateCustomer(context.Background(), tt.request)
-// 			if status.Code(err) != tt.wantStatus {
-// 				t.Fatalf("handler returned wrong status code: got %v want %v", status.Code(err), tt.wantStatus)
-// 			}
-
-// 			if tt.wantStatus == codes.OK {
-// 				if req == nil {
-// 					t.Fatalf("handler returned wrong item data")
-// 				}
-// 			}
-// 		})
-// 	}
-// }
-
-// func TestHandler_UpdateCustomer(t *testing.T) {
-// 	t.Parallel()
-
-// 	itemID := uuid.New().String()
-
-// 	patterns := []struct {
-// 		name  string
-// 		setup func(
-// 			m *mock.MockCustomerUseCase,
-// 		)
-// 		request    *pb.UpdateCustomerRequest
-// 		wantStatus codes.Code
-// 	}{
-// 		{
-// 			name: "success",
-// 			setup: func(tuc *mock.MockCustomerUseCase) {
-// 				tuc.EXPECT().UpdateCustomer(
-// 					gomock.Any(),
-// 					&usecase.UpdateCustomerParams{
-// 						ID:      itemID,
-// 						Name:    "New John Doe",
-// 						Email:   "john.new.doe@example.com",
-// 						Street:  "123 Maple Street",
-// 						City:    "Springfield",
-// 						Country: "USA",
-// 					},
-// 				).Return(nil)
-// 			},
-// 			request: &pb.UpdateCustomerRequest{
-// 				Id:      itemID,
-// 				Name:    "New John Doe",
-// 				Email:   "john.new.doe@example.com",
-// 				Street:  "123 Maple Street",
-// 				City:    "Springfield",
-// 				Country: "USA",
-// 			},
-// 			wantStatus: codes.OK,
-// 		},
-// 		{
-// 			name: "Fail: invalid request of id is empty",
-// 			request: &pb.UpdateCustomerRequest{
-// 				Id:      "",
-// 				Name:    "New John Doe",
-// 				Email:   "john.new.doe@example.com",
-// 				Street:  "123 Maple Street",
-// 				City:    "Springfield",
-// 				Country: "USA",
-// 			},
-// 			wantStatus: codes.InvalidArgument,
-// 		},
-// 		{
-// 			name: "Fail: invalid request of name is empty",
-// 			request: &pb.UpdateCustomerRequest{
-// 				Id:      itemID,
-// 				Name:    "",
-// 				Email:   "john.new.doe@example.com",
-// 				Street:  "123 Maple Street",
-// 				City:    "Springfield",
-// 				Country: "USA",
-// 			},
-// 			wantStatus: codes.InvalidArgument,
-// 		},
-// 		{
-// 			name: "Fail: invalid request of email is empty",
-// 			request: &pb.UpdateCustomerRequest{
-// 				Id:      itemID,
-// 				Name:    "New John Doe",
-// 				Email:   "",
-// 				Street:  "123 Maple Street",
-// 				City:    "Springfield",
-// 				Country: "USA",
-// 			},
-// 			wantStatus: codes.InvalidArgument,
-// 		},
-// 		{
-// 			name: "Fail: invalid request of street is empty",
-// 			request: &pb.UpdateCustomerRequest{
-// 				Id:      itemID,
-// 				Name:    "New John Doe",
-// 				Email:   "john.new.doe@example.com",
-// 				Street:  "",
-// 				City:    "Springfield",
-// 				Country: "USA",
-// 			},
-// 			wantStatus: codes.InvalidArgument,
-// 		},
-// 		{
-// 			name: "Fail: invalid request of city is empty",
-// 			request: &pb.UpdateCustomerRequest{
-// 				Id:      itemID,
-// 				Name:    "New John Doe",
-// 				Email:   "john.new.doe@example.com",
-// 				Street:  "123 Maple Street",
-// 				City:    "",
-// 				Country: "USA",
-// 			},
-// 			wantStatus: codes.InvalidArgument,
-// 		},
-// 		{
-// 			name: "Fail: invalid request of country is empty",
-// 			request: &pb.UpdateCustomerRequest{
-// 				Id:      itemID,
-// 				Name:    "New John Doe",
-// 				Email:   "john.new.doe@example.com",
-// 				Street:  "123 Maple Street",
-// 				City:    "Springfield",
-// 				Country: "",
-// 			},
-// 			wantStatus: codes.InvalidArgument,
-// 		},
-// 	}
-
-// 	for _, tt := range patterns {
-// 		tt := tt
-// 		t.Run(tt.name, func(t *testing.T) {
-// 			t.Parallel()
-
-// 			client, cleanup := setupTestServer(t, tt.setup)
-// 			defer cleanup()
-
-// 			req, err := client.UpdateCustomer(context.Background(), tt.request)
-// 			if status.Code(err) != tt.wantStatus {
-// 				t.Fatalf("handler returned wrong status code: got %v want %v", status.Code(err), tt.wantStatus)
-// 			}
-
-// 			if tt.wantStatus == codes.OK {
-// 				if req == nil {
-// 					t.Fatalf("handler returned wrong item data")
-// 				}
-// 			}
-// 		})
-// 	}
-// }
-
-// func TestHandler_DeleteCustomer(t *testing.T) {
-// 	t.Parallel()
-
-// 	itemID := uuid.New().String()
-
-// 	patterns := []struct {
-// 		name  string
-// 		setup func(
-// 			m *mock.MockCustomerUseCase,
-// 		)
-// 		request    *pb.DeleteCustomerRequest
-// 		wantStatus codes.Code
-// 	}{
-// 		{
-// 			name: "success",
-// 			setup: func(tuc *mock.MockCustomerUseCase) {
-// 				tuc.EXPECT().DeleteCustomer(
-// 					gomock.Any(),
-// 					itemID,
-// 				).Return(nil)
-// 			},
-// 			request:    &pb.DeleteCustomerRequest{Id: itemID},
-// 			wantStatus: codes.OK,
-// 		},
-// 		{
-// 			name:       "Fail: invalid request of id is empty",
-// 			request:    &pb.DeleteCustomerRequest{Id: ""},
-// 			wantStatus: codes.InvalidArgument,
-// 		},
-// 	}
-
-// 	for _, tt := range patterns {
-// 		tt := tt
-// 		t.Run(tt.name, func(t *testing.T) {
-// 			t.Parallel()
-
-// 			client, cleanup := setupTestServer(t, tt.setup)
-// 			defer cleanup()
-
-// 			req, err := client.DeleteCustomer(context.Background(), tt.request)
-// 			if status.Code(err) != tt.wantStatus {
-// 				t.Fatalf("handler returned wrong status code: got %v want %v", status.Code(err), tt.wantStatus)
-// 			}
-
-// 			if tt.wantStatus == codes.OK {
-// 				if req == nil {
-// 					t.Fatalf("handler returned wrong item data")
-// 				}
-// 			}
-// 		})
-// 	}
-// }
+func Test_DeleteCustomer(t *testing.T) {
+	t.Parallel()
+	id := uuid.NewString()
+	errmock := errors.New("errors")
+	ctx := context.Background()
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	db := dbmock.NewMockCustomer(ctrl)
+	gomock.InOrder(
+		db.EXPECT().Delete(ctx, id).Return(errmock),
+		db.EXPECT().Delete(ctx, id).Return(nil),
+	)
+	service := &customerService{
+		db: &database.Database{
+			Customer: db,
+		},
+	}
+	// bad request
+	req := &customer.DeleteCustomerRequest{}
+	_, err := service.DeleteCustomer(ctx, req)
+	assert.Error(t, err)
+	// db error
+	req.Id = id
+	resp, err := service.DeleteCustomer(ctx, req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	// success
+	resp, err = service.DeleteCustomer(ctx, req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+}

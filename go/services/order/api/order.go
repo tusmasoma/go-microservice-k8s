@@ -5,9 +5,15 @@ import (
 
 	"github.com/tusmasoma/go-microservice-k8s/go/services/order/entity"
 	pb "github.com/tusmasoma/go-microservice-k8s/proto/order"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 func (o *orderService) GetOrder(ctx context.Context, req *pb.GetOrderRequest) (*pb.GetOrderResponse, error) {
+	id := req.GetId()
+	if id == "" {
+		return nil, status.Errorf(codes.InvalidArgument, "ID is required")
+	}
 	order, err := o.db.Order.Get(ctx, req.GetId())
 	if err != nil {
 		return nil, err
@@ -45,6 +51,10 @@ func (o *orderService) CreateOrder(ctx context.Context, req *pb.CreateOrderReque
 }
 
 func (o *orderService) DeleteOrder(ctx context.Context, req *pb.DeleteOrderRequest) (*pb.DeleteOrderResponse, error) {
+	id := req.GetId()
+	if id == "" {
+		return nil, status.Errorf(codes.InvalidArgument, "ID is required")
+	}
 	if err := o.db.Order.Delete(ctx, req.GetId()); err != nil {
 		return nil, err
 	}

@@ -13,8 +13,8 @@ import (
 	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
 	"github.com/tusmasoma/go-microservice-k8s/go/pkg/config"
+	"github.com/tusmasoma/go-microservice-k8s/go/pkg/log"
 	"github.com/tusmasoma/go-microservice-k8s/go/services/gateway/web"
-	"github.com/tusmasoma/go-tech-dojo/pkg/log"
 )
 
 func main() {

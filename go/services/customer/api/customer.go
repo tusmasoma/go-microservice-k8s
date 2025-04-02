@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 
-	"github.com/tusmasoma/go-tech-dojo/pkg/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -15,12 +14,10 @@ import (
 func (c *customerService) GetCustomer(ctx context.Context, req *pb.GetCustomerRequest) (*pb.GetCustomerResponse, error) {
 	id := req.GetId()
 	if id == "" {
-		log.Warn("ID is required")
 		return nil, status.Errorf(codes.InvalidArgument, "ID is required")
 	}
 	customer, err := c.db.Customer.Get(ctx, id)
 	if err != nil {
-		log.Error("Failed to get customer", log.Ferror(err))
 		return nil, status.Errorf(codes.Internal, "Failed to get customer")
 	}
 	return &pb.GetCustomerResponse{
@@ -31,7 +28,6 @@ func (c *customerService) GetCustomer(ctx context.Context, req *pb.GetCustomerRe
 func (c *customerService) ListCustomers(ctx context.Context, _ *pb.ListCustomersRequest) (*pb.ListCustomersResponse, error) {
 	customers, err := c.db.Customer.List(ctx)
 	if err != nil {
-		log.Error("Failed to list customers", log.Ferror(err))
 		return nil, status.Errorf(codes.Internal, "Failed to list customers")
 	}
 	return &pb.ListCustomersResponse{
@@ -54,7 +50,6 @@ func (c *customerService) CreateCustomer(ctx context.Context, req *pb.CreateCust
 		return nil, err
 	}
 	if err := c.db.Customer.Create(ctx, customer); err != nil {
-		log.Error("Failed to create customer", log.Ferror(err))
 		return nil, status.Errorf(codes.Internal, "Failed to create customer")
 	}
 	return &pb.CreateCustomerResponse{}, nil
@@ -66,14 +61,6 @@ func (c *customerService) isValidCreateCustomerRequest(req *pb.CreateCustomerReq
 		req.GetStreet() == "" ||
 		req.GetCity() == "" ||
 		req.GetCountry() == "" {
-		log.Warn(
-			"Invalid request",
-			log.Fstring("name", req.GetName()),
-			log.Fstring("email", req.GetEmail()),
-			log.Fstring("street", req.GetStreet()),
-			log.Fstring("city", req.GetCity()),
-			log.Fstring("country", req.GetCountry()),
-		)
 		return false
 	}
 	return true
@@ -85,7 +72,6 @@ func (c *customerService) UpdateCustomer(ctx context.Context, req *pb.UpdateCust
 	}
 	customer, err := c.db.Customer.Get(ctx, req.GetId())
 	if err != nil {
-		log.Error("failed to get customer", log.Ferror(err))
 		return nil, err
 	}
 	customer.Name = req.GetName()
@@ -106,7 +92,6 @@ func (c *customerService) isValidUpdateCustomerRequest(req *pb.UpdateCustomerReq
 		req.GetStreet() == "" ||
 		req.GetCity() == "" ||
 		req.GetCountry() == "" {
-		log.Warn("Invalid request body: %v", req)
 		return false
 	}
 	return true
@@ -115,11 +100,9 @@ func (c *customerService) isValidUpdateCustomerRequest(req *pb.UpdateCustomerReq
 func (c *customerService) DeleteCustomer(ctx context.Context, req *pb.DeleteCustomerRequest) (*pb.DeleteCustomerResponse, error) {
 	id := req.GetId()
 	if id == "" {
-		log.Warn("ID is required")
 		return nil, status.Errorf(codes.InvalidArgument, "ID is required")
 	}
 	if err := c.db.Customer.Delete(ctx, id); err != nil {
-		log.Error("Failed to delete customer", log.Ferror(err))
 		return nil, status.Errorf(codes.Internal, "Failed to delete customer")
 	}
 	return &pb.DeleteCustomerResponse{}, nil

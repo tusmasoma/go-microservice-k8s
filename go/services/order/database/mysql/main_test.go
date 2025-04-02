@@ -8,7 +8,7 @@ import (
 
 	"github.com/ory/dockertest"
 	"github.com/ory/dockertest/docker"
-	"github.com/tusmasoma/go-tech-dojo/pkg/log"
+	"github.com/tusmasoma/go-microservice-k8s/go/pkg/log"
 
 	_ "github.com/go-sql-driver/mysql" // This blank import is used for its init function
 )

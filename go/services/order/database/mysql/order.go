@@ -5,10 +5,10 @@ import (
 	"database/sql"
 	"time"
 
+	"github.com/tusmasoma/go-microservice-k8s/go/pkg/log"
 	"github.com/tusmasoma/go-microservice-k8s/go/services/order/database"
 	"github.com/tusmasoma/go-microservice-k8s/go/services/order/entity"
 	pb "github.com/tusmasoma/go-microservice-k8s/proto/order"
-	"github.com/tusmasoma/go-tech-dojo/pkg/log"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 

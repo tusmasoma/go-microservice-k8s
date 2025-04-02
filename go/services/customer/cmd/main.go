@@ -11,13 +11,13 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
-	"github.com/tusmasoma/go-tech-dojo/pkg/log"
+	"github.com/tusmasoma/go-microservice-k8s/go/pkg/log"
 	"go.uber.org/dig"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
 	"github.com/tusmasoma/go-microservice-k8s/go/pkg/config"
-	pmysql "github.com/tusmasoma/go-microservice-k8s/go/pkg/repository/mysql"
+	pmysql "github.com/tusmasoma/go-microservice-k8s/go/pkg/mysql"
 	"github.com/tusmasoma/go-microservice-k8s/go/services/customer/api"
 	"github.com/tusmasoma/go-microservice-k8s/go/services/customer/database/mysql"
 

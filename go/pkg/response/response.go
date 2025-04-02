@@ -6,8 +6,8 @@ import (
 	"net/http"
 
 	"github.com/gogo/protobuf/proto"
+	"github.com/tusmasoma/go-microservice-k8s/go/pkg/log"
 	"github.com/tusmasoma/go-microservice-k8s/proto/web"
-	"github.com/tusmasoma/go-tech-dojo/pkg/log"
 )
 
 func Send(status int, msg proto.Message, w http.ResponseWriter, _ *http.Request) {

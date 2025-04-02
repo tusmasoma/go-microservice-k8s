@@ -6,7 +6,7 @@ import (
 
 	"github.com/sethvargo/go-envconfig"
 
-	"github.com/tusmasoma/go-tech-dojo/pkg/log"
+	"github.com/tusmasoma/go-microservice-k8s/go/pkg/log"
 )
 
 const (

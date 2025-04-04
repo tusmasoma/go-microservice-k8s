@@ -30,7 +30,7 @@ message CreateCustomerRequest {
     string email = 2;
     string street = 3;
     string city = 4;
-    string country = 5;
+    CountryCode country_code = 5;
 }
 message CreateCustomerResponse {}
 
@@ -40,7 +40,7 @@ message UpdateCustomerRequest {
     string email = 3;
     string street = 4;
     string city = 5;
-    string country = 6;
+    CountryCode country_code = 6;
 }
 message UpdateCustomerResponse {}
 

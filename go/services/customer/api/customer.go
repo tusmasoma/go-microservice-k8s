@@ -44,7 +44,7 @@ func (c *customerService) CreateCustomer(ctx context.Context, req *pb.CreateCust
 		req.GetEmail(),
 		req.GetStreet(),
 		req.GetCity(),
-		req.GetCountry(),
+		req.GetCountryCode(),
 	)
 	if err != nil {
 		return nil, err
@@ -60,7 +60,7 @@ func (c *customerService) isValidCreateCustomerRequest(req *pb.CreateCustomerReq
 		req.GetEmail() == "" ||
 		req.GetStreet() == "" ||
 		req.GetCity() == "" ||
-		req.GetCountry() == "" {
+		req.GetCountryCode() == pb.CountryCode_COUNTRY_CODE_UNSPECIFIED {
 		return false
 	}
 	return true
@@ -78,7 +78,7 @@ func (c *customerService) UpdateCustomer(ctx context.Context, req *pb.UpdateCust
 	customer.Email = req.GetEmail()
 	customer.Street = req.GetStreet()
 	customer.City = req.GetCity()
-	customer.Country = req.GetCountry()
+	customer.CountryCode = req.GetCountryCode()
 	if err = c.db.Customer.Update(ctx, customer); err != nil {
 		return nil, status.Errorf(codes.Internal, "Failed to update customer")
 	}
@@ -91,7 +91,7 @@ func (c *customerService) isValidUpdateCustomerRequest(req *pb.UpdateCustomerReq
 		req.GetEmail() == "" ||
 		req.GetStreet() == "" ||
 		req.GetCity() == "" ||
-		req.GetCountry() == "" {
+		req.GetCountryCode() == pb.CountryCode_COUNTRY_CODE_UNSPECIFIED {
 		return false
 	}
 	return true

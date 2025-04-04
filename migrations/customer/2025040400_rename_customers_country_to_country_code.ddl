@@ -1,0 +1,2 @@
+ALTER TABLE Customers ADD COLUMN country_code CHAR(3) NOT NULL DEFAULT 'JPN';
+ALTER TABLE Customers DROP COLUMN country;

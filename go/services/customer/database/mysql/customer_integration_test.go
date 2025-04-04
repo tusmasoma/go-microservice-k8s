@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/tusmasoma/go-microservice-k8s/go/services/customer/entity"
+	pb "github.com/tusmasoma/go-microservice-k8s/proto/customer"
 )
 
 func Test_CustomerRepository(t *testing.T) {
@@ -17,7 +18,7 @@ func Test_CustomerRepository(t *testing.T) {
 		"john.doe@example.com",
 		"123 Maple Street",
 		"Springfield",
-		"USA",
+		pb.CountryCode_JPN,
 	)
 	ValidateErr(t, err, nil)
 	customer2, err := entity.CreateCustomer(
@@ -25,7 +26,7 @@ func Test_CustomerRepository(t *testing.T) {
 		"jane.smith@example.com",
 		"456 Oak Avenue",
 		"Seattle",
-		"USA",
+		pb.CountryCode_JPN,
 	)
 	ValidateErr(t, err, nil)
 

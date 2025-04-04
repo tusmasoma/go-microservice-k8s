@@ -3,19 +3,19 @@ docs 📖:
       - any-glob-to-any-file: docs/**/*
 gateway 🚀:
   - changed-files:
-      - any-glob-to-any-file: services/gateway/**/*
+      - any-glob-to-any-file: go/services/gateway/**/*
 order 📦:
   - changed-files:
-      - any-glob-to-any-file: services/order/**/*
+      - any-glob-to-any-file: go/services/order/**/*
 customer 🧑‍🤝‍🧑:
   - changed-files:
-      - any-glob-to-any-file: services/customer/**/*
+      - any-glob-to-any-file: go/services/customer/**/*
 catalog 📚:
   - changed-files:
-      - any-glob-to-any-file: services/catalog/**/*
+      - any-glob-to-any-file: go/services/catalog/**/*
 pkg 🏗️:
   - changed-files:
-      - any-glob-to-any-file: pkg/**/*
+      - any-glob-to-any-file: go/pkg/**/*
 proto 📡:
   - changed-files:
       - any-glob-to-any-file: proto/**/*

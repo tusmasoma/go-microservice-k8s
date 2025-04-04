@@ -1,33 +1,33 @@
 syntax = "proto3";
 
 package web;
-option go_package = "proto/web";
+option  go_package = "proto/web";
 
 message GetCustomerRequest {}
 message GetCustomerResponse {
-    Customer customer = 1;
+  Customer customer = 1;
 }
 
 message ListCustomersRequest {}
 message ListCustomersResponse {
-    repeated Customer customers = 1;
+  repeated Customer customers = 1;
 }
 
 message CreateCustomerRequest {
-    string name = 1;
-    string email = 2;
-    string street = 3;
-    string city = 4;
-    CountryCode country_code = 5;
+  string      name         = 1;
+  string      email        = 2;
+  string      street       = 3;
+  string      city         = 4;
+  CountryCode country_code = 5;
 }
 message CreateCustomerResponse {}
 
 message UpdateCustomerRequest {
-    string name = 2;
-    string email = 3;
-    string street = 4;
-    string city = 5;
-    CountryCode country_code = 6;
+  string      name         = 2;
+  string      email        = 3;
+  string      street       = 4;
+  string      city         = 5;
+  CountryCode country_code = 6;
 }
 message UpdateCustomerResponse {}
 
@@ -35,34 +35,34 @@ message DeleteCustomerRequest {}
 message DeleteCustomerResponse {}
 
 message Customer {
-    string id = 1;
-    string name = 2;
-    string email = 3;
-    string street = 4;
-    string city = 5;
-    CountryCode country_code = 6;
+  string      id           = 1;
+  string      name         = 2;
+  string      email        = 3;
+  string      street       = 4;
+  string      city         = 5;
+  CountryCode country_code = 6;
 }
 
 enum CountryCode {
-    COUNTRY_CODE_UNSPECIFIED = 0;
-    USA = 1;
-    JPN = 2;
-    DEU = 3;
-    FRA = 4;
-    GBR = 5;
-    CAN = 6;
-    AUS = 7;
-    ITA = 8;
-    BRA = 9;
-    KOR = 10;
-    CHN = 11;
-    IND = 12;
-    MEX = 13;
-    RUS = 14;
-    ESP = 15;
-    NLD = 16;
-    SWE = 17;
-    CHE = 18;
-    ARG = 19;
-    ZAF = 20;
-  }
+  COUNTRY_CODE_UNSPECIFIED = 0;
+  USA                      = 1;
+  JPN                      = 2;
+  DEU                      = 3;
+  FRA                      = 4;
+  GBR                      = 5;
+  CAN                      = 6;
+  AUS                      = 7;
+  ITA                      = 8;
+  BRA                      = 9;
+  KOR                      = 10;
+  CHN                      = 11;
+  IND                      = 12;
+  MEX                      = 13;
+  RUS                      = 14;
+  ESP                      = 15;
+  NLD                      = 16;
+  SWE                      = 17;
+  CHE                      = 18;
+  ARG                      = 19;
+  ZAF                      = 20;
+}

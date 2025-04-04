@@ -1,18 +1,18 @@
 syntax = "proto3";
 
 package order;
-option go_package = "proto/order";
+option  go_package = "proto/order";
 
 import "google/protobuf/timestamp.proto";
 
 message Order {
-    string id = 1;
-    string customer_id = 2;
-    google.protobuf.Timestamp order_date = 3;
-    repeated OrderLine order_lines = 4;
+  string                    id          = 1;
+  string                    customer_id = 2;
+  google.protobuf.Timestamp order_date  = 3;
+  repeated OrderLine        order_lines = 4;
 }
 
 message OrderLine {
-    int64 quantity = 1;
-    string catalog_item_id = 2;
+  int64  quantity        = 1;
+  string catalog_item_id = 2;
 }

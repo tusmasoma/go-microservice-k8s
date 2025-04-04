@@ -1,36 +1,36 @@
 syntax = "proto3";
 
 package order;
-option go_package = "proto/order";
+option  go_package = "proto/order";
 
 import "proto/order/order.proto";
 
 service OrderService {
-    rpc GetOrder(GetOrderRequest) returns (GetOrderResponse);
-    rpc ListOrders(ListOrdersRequest) returns (ListOrdersResponse);
-    rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
-    rpc DeleteOrder(DeleteOrderRequest) returns (DeleteOrderResponse);
+  rpc GetOrder(GetOrderRequest) returns (GetOrderResponse);
+  rpc ListOrders(ListOrdersRequest) returns (ListOrdersResponse);
+  rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
+  rpc DeleteOrder(DeleteOrderRequest) returns (DeleteOrderResponse);
 }
 
 message GetOrderRequest {
-    string id = 1;
+  string id = 1;
 }
-message GetOrderResponse{
-    Order order = 1;
+message GetOrderResponse {
+  Order order = 1;
 }
 
 message ListOrdersRequest {}
 message ListOrdersResponse {
-    repeated Order orders = 1;
+  repeated Order orders = 1;
 }
 
 message CreateOrderRequest {
-    string customer_id = 1;
-    repeated OrderLine order_lines = 2;
+  string             customer_id = 1;
+  repeated OrderLine order_lines = 2;
 }
 message CreateOrderResponse {}
 
 message DeleteOrderRequest {
-    string id = 1;
+  string id = 1;
 }
 message DeleteOrderResponse {}

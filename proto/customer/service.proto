@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package customer;
-option go_package = "proto/customer";
+option  go_package = "proto/customer";
 
 import "proto/customer/customer.proto";
 
@@ -14,33 +14,33 @@ service CustomerService {
 }
 
 message GetCustomerRequest {
-    string id = 1;
+  string id = 1;
 }
 message GetCustomerResponse {
-    Customer customer = 1;
+  Customer customer = 1;
 }
 
 message ListCustomersRequest {}
 message ListCustomersResponse {
-    repeated Customer customers = 1;
+  repeated Customer customers = 1;
 }
 
 message CreateCustomerRequest {
-    string name = 1;
-    string email = 2;
-    string street = 3;
-    string city = 4;
-    CountryCode country_code = 5;
+  string      name         = 1;
+  string      email        = 2;
+  string      street       = 3;
+  string      city         = 4;
+  CountryCode country_code = 5;
 }
 message CreateCustomerResponse {}
 
 message UpdateCustomerRequest {
-    string id = 1;
-    string name = 2;
-    string email = 3;
-    string street = 4;
-    string city = 5;
-    CountryCode country_code = 6;
+  string      id           = 1;
+  string      name         = 2;
+  string      email        = 3;
+  string      street       = 4;
+  string      city         = 5;
+  CountryCode country_code = 6;
 }
 message UpdateCustomerResponse {}
 

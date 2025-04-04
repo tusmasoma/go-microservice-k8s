@@ -13,6 +13,6 @@ message Order {
 }
 
 message OrderLine {
-    int64 count = 1;
+    int64 quantity = 1;
     string catalog_item_id = 2;
 }

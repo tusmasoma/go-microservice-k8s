@@ -16,7 +16,7 @@ func Test_OrderRepository(t *testing.T) {
 	lines := []*entity.OrderLine{
 		{
 			OrderLine: &pb.OrderLine{
-				Count:         1,
+				Quantity:      1,
 				CatalogItemId: uuid.NewString(),
 			},
 		},

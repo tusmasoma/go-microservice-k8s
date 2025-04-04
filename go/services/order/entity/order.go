@@ -24,11 +24,11 @@ func (o *Order) GetOrderLines() OrderLines {
 	if o == nil || o.Order.OrderLines == nil {
 		return nil
 	}
-	lines := make(OrderLines, len(o.Order.GetOrderLines()))
-	for i, line := range o.Order.GetOrderLines() {
-		lines[i] = &OrderLine{OrderLine: line}
+	orderLines := make(OrderLines, len(o.Order.GetOrderLines()))
+	for i, orderLine := range o.Order.GetOrderLines() {
+		orderLines[i] = &OrderLine{OrderLine: orderLine}
 	}
-	return lines
+	return orderLines
 }
 
 type Orders []*Order
@@ -55,11 +55,11 @@ func (ol *OrderLine) Proto() *order.OrderLine {
 type OrderLines []*OrderLine
 
 func (ols OrderLines) Proto() []*order.OrderLine {
-	lines := make([]*order.OrderLine, len(ols))
-	for i, line := range ols {
-		lines[i] = line.Proto()
+	orderLines := make([]*order.OrderLine, len(ols))
+	for i, orderLine := range ols {
+		orderLines[i] = orderLine.Proto()
 	}
-	return lines
+	return orderLines
 }
 
 func NewOrder(id, customerID string, orderDate time.Time, orderLines OrderLines) (*Order, error) {

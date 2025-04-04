@@ -34,7 +34,7 @@ func Test_GetOrder(t *testing.T) {
 					OrderDate:  timestamppb.New(time.Now()),
 					OrderLines: []*order.OrderLine{
 						{
-							Count:         1,
+							Quantity:      1,
 							CatalogItemId: "1",
 						},
 					},
@@ -79,7 +79,7 @@ func Test_ListOrders(t *testing.T) {
 						OrderDate:  timestamppb.New(time.Now()),
 						OrderLines: []*order.OrderLine{
 							{
-								Count:         1,
+								Quantity:      1,
 								CatalogItemId: "1",
 							},
 						},
@@ -109,7 +109,7 @@ func Test_CreateOrder(t *testing.T) {
 	lines := entity.OrderLines{
 		&entity.OrderLine{
 			OrderLine: &order.OrderLine{
-				Count:         1,
+				Quantity:      1,
 				CatalogItemId: "1",
 			},
 		},

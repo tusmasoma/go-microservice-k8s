@@ -18,7 +18,7 @@ func TestEntity_NewOrder(t *testing.T) {
 	orderLines := OrderLines{
 		&OrderLine{
 			OrderLine: &order.OrderLine{
-				Count:         1,
+				Quantity:      1,
 				CatalogItemId: uuid.NewString(),
 			},
 		},
@@ -156,7 +156,7 @@ func TestEntity_CreateOrder(t *testing.T) {
 	orderLines := OrderLines{
 		&OrderLine{
 			OrderLine: &order.OrderLine{
-				Count:         1,
+				Quantity:      1,
 				CatalogItemId: uuid.NewString(),
 			},
 		},
@@ -257,7 +257,7 @@ func Test_Order_Proto(t *testing.T) {
 			OrderDate:  timestamppb.New(now),
 			OrderLines: []*order.OrderLine{
 				{
-					Count:         1,
+					Quantity:      1,
 					CatalogItemId: "1",
 				},
 			},
@@ -269,7 +269,7 @@ func Test_Order_Proto(t *testing.T) {
 		OrderDate:  timestamppb.New(now),
 		OrderLines: []*order.OrderLine{
 			{
-				Count:         1,
+				Quantity:      1,
 				CatalogItemId: "1",
 			},
 		},
@@ -287,7 +287,7 @@ func Test_Orders_Proto(t *testing.T) {
 				OrderDate:  timestamppb.New(now),
 				OrderLines: []*order.OrderLine{
 					{
-						Count:         1,
+						Quantity:      1,
 						CatalogItemId: "1",
 					},
 				},
@@ -301,7 +301,7 @@ func Test_Orders_Proto(t *testing.T) {
 			OrderDate:  timestamppb.New(now),
 			OrderLines: []*order.OrderLine{
 				{
-					Count:         1,
+					Quantity:      1,
 					CatalogItemId: "1",
 				},
 			},
@@ -313,12 +313,12 @@ func Test_Orders_Proto(t *testing.T) {
 func Test_OrderLine_Proto(t *testing.T) {
 	ol := OrderLine{
 		OrderLine: &order.OrderLine{
-			Count:         1,
+			Quantity:      1,
 			CatalogItemId: "1",
 		},
 	}
 	expect := &order.OrderLine{
-		Count:         1,
+		Quantity:      1,
 		CatalogItemId: "1",
 	}
 	assert.Equal(t, expect, ol.Proto())
@@ -328,14 +328,14 @@ func Test_OrderLines_Proto(t *testing.T) {
 	ols := OrderLines{
 		&OrderLine{
 			OrderLine: &order.OrderLine{
-				Count:         1,
+				Quantity:      1,
 				CatalogItemId: "1",
 			},
 		},
 	}
 	expect := []*order.OrderLine{
 		{
-			Count:         1,
+			Quantity:      1,
 			CatalogItemId: "1",
 		},
 	}

@@ -49,7 +49,7 @@ func newOrderLine(line *order.OrderLine, catalogItem *catalog.CatalogItem) *Orde
 	}
 	return &OrderLine{
 		OrderLine: &web.OrderLine{
-			Count: line.GetCount(),
+			Quantity: line.GetQuantity(),
 			CatalogItem: &web.CatalogItem{
 				Id:    catalogItem.GetId(),
 				Name:  catalogItem.GetName(),

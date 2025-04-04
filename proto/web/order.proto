@@ -40,6 +40,6 @@ message Order {
 }
 
 message OrderLine {
-    int64 count = 1;
+    int64 quantity = 1;
     CatalogItem catalog_item = 2;
 }

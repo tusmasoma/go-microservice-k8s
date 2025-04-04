@@ -42,8 +42,8 @@ func (w *web) listOrders(rw http.ResponseWriter, r *http.Request) {
 			return
 		}
 		var itemIDs []string
-		for _, ol := range order.GetOrderLines() {
-			itemIDs = append(itemIDs, ol.GetCatalogItemId())
+		for _, orderLine := range order.GetOrderLines() {
+			itemIDs = append(itemIDs, orderLine.GetCatalogItemId())
 		}
 		catalogIn := &catalog.ListCatalogItemsByIDsRequest{
 			Ids: itemIDs,
@@ -68,9 +68,16 @@ func (w *web) createOrder(rw http.ResponseWriter, r *http.Request) {
 		response.BadRequest(err, rw, r)
 		return
 	}
+	orderLines := make([]*order.OrderLine, len(req.GetOrderLines()))
+	for i, orderLine := range req.GetOrderLines() {
+		orderLines[i] = &order.OrderLine{
+			CatalogItemId: orderLine.GetCatalogItem().GetId(),
+			Quantity:      orderLine.GetQuantity(),
+		}
+	}
 	in := &order.CreateOrderRequest{
 		CustomerId: req.GetCustomerId(),
-		OrderLines: nil, // TODO: 後で実装
+		OrderLines: orderLines,
 	}
 	if _, err := w.order.CreateOrder(ctx, in); err != nil {
 		response.Error(err, rw, r)
@@ -99,8 +106,8 @@ func (w *web) getOrder(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var itemIDs []string
-	for _, ol := range orderOut.GetOrder().GetOrderLines() {
-		itemIDs = append(itemIDs, ol.GetCatalogItemId())
+	for _, orderLine := range orderOut.GetOrder().GetOrderLines() {
+		itemIDs = append(itemIDs, orderLine.GetCatalogItemId())
 	}
 	catalogIn := &catalog.ListCatalogItemsByIDsRequest{
 		Ids: itemIDs,

@@ -96,19 +96,19 @@ func (cr *catalogItem) ListByName(ctx context.Context, name string) (entity.Cata
 }
 
 func (cr *catalogItem) ListByIDs(ctx context.Context, ids []string) (entity.CatalogItems, error) {
-	placeholders := make([]string, len(ids))
-	args := make([]interface{}, len(ids))
+	queryParams := make([]string, len(ids))
+	queryValues := make([]interface{}, len(ids))
 	for i, id := range ids {
-		placeholders[i] = "?"
-		args[i] = id
+		queryParams[i] = "?"
+		queryValues[i] = id
 	}
 	//nolint: gosec // ignore SQL string concatenation
 	query := `
 	SELECT id, name, price
 	FROM CatalogItems
-	WHERE id IN (` + strings.Join(placeholders, ",") + `)
+	WHERE id IN (` + strings.Join(queryParams, ",") + `)
 	`
-	rows, err := cr.db.QueryContext(ctx, query, args...)
+	rows, err := cr.db.QueryContext(ctx, query, queryValues...)
 	if err != nil {
 		return nil, err
 	}

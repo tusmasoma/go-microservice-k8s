@@ -23,13 +23,13 @@ func NewOrder(db *sql.DB) database.Order {
 }
 
 func (or *order) Get(ctx context.Context, id string) (*entity.Order, error) {
-	query := `
+	ordersQuery := `
 	SELECT id, customer_id, order_date
 	FROM Orders
 	WHERE id = ?
 	LIMIT 1
 	`
-	row := or.db.QueryRowContext(ctx, query, id)
+	row := or.db.QueryRowContext(ctx, ordersQuery, id)
 	var order entity.Order
 	var orderDate time.Time
 	if err := row.Scan(
@@ -40,32 +40,32 @@ func (or *order) Get(ctx context.Context, id string) (*entity.Order, error) {
 		return nil, err
 	}
 	order.OrderDate = timestamppb.New(orderDate)
-	query = `
-	SELECT catalog_item_id, count
+	orderLinesQuery := `
+	SELECT catalog_item_id, quantity
 	FROM OrderLines
 	WHERE order_id = ?
 	`
-	rows, err := or.db.QueryContext(ctx, query, id)
+	rows, err := or.db.QueryContext(ctx, orderLinesQuery, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var lines entity.OrderLines
+	var orderLines entity.OrderLines
 	for rows.Next() {
-		var line entity.OrderLine
-		line.OrderLine = &pb.OrderLine{} // initialize here to prevent nil pointers
+		var orderLine entity.OrderLine
+		orderLine.OrderLine = &pb.OrderLine{} // initialize here to prevent nil pointers
 		if err = rows.Scan(
-			&line.CatalogItemId,
-			&line.Count,
+			&orderLine.CatalogItemId,
+			&orderLine.Quantity,
 		); err != nil {
 			return nil, err
 		}
-		lines = append(lines, &line)
+		orderLines = append(orderLines, &orderLine)
 	}
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
-	order.OrderLines = lines.Proto()
+	order.OrderLines = orderLines.Proto()
 	return &order, nil
 }
 
@@ -76,7 +76,7 @@ func (or *order) List(ctx context.Context) (entity.Orders, error) {
 		Orders.customer_id,
 		Orders.order_date,
 		OrderLines.catalog_item_id,
-		OrderLines.count
+		OrderLines.quantity
 	FROM
    		Orders
 	INNER JOIN
@@ -95,14 +95,14 @@ func (or *order) List(ctx context.Context) (entity.Orders, error) {
 			customerID    string
 			orderDate     time.Time
 			catalogItemID string
-			count         int64
+			quantity      int64
 		)
 		if err = rows.Scan(
 			&orderID,
 			&customerID,
 			&orderDate,
 			&catalogItemID,
-			&count,
+			&quantity,
 		); err != nil {
 			return nil, err
 		}
@@ -121,7 +121,7 @@ func (or *order) List(ctx context.Context) (entity.Orders, error) {
 		orderLine := entity.OrderLine{
 			OrderLine: &pb.OrderLine{
 				CatalogItemId: catalogItemID,
-				Count:         count,
+				Quantity:      quantity,
 			},
 		}
 		order.OrderLines = append(order.OrderLines, orderLine.Proto())
@@ -164,16 +164,16 @@ func (or *order) createOrder(ctx context.Context, tx *sql.Tx, order *entity.Orde
 	return nil
 }
 
-func (or *order) createOrderLines(ctx context.Context, tx *sql.Tx, orderID string, lines entity.OrderLines) error {
+func (or *order) createOrderLines(ctx context.Context, tx *sql.Tx, orderID string, orderLines entity.OrderLines) error {
 	query := `
-	INSERT INTO OrderLines (order_id, catalog_item_id, count) VALUES`
-	values := make([]interface{}, 0, len(lines)*3) //nolint:mnd // 3 is the number of columns.
-	for i, line := range lines {
+	INSERT INTO OrderLines (order_id, catalog_item_id, quantity) VALUES`
+	values := make([]interface{}, 0, len(orderLines)*3) //nolint:mnd // 3 is the number of columns.
+	for i, orderLine := range orderLines {
 		if i > 0 {
 			query += ", "
 		}
 		query += "(?, ?, ?)"
-		values = append(values, orderID, line.GetCatalogItemId(), line.GetCount())
+		values = append(values, orderID, orderLine.GetCatalogItemId(), orderLine.GetQuantity())
 	}
 	if _, err := tx.ExecContext(ctx, query, values...); err != nil {
 		return err

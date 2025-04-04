@@ -20,7 +20,7 @@ func NewCustomer(db *sql.DB) database.Customer {
 
 func (cr *customer) Get(ctx context.Context, id string) (*entity.Customer, error) {
 	query := `
-	SELECT id, name, email, street, city, country
+	SELECT id, name, email, street, city, country_code
 	FROM Customers
 	WHERE id = ?
 	LIMIT 1
@@ -33,7 +33,7 @@ func (cr *customer) Get(ctx context.Context, id string) (*entity.Customer, error
 		&customer.Email,
 		&customer.Street,
 		&customer.City,
-		&customer.Country,
+		&customer.CountryCode,
 	); err != nil {
 		return nil, err
 	}
@@ -42,7 +42,7 @@ func (cr *customer) Get(ctx context.Context, id string) (*entity.Customer, error
 
 func (cr *customer) List(ctx context.Context) (entity.Customers, error) {
 	query := `
-	SELECT id, name, email, street, city, country
+	SELECT id, name, email, street, city, country_code
 	FROM Customers
 	`
 	rows, err := cr.db.QueryContext(ctx, query)
@@ -59,7 +59,7 @@ func (cr *customer) List(ctx context.Context) (entity.Customers, error) {
 			&customer.Email,
 			&customer.Street,
 			&customer.City,
-			&customer.Country,
+			&customer.CountryCode,
 		); err != nil {
 			return nil, err
 		}
@@ -74,7 +74,7 @@ func (cr *customer) List(ctx context.Context) (entity.Customers, error) {
 func (cr *customer) Create(ctx context.Context, customer *entity.Customer) error {
 	query := `
 	INSERT INTO Customers (
-	id, name, email, street, city, country
+	id, name, email, street, city, country_code
 	)
 	VALUES (?, ?, ?, ?, ?, ?)
 	`
@@ -86,7 +86,7 @@ func (cr *customer) Create(ctx context.Context, customer *entity.Customer) error
 		customer.GetEmail(),
 		customer.GetStreet(),
 		customer.GetCity(),
-		customer.GetCountry(),
+		customer.GetCountryCode(),
 	); err != nil {
 		return err
 	}
@@ -96,7 +96,7 @@ func (cr *customer) Create(ctx context.Context, customer *entity.Customer) error
 func (cr *customer) Update(ctx context.Context, customer *entity.Customer) error {
 	query := `
 	UPDATE Customers
-	SET name = ?, email = ?, street = ?, city = ?, country = ?
+	SET name = ?, email = ?, street = ?, city = ?, country_code = ?
 	WHERE id = ?
 	`
 	if _, err := cr.db.ExecContext(
@@ -106,7 +106,7 @@ func (cr *customer) Update(ctx context.Context, customer *entity.Customer) error
 		customer.GetEmail(),
 		customer.GetStreet(),
 		customer.GetCity(),
-		customer.GetCountry(),
+		customer.GetCountryCode(),
 		customer.GetId(),
 	); err != nil {
 		return err

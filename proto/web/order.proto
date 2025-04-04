@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package web;
-option go_package = "proto/web";
+option  go_package = "proto/web";
 
 import "google/protobuf/timestamp.proto";
 import "proto/web/customer.proto";
@@ -9,23 +9,23 @@ import "proto/web/catalog.proto";
 
 message GetOrderRequest {}
 message GetOrderResponse {
-    Order order = 1;
+  Order order = 1;
 }
 
 message ListOrdersRequest {}
 message ListOrdersResponse {
-    repeated Order orders = 1;
+  repeated Order orders = 1;
 }
 
 message CreateOrderFormRequest {}
 message CreateOrderFormResponse {
-    repeated Customer customers = 1;
-    repeated CatalogItem items = 2;
+  repeated Customer    customers = 1;
+  repeated CatalogItem items     = 2;
 }
 
 message CreateOrderRequest {
-    string customer_id = 1;
-    repeated OrderLine order_lines = 2;
+  string             customer_id = 1;
+  repeated OrderLine order_lines = 2;
 }
 message CreateOrderResponse {}
 
@@ -33,13 +33,13 @@ message DeleteOrderRequest {}
 message DeleteOrderResponse {}
 
 message Order {
-    string id = 1;
-    Customer customer = 2;
-    google.protobuf.Timestamp order_date = 3;
-    repeated OrderLine order_lines = 4;
+  string                    id          = 1;
+  Customer                  customer    = 2;
+  google.protobuf.Timestamp order_date  = 3;
+  repeated OrderLine        order_lines = 4;
 }
 
 message OrderLine {
-    int64 count = 1;
-    CatalogItem catalog_item = 2;
+  int64       quantity     = 1;
+  CatalogItem catalog_item = 2;
 }

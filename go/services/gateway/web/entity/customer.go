@@ -19,12 +19,12 @@ func (c *Customer) Proto() *web.Customer {
 func NewCustomer(customer *customer.Customer) *Customer {
 	return &Customer{
 		Customer: web.Customer{
-			Id:      customer.GetId(),
-			Name:    customer.GetName(),
-			Email:   customer.GetEmail(),
-			Street:  customer.GetStreet(),
-			City:    customer.GetCity(),
-			Country: customer.GetCountry(),
+			Id:          customer.GetId(),
+			Name:        customer.GetName(),
+			Email:       customer.GetEmail(),
+			Street:      customer.GetStreet(),
+			City:        customer.GetCity(),
+			CountryCode: web.CountryCode(customer.GetCountryCode()),
 		},
 	}
 }

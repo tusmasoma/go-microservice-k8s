@@ -91,12 +91,12 @@ func Test_CreateCustomer(t *testing.T) {
 	t.Parallel()
 	user := &entity.Customer{
 		Customer: customer.Customer{
-			Id:      uuid.NewString(),
-			Name:    "John Doe",
-			Email:   "john.doe@example.com",
-			Street:  "1600 Pennsylvania Avenue NW",
-			City:    "Washington",
-			Country: "USA",
+			Id:          uuid.NewString(),
+			Name:        "John Doe",
+			Email:       "john.doe@example.com",
+			Street:      "1600 Pennsylvania Avenue NW",
+			City:        "Washington",
+			CountryCode: customer.CountryCode_JPN,
 		},
 	}
 	errmock := errors.New("errors")
@@ -125,8 +125,8 @@ func Test_CreateCustomer(t *testing.T) {
 			if user.GetCity() != "Washington" {
 				t.Errorf("unexpected City: got %v, want %v", user.GetCity(), "Washington")
 			}
-			if user.GetCountry() != "USA" {
-				t.Errorf("unexpected Country: got %v, want %v", user.GetCountry(), "USA")
+			if user.GetCountryCode() != customer.CountryCode_JPN {
+				t.Errorf("unexpected CountryCode: got %v, want %v", user.GetCountryCode(), "USA")
 			}
 		}).Return(nil),
 	)
@@ -144,7 +144,7 @@ func Test_CreateCustomer(t *testing.T) {
 	req.Email = user.GetEmail()
 	req.Street = user.GetStreet()
 	req.City = user.GetCity()
-	req.Country = user.GetCountry()
+	req.CountryCode = user.GetCountryCode()
 	resp, err := service.CreateCustomer(ctx, req)
 	assert.Error(t, err)
 	assert.Nil(t, resp)
@@ -159,12 +159,12 @@ func Test_UpdateCustomer(t *testing.T) {
 	id := uuid.NewString()
 	user := &entity.Customer{
 		Customer: customer.Customer{
-			Id:      id,
-			Name:    "John Doe",
-			Email:   "john.doe@example.com",
-			Street:  "1600 Pennsylvania Avenue NW",
-			City:    "Washington",
-			Country: "USA",
+			Id:          id,
+			Name:        "John Doe",
+			Email:       "john.doe@example.com",
+			Street:      "1600 Pennsylvania Avenue NW",
+			City:        "Washington",
+			CountryCode: customer.CountryCode_JPN,
 		},
 	}
 	errmock := errors.New("errors")
@@ -196,8 +196,8 @@ func Test_UpdateCustomer(t *testing.T) {
 			if user.GetCity() != "Washington" {
 				t.Errorf("unexpected City: got %v, want %v", user.GetCity(), "Washington")
 			}
-			if user.GetCountry() != "USA" {
-				t.Errorf("unexpected Country: got %v, want %v", user.GetCountry(), "USA")
+			if user.GetCountryCode() != customer.CountryCode_JPN {
+				t.Errorf("unexpected CountryCode: got %v, want %v", user.GetCountryCode(), "USA")
 			}
 		}).Return(nil),
 	)
@@ -216,7 +216,7 @@ func Test_UpdateCustomer(t *testing.T) {
 	req.Email = user.GetEmail()
 	req.Street = user.GetStreet()
 	req.City = user.GetCity()
-	req.Country = user.GetCountry()
+	req.CountryCode = user.GetCountryCode()
 	resp, err := service.UpdateCustomer(ctx, req)
 	assert.Error(t, err)
 	assert.Nil(t, resp)

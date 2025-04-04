@@ -44,11 +44,11 @@ func (w *web) createCustomer(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 	in := &customer.CreateCustomerRequest{
-		Name:    req.GetName(),
-		Email:   req.GetEmail(),
-		Street:  req.GetStreet(),
-		City:    req.GetCity(),
-		Country: req.GetCountry(),
+		Name:        req.GetName(),
+		Email:       req.GetEmail(),
+		Street:      req.GetStreet(),
+		City:        req.GetCity(),
+		CountryCode: customer.CountryCode(req.GetCountryCode()),
 	}
 	if _, err := w.customer.CreateCustomer(ctx, in); err != nil {
 		response.Error(err, rw, r)
@@ -83,12 +83,12 @@ func (w *web) updateCustomer(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 	in := &customer.UpdateCustomerRequest{
-		Id:      customerID,
-		Name:    req.GetName(),
-		Email:   req.GetEmail(),
-		Street:  req.GetStreet(),
-		City:    req.GetCity(),
-		Country: req.GetCountry(),
+		Id:          customerID,
+		Name:        req.GetName(),
+		Email:       req.GetEmail(),
+		Street:      req.GetStreet(),
+		City:        req.GetCity(),
+		CountryCode: customer.CountryCode(req.GetCountryCode()),
 	}
 	if _, err := w.customer.UpdateCustomer(ctx, in); err != nil {
 		response.Error(err, rw, r)

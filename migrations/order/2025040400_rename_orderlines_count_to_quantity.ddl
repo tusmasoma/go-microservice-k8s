@@ -1,0 +1,1 @@
+ALTER TABLE OrderLines RENAME COLUMN count TO quantity;

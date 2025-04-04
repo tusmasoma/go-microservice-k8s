@@ -18,7 +18,7 @@ func (c *Customer) Proto() *customer.Customer {
 	return &c.Customer
 }
 
-func NewCustomer(id, name, email, street, city, country string) (*Customer, error) {
+func NewCustomer(id, name, email, street, city string, countryCode customer.CountryCode) (*Customer, error) {
 	if id == "" {
 		return nil, errors.New("id is required")
 	}
@@ -34,22 +34,22 @@ func NewCustomer(id, name, email, street, city, country string) (*Customer, erro
 	if city == "" {
 		return nil, errors.New("city is required")
 	}
-	if country == "" {
-		return nil, errors.New("country is required")
+	if countryCode == customer.CountryCode_COUNTRY_CODE_UNSPECIFIED {
+		return nil, errors.New("countryCode is required")
 	}
 	return &Customer{
 		Customer: customer.Customer{
-			Id:      id,
-			Name:    name,
-			Email:   email,
-			Street:  street,
-			City:    city,
-			Country: country,
+			Id:          id,
+			Name:        name,
+			Email:       email,
+			Street:      street,
+			City:        city,
+			CountryCode: countryCode,
 		},
 	}, nil
 }
 
-func CreateCustomer(name, email, street, city, country string) (*Customer, error) {
+func CreateCustomer(name, email, street, city string, countryCode customer.CountryCode) (*Customer, error) {
 	if name == "" {
 		return nil, errors.New("name is required")
 	}
@@ -62,17 +62,17 @@ func CreateCustomer(name, email, street, city, country string) (*Customer, error
 	if city == "" {
 		return nil, errors.New("city is required")
 	}
-	if country == "" {
-		return nil, errors.New("country is required")
+	if countryCode == customer.CountryCode_COUNTRY_CODE_UNSPECIFIED {
+		return nil, errors.New("countryCode is required")
 	}
 	return &Customer{
 		Customer: customer.Customer{
-			Id:      uuid.NewString(),
-			Name:    name,
-			Email:   email,
-			Street:  street,
-			City:    city,
-			Country: country,
+			Id:          uuid.NewString(),
+			Name:        name,
+			Email:       email,
+			Street:      street,
+			City:        city,
+			CountryCode: countryCode,
 		},
 	}, nil
 }

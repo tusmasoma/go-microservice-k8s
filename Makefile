@@ -148,6 +148,9 @@ proto_gen: proto_tools
 			./proto/$$service/*.proto; \
 	done
 
+format-proto:
+	clang-format -i proto/**/*.proto
+
 # .PHONY: generate
 # generate: generate-deps
 # 	@for dir in $$(find $(if $(SERVICE),$(SERVICE_PATH_PREFIX)/$(SERVICE),$(SERVICE_PATH_PREFIX)) -type d | sed '1,1d' | sed 's@./@@') ; do \

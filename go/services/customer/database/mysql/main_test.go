@@ -20,7 +20,6 @@ func TestMain(m *testing.M) {
 	params := pt.MySQLParams{
 		DB:           db,
 		DBName:       "go-microservice-k8s-test",
-		ServiceName:  "customer",
 		UserName:     "root",
 		UserPassword: "root",
 	}

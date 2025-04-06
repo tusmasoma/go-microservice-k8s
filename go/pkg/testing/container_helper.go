@@ -16,7 +16,6 @@ import (
 type MySQLParams struct {
 	DB           *sql.DB
 	DBName       string
-	ServiceName  string
 	UserName     string
 	UserPassword string
 }
@@ -45,11 +44,11 @@ func StartMySQL(ctx context.Context, params *MySQLParams) (*sql.DB, func(), erro
 			"--collation-server=utf8mb4_unicode_ci",
 		},
 	}
-	migrationsDir, err := findMigrationsDir()
-	if err != nil {
-		log.Error("Failed to find migrations directory: %v", err)
-		return nil, nil, err
-	}
+	// migrationsDir, err := findMigrationsDir()
+	// if err != nil {
+	// 	log.Error("Failed to find migrations directory: %v", err)
+	// 	return nil, nil, err
+	// }
 	resource, err := pool.RunWithOptions(runOptions,
 		func(hc *docker.HostConfig) {
 			hc.AutoRemove = true
@@ -57,11 +56,11 @@ func StartMySQL(ctx context.Context, params *MySQLParams) (*sql.DB, func(), erro
 				Name: "no",
 			}
 			hc.Mounts = []docker.HostMount{
-				{
-					Type:   "bind",
-					Source: filepath.Join(migrationsDir, params.ServiceName, params.ServiceName+".ddl"),
-					Target: fmt.Sprintf("/docker-entrypoint-initdb.d/%s.ddl", params.ServiceName),
-				},
+				// {
+				// 	Type:   "bind",
+				// 	Source: filepath.Join(migrationsDir, params.ServiceName, params.ServiceName+".ddl"),
+				// 	Target: fmt.Sprintf("/docker-entrypoint-initdb.d/%s.ddl", params.ServiceName),
+				// },
 			}
 		},
 	)

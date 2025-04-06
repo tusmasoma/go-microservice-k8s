@@ -7,6 +7,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	pt "github.com/tusmasoma/go-microservice-k8s/go/pkg/testing"
 	"github.com/tusmasoma/go-microservice-k8s/proto/order"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
@@ -134,11 +135,7 @@ func TestEntity_NewOrder(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			order, err := NewOrder(tt.arg.id, tt.arg.customerID, tt.arg.orderDate, tt.arg.orderLines)
-			if (err != nil) != (tt.want.err != nil) {
-				t.Errorf("NewOrder() error = %v, wantErr %v", err, tt.want.err)
-			} else if err != nil && tt.want.err != nil && err.Error() != tt.want.err.Error() {
-				t.Errorf("NewOrder() error = %v, wantErr %v", err, tt.want.err)
-			}
+			pt.ValidateErr(t, tt.want.err, err)
 			if tt.want.err != nil {
 				return
 			}
@@ -234,11 +231,7 @@ func TestEntity_CreateOrder(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			order, err := CreateOrder(tt.arg.customerID, tt.arg.orderLines)
-			if (err != nil) != (tt.want.err != nil) {
-				t.Errorf("CreateOrder() error = %v, wantErr %v", err, tt.want.err)
-			} else if err != nil && tt.want.err != nil && err.Error() != tt.want.err.Error() {
-				t.Errorf("CreateOrder() error = %v, wantErr %v", err, tt.want.err)
-			}
+			pt.ValidateErr(t, tt.want.err, err)
 			if tt.want.err != nil {
 				return
 			}

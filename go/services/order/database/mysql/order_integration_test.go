@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/google/uuid"
-	"github.com/tusmasoma/go-microservice-k8s/go/pkg/mysql"
+	pt "github.com/tusmasoma/go-microservice-k8s/go/pkg/testing"
 	"github.com/tusmasoma/go-microservice-k8s/go/services/order/entity"
 	pb "github.com/tusmasoma/go-microservice-k8s/proto/order"
 )
@@ -28,22 +28,22 @@ func Test_OrderRepository(t *testing.T) {
 	}
 	// Create
 	err = repo.Create(ctx, order)
-	mysql.ValidateErr(t, err, nil)
+	pt.ValidateErr(t, err, nil)
 	// Get
 	gotOrder, err := repo.Get(ctx, order.GetId())
-	mysql.ValidateErr(t, err, nil)
+	pt.ValidateErr(t, err, nil)
 	if order.GetId() != gotOrder.GetId() {
 		t.Errorf("unexpected order ID: want=%s, got=%s", order.GetId(), gotOrder.GetId())
 	}
 	// List
 	gotOrders, err := repo.List(ctx)
-	mysql.ValidateErr(t, err, nil)
+	pt.ValidateErr(t, err, nil)
 	if len(gotOrders) != 1 {
 		t.Errorf("got %d orders, want 1", len(gotOrders))
 	}
 	// Delete
 	err = repo.Delete(ctx, order.GetId())
-	mysql.ValidateErr(t, err, nil)
+	pt.ValidateErr(t, err, nil)
 	_, err = repo.Get(ctx, order.GetId())
 	if err == nil {
 		t.Errorf("want: %v, got: %v", nil, err)

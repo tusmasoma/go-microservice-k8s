@@ -6,6 +6,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	pt "github.com/tusmasoma/go-microservice-k8s/go/pkg/testing"
 	"github.com/tusmasoma/go-microservice-k8s/proto/customer"
 )
 
@@ -217,11 +218,7 @@ func TestEntity_NewCustomer(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			customer, err := NewCustomer(tt.arg.id, tt.arg.name, tt.arg.email, tt.arg.street, tt.arg.city, tt.arg.countryCode)
-			if (err != nil) != (tt.want.err != nil) {
-				t.Errorf("NewCustomer() error = %v, wantErr %v", err, tt.want.err)
-			} else if err != nil && tt.want.err != nil && err.Error() != tt.want.err.Error() {
-				t.Errorf("NewCustomer() error = %v, wantErr %v", err, tt.want.err)
-			}
+			pt.ValidateErr(t, tt.want.err, err)
 			if tt.want.err != nil {
 				return
 			}
@@ -403,11 +400,7 @@ func TestEntity_CreateCustomer(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			customer, err := CreateCustomer(tt.arg.name, tt.arg.email, tt.arg.street, tt.arg.city, tt.arg.countryCode)
-			if (err != nil) != (tt.want.err != nil) {
-				t.Errorf("CreateCustomer() error = %v, wantErr %v", err, tt.want.err)
-			} else if err != nil && tt.want.err != nil && err.Error() != tt.want.err.Error() {
-				t.Errorf("CreateCustomer() error = %v, wantErr %v", err, tt.want.err)
-			}
+			pt.ValidateErr(t, tt.want.err, err)
 			if tt.want.err != nil {
 				return
 			}

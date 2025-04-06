@@ -6,6 +6,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	pt "github.com/tusmasoma/go-microservice-k8s/go/pkg/testing"
 	"github.com/tusmasoma/go-microservice-k8s/proto/catalog"
 )
 
@@ -111,11 +112,7 @@ func TestEntity_NewCatalogItem(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			item, err := NewCatalogItem(tt.arg.id, tt.arg.name, tt.arg.price)
-			if (err != nil) != (tt.want.err != nil) {
-				t.Errorf("NewCatalogItem() error = %v, wantErr %v", err, tt.want.err)
-			} else if err != nil && tt.want.err != nil && err.Error() != tt.want.err.Error() {
-				t.Errorf("NewCatalogItem() error = %v, wantErr %v", err, tt.want.err)
-			}
+			pt.ValidateErr(t, tt.want.err, err)
 			if tt.want.err != nil {
 				return
 			}
@@ -203,11 +200,7 @@ func TestEntity_CreateCatalogItem(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			item, err := CreateCatalogItem(tt.arg.name, tt.arg.price)
-			if (err != nil) != (tt.want.err != nil) {
-				t.Errorf("CreateCatalogItem() error = %v, wantErr %v", err, tt.want.err)
-			} else if err != nil && tt.want.err != nil && err.Error() != tt.want.err.Error() {
-				t.Errorf("CreateCatalogItem() error = %v, wantErr %v", err, tt.want.err)
-			}
+			pt.ValidateErr(t, tt.want.err, err)
 			if tt.want.err != nil {
 				return
 			}

@@ -64,6 +64,9 @@ jobs:
         run: |
           go mod download
           go mod verify
+      
+      - name: Generate
+        run: make setup
 
       - name: Build
         working-directory: ./go/services/${{ matrix.service }}

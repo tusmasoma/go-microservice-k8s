@@ -114,15 +114,6 @@ proto_gen:
 format-proto:
 	clang-format -i proto/**/*.proto
 
-# .PHONY: generate
-# generate: generate-deps
-# 	@for dir in $$(find $(if $(SERVICE),$(SERVICE_PATH_PREFIX)/$(SERVICE),$(SERVICE_PATH_PREFIX)) -type d | sed '1,1d' | sed 's@./@@') ; do \
-# 		if [ -n "$$(git diff --name-only origin/main "$${dir}")" ]; then \
-# 			echo "go generate ./$${dir}/..." && \
-# 			(cd "$${dir}" && PATH="$(BIN):$(PATH)" ${GO_ENV} ${GO} generate ./...) || exit 1; \
-# 		fi; \
-# 	done
-# 	$(MAKE) fmt
 .PHONY: generate
 generate: generate-deps
 ifdef SERVICE
@@ -167,3 +158,5 @@ build:
 .PHONY: bin-clean
 bin-clean:
 	$(RM) -r $(if $(SERVICE),$(SERVICE_PATH_PREFIX)/$(SERVICE)/bin,./bin)
+
+setup: proto_gen generate

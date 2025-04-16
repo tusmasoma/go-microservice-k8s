@@ -49,6 +49,9 @@ jobs:
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3.5.2
+      
+      - name: Setup Buf
+        uses: bufbuild/buf-setup-action@a47c93e0b1648d5651a065437926377d060baa99 # v1.50.0
 
       - name: Setup Go
         uses: actions/setup-go@v4.1.0

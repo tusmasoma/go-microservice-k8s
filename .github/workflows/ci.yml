@@ -49,6 +49,9 @@ jobs:
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3.5.2
+      
+      - name: Setup Buf
+        uses: bufbuild/buf-setup-action@a47c93e0b1648d5651a065437926377d060baa99 # v1.50.0
 
       - name: Setup Go
         uses: actions/setup-go@v4.1.0
@@ -92,10 +95,11 @@ jobs:
           name: app-${{ matrix.service }}
           path: ./go/services/${{ matrix.service }}/app
 
-      # - name: Setup .env file
-      #   run: echo "${{ secrets.LOCAL_ENV_FILE }}" > ./go/services/.env
-      #   env:
-      #     LOCAL_ENV_FILE: ${{ secrets.LOCAL_ENV_FILE }}
+      - name: Setup Buf
+        uses: bufbuild/buf-setup-action@a47c93e0b1648d5651a065437926377d060baa99 # v1.50.0
+
+      - name: Generate
+        run: make setup
 
       - name: Test
         working-directory: ./go/services/${{ matrix.service }}
@@ -113,24 +117,12 @@ jobs:
         with:
           name: app-${{ matrix.service }}
           path: ./go/services/${{ matrix.service }}/app
+      
+      - name: Setup Buf
+        uses: bufbuild/buf-setup-action@a47c93e0b1648d5651a065437926377d060baa99 # v1.50.0
+
+      - name: Generate
+        run: make setup
 
       - name: Lint
         run: make lint SERVICE=${{ matrix.service }}
-  generate:
-    needs: build
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        service: [catalog, customer, order, gateway]
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/download-artifact@v4
-        with:
-         name: app-${{ matrix.service }}
-         path: ./go/services/${{ matrix.service }}/app
-
-      - name: Generate and check for changes
-        run: |
-          make generate SERVICE=${{ matrix.service }}
-          git add .
-          git diff --cached --quiet -- ./**/*.go

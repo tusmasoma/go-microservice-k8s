@@ -116,32 +116,8 @@ format-proto:
 
 .PHONY: generate
 generate: generate-deps
-ifdef SERVICE
-	@echo "Running generate for service: $(SERVICE)"
-	@for dir in $$(find $(SERVICE_PATH_PREFIX)/$(SERVICE) -type d); do \
-		if [ -n "$$(git diff --name-only origin/main -- $$dir)" ]; then \
-			echo "go generate $$dir/..." && \
-			(cd "$$dir" && PATH="$(BIN):$(PATH)" ${GO_ENV} ${GO} generate ./...) || true; \
-		fi; \
-	done
-else
-	@for service in $(SERVICES); do \
-		echo "Running generate for service: $$service"; \
-		for dir in $$(find $(SERVICE_PATH_PREFIX)/$$service -type d); do \
-			if [ -n "$$(git diff --name-only origin/main -- $$dir)" ]; then \
-				echo "go generate $$dir/..." && \
-				(cd "$$dir" && PATH="$(BIN):$(PATH)" ${GO_ENV} ${GO} generate ./...) || true; \
-			fi; \
-		done; \
-	done
-endif
-	@echo "Running generate for pkg/"
-	@for dir in $$(find ./pkg -type d); do \
-		if [ -n "$$(git diff --name-only origin/main -- $$dir)" ]; then \
-			echo "go generate $$dir/..." && \
-			(cd "$$dir" && PATH="$(BIN):$(PATH)" ${GO_ENV} ${GO} generate ./...) || true; \
-		fi; \
-	done
+	@echo "Running go generate for all packages"
+	PATH="$(BIN):$(PATH)" ${GO_ENV} go generate ./...
 	$(MAKE) fmt
 
 .PHONY: generate-deps

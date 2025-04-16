@@ -1,19 +1,14 @@
 version: v2
 
 plugins:
-  # protobuf → Go 型（公式プラグイン）
   - remote: buf.build/protocolbuffers/go
     out: .
     opt:
       - paths=source_relative
-
-  # gRPC スタブ生成（公式プラグイン）
   - remote: buf.build/grpc/go
     out: .
     opt:
       - paths=source_relative
-
-  # （必要なら）enum-label プラグイン
   - local: protoc-gen-enum-label
     out: .
     opt:

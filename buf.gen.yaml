@@ -9,7 +9,3 @@ plugins:
     out: .
     opt:
       - paths=source_relative
-  - local: protoc-gen-enum-label
-    out: .
-    opt:
-      - paths=source_relative

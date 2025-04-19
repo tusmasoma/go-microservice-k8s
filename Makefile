@@ -14,17 +14,12 @@ SERVICE_PATH_PREFIX := go/services
 # tools
 $(shell mkdir -p $(BIN))
 
-ifdef MAKE_IN_CI
-GOLANGCI_LINT_BIN := golangci-lint
-else
 GOLANGCI_LINT_VERSION := v1.63.4
-GOLANGCI_LINT_BIN := $(BIN)/golangci-lint
 $(BIN)/golangci-lint-$(GOLANGCI_LINT_VERSION):
 	unlink $(BIN)/golangci-lint || true
 	$(GO_ENV) ${GO} install github.com/golangci/golangci-lint/cmd/golangci-lint@$(GOLANGCI_LINT_VERSION)
 	mv $(BIN)/golangci-lint $(BIN)/golangci-lint-$(GOLANGCI_LINT_VERSION)
 	ln -s $(BIN)/golangci-lint-$(GOLANGCI_LINT_VERSION) $(BIN)/golangci-lint
-endif
 
 MOCKGEN_VERSION := 1.6.0
 $(BIN)/mockgen-$(MOCKGEN_VERSION):
@@ -57,7 +52,7 @@ endif
 
 # golangci-lint: lint for all under the PKG
 .PHONY: lint
-lint: $(if $(MAKE_IN_CI),,$(BIN)/golangci-lint-$(GOLANGCI_LINT_VERSION))
+lint: $(BIN)/golangci-lint-$(GOLANGCI_LINT_VERSION)
 ifdef SERVICE
 	@echo "Running lint for service: $(SERVICE)"
 	cd ./$(SERVICE_PATH_PREFIX)/$(SERVICE) && \

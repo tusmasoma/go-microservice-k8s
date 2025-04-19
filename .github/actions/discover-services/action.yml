@@ -29,5 +29,9 @@ runs:
           fi
         done
 
-        json=$(printf "%s\n" "${changed_services[@]}" | jq -R -s -c 'split("\n") | map(select(length > 0)) | {include: map({service: .})}')
+        if [ ${#changed_services[@]} -eq 0 ]; then
+          json='{"include":[]}'
+        else
+          json=$(printf "%s\n" "${changed_services[@]}" | jq -R -s -c 'split("\n") | map(select(length > 0)) | {include: map({service: .})}')
+        fi
         echo "matrix=$json" >> "$GITHUB_OUTPUT"

@@ -45,6 +45,9 @@ $(BIN)/gofumpt-$(GOFUMPT_VERSION):
 # go: test for all under the PKG
 .PHONY: test
 test:
+ifndef GOTESTSUM
+	go install gotest.tools/gotestsum@latest
+endif
 ifdef SERVICE
 	@gotestsum --format testname -- -vet=off -race=false -timeout=10m -count=1 ./$(SERVICE_PATH_PREFIX)/$(SERVICE)/...
 else

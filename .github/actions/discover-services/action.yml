@@ -12,26 +12,29 @@ runs:
       shell: bash
       run: |
         services=$(find ./go/services -mindepth 1 -maxdepth 1 -type d -exec basename {} \;)
-        printf "all_services<<EOF\n%s\nEOF\n" "$services" >> "$GITHUB_ENV"
+        printf "services<<EOF\n%s\nEOF\n" "$services" >> "$GITHUB_OUTPUT"
 
     - name: Diff and extract changed services
       id: set-matrix
       shell: bash
       run: |
-        git fetch origin main
+        all_services="${{ steps.find-services.outputs.services }}"
 
-        diff_files=$(git diff --name-only origin/main...HEAD)
+        if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+          base_ref="origin/${{ github.base_ref }}"
+          git fetch origin "${{ github.base_ref }}"
+          diff_files=$(git diff --name-only "$base_ref"...HEAD)
+        else
+          git fetch origin main
+          diff_files=$(git diff --name-only HEAD^ HEAD)
+        fi
+
         changed_services=()
-
         for svc in $all_services; do
           if echo "$diff_files" | grep -q "go/services/$svc/"; then
             changed_services+=("$svc")
           fi
         done
 
-        if [ ${#changed_services[@]} -eq 0 ]; then
-          json='{"include":[]}'
-        else
-          json=$(printf "%s\n" "${changed_services[@]}" | jq -R -s -c 'split("\n") | map(select(length > 0)) | {include: map({service: .})}')
-        fi
+        json=$(printf "%s\n" "${changed_services[@]}" | jq -R -s -c 'split("\n") | map(select(length > 0)) | {include: map({service: .})}')
         echo "matrix=$json" >> "$GITHUB_OUTPUT"

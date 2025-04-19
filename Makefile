@@ -42,6 +42,7 @@ $(BIN)/gofumpt-$(GOFUMPT_VERSION):
 	mv $(BIN)/gofumpt $(BIN)/gofumpt-$(GOFUMPT_VERSION)
 	ln -s $(BIN)/gofumpt-$(GOFUMPT_VERSION) $(BIN)/gofumpt
 
+GOTESTSUM := $(shell command -v gotestsum 2> /dev/null)
 # go: test for all under the PKG
 .PHONY: test
 test:

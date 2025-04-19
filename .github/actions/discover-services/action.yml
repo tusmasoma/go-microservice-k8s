@@ -1,18 +1,33 @@
 name: "Discover Go Services"
-description: "Finds Go service directories and outputs a matrix"
-
+description: "Finds changed Go services and outputs matrix"
 outputs:
   matrix:
-    description: "JSON matrix of discovered Go services"
+    description: "JSON matrix of changed services"
     value: ${{ steps.set-matrix.outputs.matrix }}
-
 runs:
   using: "composite"
   steps:
-    - name: Set matrix dynamically
+    - name: Find all service directories
+      id: find-services
+      shell: bash
+      run: |
+        services=$(find ./go/services -mindepth 1 -maxdepth 1 -type d -exec basename {} \;)
+        echo "all_services=$services" >> "$GITHUB_ENV"
+
+    - name: Diff and extract changed services
       id: set-matrix
       shell: bash
       run: |
-        dirs=$(find ./go/services -mindepth 1 -maxdepth 1 -type d -exec basename {} \;)
-        json=$(echo "$dirs" | jq -R -s -c 'split("\n") | map(select(length > 0)) | {service: .}')
-        echo "matrix=$json" >> $GITHUB_OUTPUT
+        git fetch origin main
+
+        diff_files=$(git diff --name-only origin/main...HEAD)
+        changed_services=()
+
+        for svc in $all_services; do
+          if echo "$diff_files" | grep -q "go/services/$svc/"; then
+            changed_services+=("$svc")
+          fi
+        done
+
+        json=$(printf "%s\n" "${changed_services[@]}" | jq -R -s -c 'split("\n") | map(select(length > 0)) | {include: map({service: .})}')
+        echo "matrix=$json" >> "$GITHUB_OUTPUT"

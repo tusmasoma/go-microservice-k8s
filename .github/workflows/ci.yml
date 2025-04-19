@@ -99,13 +99,11 @@ jobs:
         uses: golangci/golangci-lint-action@v6.0.1
         with:
           version: v1.63.4
-          args: >-
-            -v --timeout=20m $(if find ./go/services/${{ matrix.service }} -name '*.go' | grep -q .; then echo ./go/services/${{ matrix.service }}; fi)
+          args: -v --timeout=20m ./go/services/${{ matrix.service }}/...
 
       - name: Lint (full for non-PR)
         if: ${{ github.event_name != 'pull_request' }}
         uses: golangci/golangci-lint-action@v6.0.1
         with:
           version: v1.63.4
-          args: >-
-            -v --timeout=20m $(if find ./go -name '*.go' | grep -q .; then echo ./...; fi)
+          args: --timeout=20m -v ./...

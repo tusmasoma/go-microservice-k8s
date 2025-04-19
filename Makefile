@@ -42,13 +42,12 @@ $(BIN)/gofumpt-$(GOFUMPT_VERSION):
 	mv $(BIN)/gofumpt $(BIN)/gofumpt-$(GOFUMPT_VERSION)
 	ln -s $(BIN)/gofumpt-$(GOFUMPT_VERSION) $(BIN)/gofumpt
 
-# go: test for all under the PKG
 .PHONY: test
 test:
 ifdef SERVICE
-	@gotestsum --format testname -- -vet=off -race=false -timeout=10m -count=1 ./$(SERVICE_PATH_PREFIX)/$(SERVICE)/...
+	@go test -v -vet=off -race=false -timeout=10m -count=1 ./$(SERVICE_PATH_PREFIX)/$(SERVICE)/...
 else
-	@gotestsum --format testname -- -vet=off -race=false -timeout=10m -count=1 $(shell go list ./go/... | grep -v /mock)
+	@go list ./go/... | grep -v /mock | xargs go test -v -vet=off -race=false -timeout=10m -count=1
 endif
 
 # golangci-lint: lint for all under the PKG

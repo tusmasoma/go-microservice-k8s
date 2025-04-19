@@ -25,6 +25,6 @@ go.work.sum
 .env
 bin/
 
-/proto/**/*.pb.go
-/proto/**/README.md
-/go/**/mock/*.go
+#/proto/**/*.pb.go
+#/proto/**/README.md
+#/go/**/mock/*.go

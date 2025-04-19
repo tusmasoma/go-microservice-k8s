@@ -2,59 +2,40 @@ name: CI
 
 on:
   push:
-    paths-ignore:
-      - '**/*.md'
     branches: [ "main" ]
-  #  branches-ignore:
-  #    - main
+    paths:
+      - "go/**"
   pull_request:
     branches: [ "main" ]
-  workflow_call:
-    secrets:
-      PRIVATE_KEY:
-        required: true
-      PUBLIC_KEY:
-        required: true
+    paths:
+      - "go/**"
   workflow_dispatch:
 
 jobs:
-  commitlint:
-    if: github.ref != 'refs/heads/main' # TODO: Remove this line when ready to enforce commitlint on main branch
+  discover-services:
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.discover.outputs.matrix }}
     steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v3.5.2
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.0.0
         with:
           fetch-depth: 0
 
-      - name: Setup Node
-        uses: actions/setup-node@v2
-        with:
-          node-version: '21.6.1'
-
-      - name: Install dependencies
-        run: |
-          npm init -y
-          npm install --save-dev @commitlint/cli @commitlint/config-conventional
-          echo "module.exports = {extends: ['@commitlint/config-conventional']}" > commitlint.config.js
-
-      - name: Validate all commits from PR
-        run: npx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
-
+      - name: Discover Go Services
+        id: discover
+        uses: ./.github/actions/discover-services
   build:
+    needs: discover-services
     runs-on: ubuntu-latest
     strategy:
-      matrix:
-        service: [catalog, customer, order, gateway] # サービス名のリスト
+      matrix: ${{ fromJson(needs.discover-services.outputs.matrix) }}
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v3.5.2
-      
-      - name: Setup Buf
-        uses: bufbuild/buf-setup-action@a47c93e0b1648d5651a065437926377d060baa99 # v1.50.0
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.0.0
 
       - name: Setup Go
-        uses: actions/setup-go@v4.1.0
+        uses: actions/setup-go@93397bea11091df50f3d7e59dc26a7711a8bcfbe # v4.0.0
         id: setup-go
         with:
           go-version-file: ./go.mod
@@ -67,9 +48,6 @@ jobs:
         run: |
           go mod download
           go mod verify
-      
-      - name: Generate
-        run: make setup
 
       - name: Build
         working-directory: ./go/services/${{ matrix.service }}
@@ -77,52 +55,39 @@ jobs:
           go build -v -o app ./cmd/
 
       - name: Archive production artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
         with:
           name: app-${{ matrix.service }}
           path: ./go/services/${{ matrix.service }}/app
-
   test:
-    needs: build
+    needs:
+      - discover-services
+      - build
     runs-on: ubuntu-latest
     strategy:
-      matrix:
-        service: [catalog, customer, order, gateway]
+      matrix: ${{ fromJson(needs.discover-services.outputs.matrix) }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.0.0
+      - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.0.0
         with:
           name: app-${{ matrix.service }}
           path: ./go/services/${{ matrix.service }}/app
-
-      - name: Setup Buf
-        uses: bufbuild/buf-setup-action@a47c93e0b1648d5651a065437926377d060baa99 # v1.50.0
-
-      - name: Generate
-        run: make setup
 
       - name: Test
-        working-directory: ./go/services/${{ matrix.service }}
-        run: go test -v ./...
-
+        run: make test SERVICE=${{ matrix.service }}
   lint:
-    needs: build
+    needs:
+      - discover-services
+      - build
     runs-on: ubuntu-latest
     strategy:
-      matrix:
-        service: [catalog, customer, order, gateway]
+      matrix: ${{ fromJson(needs.discover-services.outputs.matrix) }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.0.0
+      - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.0.0
         with:
           name: app-${{ matrix.service }}
           path: ./go/services/${{ matrix.service }}/app
-      
-      - name: Setup Buf
-        uses: bufbuild/buf-setup-action@a47c93e0b1648d5651a065437926377d060baa99 # v1.50.0
-
-      - name: Generate
-        run: make setup
 
       - name: Lint
         run: make lint SERVICE=${{ matrix.service }}

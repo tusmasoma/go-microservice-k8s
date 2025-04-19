@@ -1,0 +1,18 @@
+name: "Discover Go Services"
+description: "Finds Go service directories and outputs a matrix"
+
+outputs:
+  matrix:
+    description: "JSON matrix of discovered Go services"
+    value: ${{ steps.set-matrix.outputs.matrix }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set matrix dynamically
+      id: set-matrix
+      shell: bash
+      run: |
+        dirs=$(find ./go/services -mindepth 1 -maxdepth 1 -type d -exec basename {} \;)
+        json=$(echo "$dirs" | jq -R -s -c 'split("\n") | map(select(length > 0)) | {service: .}')
+        echo "matrix=$json" >> $GITHUB_OUTPUT

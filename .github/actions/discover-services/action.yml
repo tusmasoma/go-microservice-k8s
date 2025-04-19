@@ -12,7 +12,7 @@ runs:
       shell: bash
       run: |
         services=$(find ./go/services -mindepth 1 -maxdepth 1 -type d -exec basename {} \;)
-        echo "all_services=$services" >> "$GITHUB_ENV"
+        printf "all_services<<EOF\n%s\nEOF\n" "$services" >> "$GITHUB_ENV"
 
     - name: Diff and extract changed services
       id: set-matrix

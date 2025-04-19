@@ -87,10 +87,23 @@ jobs:
       matrix: ${{ fromJson(needs.discover-services.outputs.matrix) }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.0.0
-      - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.0.0
-        with:
-          name: app-${{ matrix.service }}
-          path: ./go/services/${{ matrix.service }}/app
 
-      - name: Lint
-        run: make lint SERVICE=${{ matrix.service }}
+      - name: Setup Go
+        uses: actions/setup-go@93397bea11091df50f3d7e59dc26a7711a8bcfbe # v4.0.0
+        with:
+          go-version-file: ./go.mod
+          cache-dependency-path: ./go.sum
+
+      - name: Lint (diff only for PR)
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: golangci/golangci-lint-action@a4f60bb28d35aeee14e6880718e0c85ff1882e64 # v6.0.1
+        with:
+          version: v1.63.4
+          args: -v --timeout=20m ./go/services/${{ matrix.service }}/...
+
+      - name: Lint (full for non-PR)
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: golangci/golangci-lint-action@a4f60bb28d35aeee14e6880718e0c85ff1882e64 # v6.0.1
+        with:
+          version: v1.63.4
+          args: --timeout=20m -v ./...

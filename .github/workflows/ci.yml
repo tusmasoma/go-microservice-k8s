@@ -96,14 +96,14 @@ jobs:
 
       - name: Lint (diff only for PR)
         if: ${{ github.event_name == 'pull_request' }}
-        uses: golangci/golangci-lint-action@v6.0.1
+        uses: golangci/golangci-lint-action@a4f60bb28d35aeee14e6880718e0c85ff1882e64 # v6.0.1
         with:
           version: v1.63.4
           args: -v --timeout=20m ./go/services/${{ matrix.service }}/...
 
       - name: Lint (full for non-PR)
         if: ${{ github.event_name != 'pull_request' }}
-        uses: golangci/golangci-lint-action@v6.0.1
+        uses: golangci/golangci-lint-action@a4f60bb28d35aeee14e6880718e0c85ff1882e64 # v6.0.1
         with:
           version: v1.63.4
           args: --timeout=20m -v ./...

@@ -5,10 +5,14 @@ on:
     branches: [ "main" ]
     paths:
       - "go/**"
+      - "go.mod"
+      - "go.sum"
   pull_request:
     branches: [ "main" ]
     paths:
       - "go/**"
+      - "go.mod"
+      - "go.sum"
   workflow_dispatch:
 
 jobs:
@@ -25,62 +29,35 @@ jobs:
       - name: Discover Go Services
         id: discover
         uses: ./.github/actions/discover-services
-  build:
+  test:
     needs: discover-services
     if: ${{ needs.discover-services.outputs.matrix != '{}' && fromJson(needs.discover-services.outputs.matrix).include != '' }}
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{ fromJson(needs.discover-services.outputs.matrix) }}
     steps:
-      - name: Checkout the repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.0.0
-
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.0.0
+      
       - name: Setup Go
-        uses: actions/setup-go@93397bea11091df50f3d7e59dc26a7711a8bcfbe # v4.0.0
-        id: setup-go
+        uses: actions/setup-go@0c52d547c9bc32b1aa3301fd7a9cb496313a4491 # v5.0.0
         with:
           go-version-file: ./go.mod
-          cache-dependency-path: ./go.sum
-
-      - name: Download Go modules
-        shell: bash
-        if: ${{ steps.setup-go.outputs.cache-hit != 'true' }}
-        working-directory: ./go/services/${{ matrix.service }}
-        run: |
-          go mod download
-          go mod verify
-
-      - name: Build
-        working-directory: ./go/services/${{ matrix.service }}
-        run: |
-          go build -v -o app ./cmd/
-
-      - name: Archive production artifacts
-        uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
+          cache: false
+      
+      - uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.0.0
         with:
-          name: app-${{ matrix.service }}
-          path: ./go/services/${{ matrix.service }}/app
-  test:
-    needs:
-      - discover-services
-      - build
-    if: ${{ needs.discover-services.outputs.matrix != '{}' && fromJson(needs.discover-services.outputs.matrix).include != '' }}
-    runs-on: ubuntu-latest
-    strategy:
-      matrix: ${{ fromJson(needs.discover-services.outputs.matrix) }}
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.0.0
-      - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.0.0
-        with:
-          name: app-${{ matrix.service }}
-          path: ./go/services/${{ matrix.service }}/app
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: ${{ runner.os }}-go-${{ matrix.service }}-${{ hashFiles(format('go/services/{0}/go.sum', matrix.service), 'go.sum') }}
+          restore-keys: ${{ runner.os }}-go-${{ matrix.service }}-
 
       - name: Test
         run: make test SERVICE=${{ matrix.service }}
   lint:
     needs:
       - discover-services
-      - build
+      - test
     if: ${{ needs.discover-services.outputs.matrix != '{}' && fromJson(needs.discover-services.outputs.matrix).include != '' }}
     runs-on: ubuntu-latest
     strategy:
@@ -89,10 +66,18 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.0.0
 
       - name: Setup Go
-        uses: actions/setup-go@93397bea11091df50f3d7e59dc26a7711a8bcfbe # v4.0.0
+        uses: actions/setup-go@0c52d547c9bc32b1aa3301fd7a9cb496313a4491 # v5.0.0
         with:
           go-version-file: ./go.mod
-          cache-dependency-path: ./go.sum
+          cache: false
+      
+      - uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.0.0
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: ${{ runner.os }}-go-${{ matrix.service }}-${{ hashFiles(format('go/services/{0}/go.sum', matrix.service), 'go.sum') }}
+          restore-keys: ${{ runner.os }}-go-${{ matrix.service }}-
 
       - name: Lint (diff only for PR)
         if: ${{ github.event_name == 'pull_request' }}

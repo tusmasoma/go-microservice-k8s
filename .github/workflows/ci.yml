@@ -49,7 +49,7 @@ jobs:
           path: |
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: ${{ runner.os }}-go-${{ matrix.service }}-${{ hashFiles(format('go/services/{0}/go.sum', matrix.service)) }}
+          key: ${{ runner.os }}-go-${{ matrix.service }}-${{ hashFiles(format('go/services/{0}/go.sum', matrix.service), 'go.sum') }}
           restore-keys: ${{ runner.os }}-go-${{ matrix.service }}-
 
       - name: Test
@@ -76,7 +76,7 @@ jobs:
           path: |
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: ${{ runner.os }}-go-${{ matrix.service }}-${{ hashFiles(format('go/services/{0}/go.sum', matrix.service)) }}
+          key: ${{ runner.os }}-go-${{ matrix.service }}-${{ hashFiles(format('go/services/{0}/go.sum', matrix.service), 'go.sum') }}
           restore-keys: ${{ runner.os }}-go-${{ matrix.service }}-
 
       - name: Lint (diff only for PR)

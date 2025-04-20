@@ -4,8 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/ory/dockertest"
@@ -72,7 +70,7 @@ func StartMySQL(ctx context.Context, params *MySQLParams) (*sql.DB, func(), erro
 	err = pool.Retry(func() error {
 		dsn := fmt.Sprintf("%s:%s@(localhost:%s)/%s?charset=utf8mb4&parseTime=true",
 			params.UserName, params.UserPassword, port, params.DBName)
-		db, err := sql.Open("mysql", dsn)
+		db, err := sql.Open("mysql", dsn) //nolint:govet // ignore shadow
 		if err != nil {
 			return err
 		}
@@ -104,25 +102,25 @@ func closeMySQL(db *sql.DB, pool *dockertest.Pool, resource *dockertest.Resource
 	log.Info("close MySQL container🐳")
 }
 
-func findMigrationsDir() (string, error) {
-	const migrationsDirName = "migrations"
-	dir, err := os.Getwd()
-	if err != nil {
-		return "", fmt.Errorf("failed to get current directory: %w", err)
-	}
-	for {
-		migrationsPath := filepath.Join(dir, migrationsDirName)
-		info, err := os.Stat(migrationsPath)
-		if err == nil && info.IsDir() {
-			return migrationsPath, nil
-		}
-		parent := filepath.Dir(dir)
-		if parent == dir {
-			return "", fmt.Errorf("migrations directory not found in any parent")
-		}
-		dir = parent
-	}
-}
+// func findMigrationsDir() (string, error) {
+// 	const migrationsDirName = "migrations"
+// 	dir, err := os.Getwd()
+// 	if err != nil {
+// 		return "", fmt.Errorf("failed to get current directory: %w", err)
+// 	}
+// 	for {
+// 		migrationsPath := filepath.Join(dir, migrationsDirName)
+// 		info, err := os.Stat(migrationsPath)
+// 		if err == nil && info.IsDir() {
+// 			return migrationsPath, nil
+// 		}
+// 		parent := filepath.Dir(dir)
+// 		if parent == dir {
+// 			return "", fmt.Errorf("migrations directory not found in any parent")
+// 		}
+// 		dir = parent
+// 	}
+// }
 
 func InitTestDatabase(ctx context.Context, params *MySQLParams, queries []string) error {
 	initDBQuery := fmt.Sprintf(`

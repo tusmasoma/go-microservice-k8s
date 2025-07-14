@@ -25,6 +25,12 @@ func NewWeb(params *HandlerParams) Web {
 	}
 }
 
+// @title			Web API
+// @version		1.0
+// @description	レポジトリのAPIドキュメントです。
+// @servers.url	https://api.example.com/web
+// @in header
+// @name Authorization
 func (w *web) Register(mux *chi.Mux) {
 	router := func(r chi.Router) {
 		r.Route("/customer", w.routeCustomer)

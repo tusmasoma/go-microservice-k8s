@@ -28,3 +28,5 @@ bin/
 #/proto/**/*.pb.go
 #/proto/**/README.md
 #/go/**/mock/*.go
+
+node_modules/

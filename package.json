@@ -1,0 +1,14 @@
+{
+  "name": "docs",
+  "version": "0.1.0",
+  "description": "API documentations",
+  "scripts": {
+    "build-openapi-web": "./node_modules/.bin/redocly build-docs docs/openapi/web/swagger.yaml -o docs/archive/web.html"
+  },
+  "author": "tusmasoma",
+  "private": false,
+  "license": "ISC",
+  "dependencies": {
+    "@redocly/cli": "^1.34.3"
+  }
+}

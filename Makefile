@@ -135,3 +135,22 @@ bin-clean:
 	$(RM) -r $(if $(SERVICE),$(SERVICE_PATH_PREFIX)/$(SERVICE)/bin,./bin)
 
 setup: proto_gen generate
+
+build-docs: ${CURDIR}/docs/archive ${CURDIR}/node_modules
+build-docs: PROTOC_INCLUDE := -I. -I${GOPATH}/src/github.com/gogo/protobuf -I=${GOPATH}/src/github.com/gogo/protobuf/protobuf
+build-docs: build-proto-docs build-openapi
+	rm -f docs-error.log
+	mkdir -p docs/archive
+	npm run build-openapi-web
+
+	@if [ -s "docs-error.log" ]; then\
+		echo "failed to build docs error";\
+		cat docs-error.log;\
+		exit 1;\
+	fi
+
+build-openapi:
+	cd ./go/services/gateway/cmd/ && swag init -g "../web/web.go" --d "../web" --parseDependency -o "../../../../docs/openapi/web" -ot yaml --v3.1
+
+build-proto-docs:
+	buf generate --template '{"version":"v2","plugins":[{"remote":"buf.build/community/pseudomuto-doc:v1.5.1","out":"docs/archive","opt":"html,web-proto.html"}]}' --path proto/web

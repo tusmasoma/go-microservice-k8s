@@ -23,6 +23,12 @@ func (w *web) routeCustomer(r chi.Router) {
 	})
 }
 
+// @Summary	顧客一覧の取得
+// @Tags		顧客
+// @Accept		json
+// @Produce	json
+// @Success	200	{object}	webpb.ListCustomersResponse
+// @Router		/web/customer [get]
 func (w *web) listCustomers(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	out, err := w.customer.ListCustomers(ctx, &customer.ListCustomersRequest{})

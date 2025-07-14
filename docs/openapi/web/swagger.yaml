@@ -1,0 +1,77 @@
+components:
+  schemas:
+    web.CountryCode:
+      type: integer
+      x-enum-varnames:
+      - CountryCode_COUNTRY_CODE_UNSPECIFIED
+      - CountryCode_USA
+      - CountryCode_JPN
+      - CountryCode_DEU
+      - CountryCode_FRA
+      - CountryCode_GBR
+      - CountryCode_CAN
+      - CountryCode_AUS
+      - CountryCode_ITA
+      - CountryCode_BRA
+      - CountryCode_KOR
+      - CountryCode_CHN
+      - CountryCode_IND
+      - CountryCode_MEX
+      - CountryCode_RUS
+      - CountryCode_ESP
+      - CountryCode_NLD
+      - CountryCode_SWE
+      - CountryCode_CHE
+      - CountryCode_ARG
+      - CountryCode_ZAF
+    web.Customer:
+      properties:
+        city:
+          type: string
+        country_code:
+          $ref: '#/components/schemas/web.CountryCode'
+        email:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+        street:
+          type: string
+      type: object
+    web.ListCustomersResponse:
+      properties:
+        customers:
+          items:
+            $ref: '#/components/schemas/web.Customer'
+          type: array
+          uniqueItems: false
+      type: object
+externalDocs:
+  description: ""
+  url: ""
+info:
+  description: レポジトリのAPIドキュメントです。
+  title: Web API
+  version: "1.0"
+openapi: 3.1.0
+paths:
+  /web/customer:
+    get:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.ListCustomersResponse'
+          description: OK
+      summary: 顧客一覧の取得
+      tags:
+      - 顧客
+servers:
+- url: https://api.example.com/web

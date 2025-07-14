@@ -1,0 +1,781 @@
+components:
+  schemas:
+    timestamppb.Timestamp:
+      properties:
+        nanos:
+          description: |-
+            Non-negative fractions of a second at nanosecond resolution. Negative
+            second values with fractions must still have non-negative nanos values
+            that count forward in time. Must be from 0 to 999,999,999
+            inclusive.
+          type: integer
+        seconds:
+          description: |-
+            Represents seconds of UTC time since Unix epoch
+            1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to
+            9999-12-31T23:59:59Z inclusive.
+          type: integer
+      type: object
+    web.CatalogItem:
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        price:
+          type: number
+      type: object
+    web.CountryCode:
+      type: integer
+      x-enum-varnames:
+      - CountryCode_COUNTRY_CODE_UNSPECIFIED
+      - CountryCode_USA
+      - CountryCode_JPN
+      - CountryCode_DEU
+      - CountryCode_FRA
+      - CountryCode_GBR
+      - CountryCode_CAN
+      - CountryCode_AUS
+      - CountryCode_ITA
+      - CountryCode_BRA
+      - CountryCode_KOR
+      - CountryCode_CHN
+      - CountryCode_IND
+      - CountryCode_MEX
+      - CountryCode_RUS
+      - CountryCode_ESP
+      - CountryCode_NLD
+      - CountryCode_SWE
+      - CountryCode_CHE
+      - CountryCode_ARG
+      - CountryCode_ZAF
+    web.CreateCatalogItemRequest:
+      properties:
+        name:
+          type: string
+        price:
+          type: number
+      type: object
+    web.CreateCustomerRequest:
+      properties:
+        city:
+          type: string
+        country_code:
+          type: integer
+          x-enum-varnames:
+          - CountryCode_COUNTRY_CODE_UNSPECIFIED
+          - CountryCode_USA
+          - CountryCode_JPN
+          - CountryCode_DEU
+          - CountryCode_FRA
+          - CountryCode_GBR
+          - CountryCode_CAN
+          - CountryCode_AUS
+          - CountryCode_ITA
+          - CountryCode_BRA
+          - CountryCode_KOR
+          - CountryCode_CHN
+          - CountryCode_IND
+          - CountryCode_MEX
+          - CountryCode_RUS
+          - CountryCode_ESP
+          - CountryCode_NLD
+          - CountryCode_SWE
+          - CountryCode_CHE
+          - CountryCode_ARG
+          - CountryCode_ZAF
+        email:
+          type: string
+        name:
+          type: string
+        street:
+          type: string
+      type: object
+    web.CreateOrderRequest:
+      properties:
+        customer_id:
+          type: string
+        order_lines:
+          items:
+            $ref: '#/components/schemas/web.OrderLine'
+          type: array
+          uniqueItems: false
+      type: object
+    web.Customer:
+      properties:
+        city:
+          type: string
+        country_code:
+          $ref: '#/components/schemas/web.CountryCode'
+        email:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+        street:
+          type: string
+      type: object
+    web.Error:
+      properties:
+        message:
+          type: string
+      type: object
+    web.GetCatalogItemResponse:
+      properties:
+        item:
+          $ref: '#/components/schemas/web.CatalogItem'
+      type: object
+    web.GetCustomerResponse:
+      properties:
+        customer:
+          $ref: '#/components/schemas/web.Customer'
+      type: object
+    web.GetOrderResponse:
+      properties:
+        order:
+          $ref: '#/components/schemas/web.Order'
+      type: object
+    web.ListCatalogItemsByIDsRequest:
+      properties:
+        ids:
+          items:
+            type: string
+          type: array
+          uniqueItems: false
+      type: object
+    web.ListCatalogItemsByIDsResponse:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/web.CatalogItem'
+          type: array
+          uniqueItems: false
+      type: object
+    web.ListCatalogItemsByNameResponse:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/web.CatalogItem'
+          type: array
+          uniqueItems: false
+      type: object
+    web.ListCatalogItemsResponse:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/web.CatalogItem'
+          type: array
+          uniqueItems: false
+      type: object
+    web.ListCustomersResponse:
+      properties:
+        customers:
+          items:
+            $ref: '#/components/schemas/web.Customer'
+          type: array
+          uniqueItems: false
+      type: object
+    web.ListOrdersResponse:
+      properties:
+        orders:
+          items:
+            $ref: '#/components/schemas/web.Order'
+          type: array
+          uniqueItems: false
+      type: object
+    web.Order:
+      properties:
+        customer:
+          $ref: '#/components/schemas/web.Customer'
+        id:
+          type: string
+        order_date:
+          $ref: '#/components/schemas/timestamppb.Timestamp'
+        order_lines:
+          items:
+            $ref: '#/components/schemas/web.OrderLine'
+          type: array
+          uniqueItems: false
+      type: object
+    web.OrderLine:
+      properties:
+        catalog_item:
+          $ref: '#/components/schemas/web.CatalogItem'
+        quantity:
+          type: integer
+      type: object
+    web.UpdateCatalogItemRequest:
+      properties:
+        name:
+          type: string
+        price:
+          type: number
+      type: object
+    web.UpdateCustomerRequest:
+      properties:
+        city:
+          type: string
+        country_code:
+          type: integer
+          x-enum-varnames:
+          - CountryCode_COUNTRY_CODE_UNSPECIFIED
+          - CountryCode_USA
+          - CountryCode_JPN
+          - CountryCode_DEU
+          - CountryCode_FRA
+          - CountryCode_GBR
+          - CountryCode_CAN
+          - CountryCode_AUS
+          - CountryCode_ITA
+          - CountryCode_BRA
+          - CountryCode_KOR
+          - CountryCode_CHN
+          - CountryCode_IND
+          - CountryCode_MEX
+          - CountryCode_RUS
+          - CountryCode_ESP
+          - CountryCode_NLD
+          - CountryCode_SWE
+          - CountryCode_CHE
+          - CountryCode_ARG
+          - CountryCode_ZAF
+        email:
+          type: string
+        name:
+          type: string
+        street:
+          type: string
+      type: object
+externalDocs:
+  description: ""
+  url: ""
+info:
+  description: レポジトリのAPIドキュメントです。
+  title: Web API
+  version: "1.0"
+openapi: 3.1.0
+paths:
+  /api/v1/catalog:
+    get:
+      description: Get a list of all catalog items
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.ListCatalogItemsResponse'
+          description: OK
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Internal Server Error
+      summary: List all catalog items
+      tags:
+      - catalog
+    post:
+      description: Create a new catalog item with name and price
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/web.CreateCatalogItemRequest'
+        description: Catalog item data
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Created
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Internal Server Error
+      summary: Create a new catalog item
+      tags:
+      - catalog
+  /api/v1/catalog/{catalogItemID}:
+    delete:
+      description: Delete a catalog item by ID
+      parameters:
+      - description: Catalog Item ID
+        in: path
+        name: catalogItemID
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "204":
+          description: No Content
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Internal Server Error
+      summary: Delete a catalog item
+      tags:
+      - catalog
+    get:
+      description: Get a catalog item by ID
+      parameters:
+      - description: Catalog Item ID
+        in: path
+        name: catalogItemID
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.GetCatalogItemResponse'
+          description: OK
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Internal Server Error
+      summary: Get a catalog item
+      tags:
+      - catalog
+    put:
+      description: Update a catalog item by ID
+      parameters:
+      - description: Catalog Item ID
+        in: path
+        name: catalogItemID
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/web.UpdateCatalogItemRequest'
+        description: Updated catalog item data
+        required: true
+      responses:
+        "204":
+          description: No Content
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Bad Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Internal Server Error
+      summary: Update a catalog item
+      tags:
+      - catalog
+  /api/v1/catalog/search/by-ids:
+    post:
+      description: Get multiple catalog items by their IDs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/web.ListCatalogItemsByIDsRequest'
+        description: List of catalog item IDs
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.ListCatalogItemsByIDsResponse'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Internal Server Error
+      summary: Get catalog items by IDs
+      tags:
+      - catalog
+  /api/v1/catalog/search/by-name:
+    get:
+      description: Search catalog items by name
+      parameters:
+      - description: Item name to search
+        in: query
+        name: name
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.ListCatalogItemsByNameResponse'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Internal Server Error
+      summary: Search catalog items by name
+      tags:
+      - catalog
+  /api/v1/customer:
+    get:
+      description: Get a list of all customers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.ListCustomersResponse'
+          description: OK
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Internal Server Error
+      summary: List all customers
+      tags:
+      - customer
+    post:
+      description: Create a new customer with the provided information
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/web.CreateCustomerRequest'
+        description: Customer information
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Created
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Internal Server Error
+      summary: Create a new customer
+      tags:
+      - customer
+  /api/v1/customer/{customerID}:
+    delete:
+      description: Delete a customer by ID
+      parameters:
+      - description: Customer ID
+        in: path
+        name: customerID
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "204":
+          description: No Content
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Internal Server Error
+      summary: Delete a customer
+      tags:
+      - customer
+    get:
+      description: Get customer information by ID
+      parameters:
+      - description: Customer ID
+        in: path
+        name: customerID
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.GetCustomerResponse'
+          description: OK
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Internal Server Error
+      summary: Get a customer
+      tags:
+      - customer
+    put:
+      description: Update customer information by ID
+      parameters:
+      - description: Customer ID
+        in: path
+        name: customerID
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/web.UpdateCustomerRequest'
+        description: Updated customer information
+        required: true
+      responses:
+        "204":
+          description: No Content
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Bad Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Internal Server Error
+      summary: Update a customer
+      tags:
+      - customer
+  /api/v1/order:
+    get:
+      description: Get a list of all orders with customer and catalog item details
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.ListOrdersResponse'
+          description: OK
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Internal Server Error
+      summary: List all orders
+      tags:
+      - order
+    post:
+      description: Create a new order with customer ID and order lines
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/web.CreateOrderRequest'
+        description: Order data
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Created
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Internal Server Error
+      summary: Create a new order
+      tags:
+      - order
+  /api/v1/order/{orderID}:
+    delete:
+      description: Delete an order by ID
+      parameters:
+      - description: Order ID
+        in: path
+        name: orderID
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "204":
+          description: No Content
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Internal Server Error
+      summary: Delete an order
+      tags:
+      - order
+    get:
+      description: Get an order by ID with customer and catalog item details
+      parameters:
+      - description: Order ID
+        in: path
+        name: orderID
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.GetOrderResponse'
+          description: OK
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web.Error'
+          description: Internal Server Error
+      summary: Get an order
+      tags:
+      - order
+servers:
+- url: https://api.example.com/web

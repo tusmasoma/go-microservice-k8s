@@ -24,6 +24,15 @@ func (w *web) routeOrder(r chi.Router) {
 	})
 }
 
+// listOrders godoc
+// @Summary      List all orders
+// @Description  Get a list of all orders with customer and catalog item details
+// @Tags         order
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  webpb.ListOrdersResponse
+// @Failure      500  {object}  web.Error
+// @Router       /api/v1/order [get]
 func (w *web) listOrders(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	orderOuts, err := w.order.ListOrders(ctx, &order.ListOrdersRequest{})
@@ -61,6 +70,17 @@ func (w *web) listOrders(rw http.ResponseWriter, r *http.Request) {
 	response.OK(body, rw, r)
 }
 
+// createOrder godoc
+// @Summary      Create a new order
+// @Description  Create a new order with customer ID and order lines
+// @Tags         order
+// @Accept       json
+// @Produce      json
+// @Param        request body webpb.CreateOrderRequest true "Order data"
+// @Success      201
+// @Failure      400  {object}  web.Error
+// @Failure      500  {object}  web.Error
+// @Router       /api/v1/order [post]
 func (w *web) createOrder(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	req := &webpb.CreateOrderRequest{}
@@ -86,6 +106,17 @@ func (w *web) createOrder(rw http.ResponseWriter, r *http.Request) {
 	response.Created(rw)
 }
 
+// getOrder godoc
+// @Summary      Get an order
+// @Description  Get an order by ID with customer and catalog item details
+// @Tags         order
+// @Accept       json
+// @Produce      json
+// @Param        orderID path string true "Order ID"
+// @Success      200  {object}  webpb.GetOrderResponse
+// @Failure      404  {object}  web.Error
+// @Failure      500  {object}  web.Error
+// @Router       /api/v1/order/{orderID} [get]
 func (w *web) getOrder(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	orderID := request.Param(r, "orderID")
@@ -123,6 +154,17 @@ func (w *web) getOrder(rw http.ResponseWriter, r *http.Request) {
 	response.OK(body, rw, r)
 }
 
+// deleteOrder godoc
+// @Summary      Delete an order
+// @Description  Delete an order by ID
+// @Tags         order
+// @Accept       json
+// @Produce      json
+// @Param        orderID path string true "Order ID"
+// @Success      204
+// @Failure      404  {object}  web.Error
+// @Failure      500  {object}  web.Error
+// @Router       /api/v1/order/{orderID} [delete]
 func (w *web) deleteOrder(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	orderID := request.Param(r, "orderID")

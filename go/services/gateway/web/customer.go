@@ -23,6 +23,15 @@ func (w *web) routeCustomer(r chi.Router) {
 	})
 }
 
+// listCustomers godoc
+// @Summary      List all customers
+// @Description  Get a list of all customers
+// @Tags         customer
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  webpb.ListCustomersResponse
+// @Failure      500  {object}  web.Error
+// @Router       /api/v1/customer [get]
 func (w *web) listCustomers(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	out, err := w.customer.ListCustomers(ctx, &customer.ListCustomersRequest{})
@@ -36,6 +45,17 @@ func (w *web) listCustomers(rw http.ResponseWriter, r *http.Request) {
 	response.OK(body, rw, r)
 }
 
+// createCustomer godoc
+// @Summary      Create a new customer
+// @Description  Create a new customer with the provided information
+// @Tags         customer
+// @Accept       json
+// @Produce      json
+// @Param        request body webpb.CreateCustomerRequest true "Customer information"
+// @Success      201
+// @Failure      400  {object}  web.Error
+// @Failure      500  {object}  web.Error
+// @Router       /api/v1/customer [post]
 func (w *web) createCustomer(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	req := &webpb.CreateCustomerRequest{}
@@ -57,6 +77,17 @@ func (w *web) createCustomer(rw http.ResponseWriter, r *http.Request) {
 	response.Created(rw)
 }
 
+// getCustomer godoc
+// @Summary      Get a customer
+// @Description  Get customer information by ID
+// @Tags         customer
+// @Accept       json
+// @Produce      json
+// @Param        customerID path string true "Customer ID"
+// @Success      200  {object}  webpb.GetCustomerResponse
+// @Failure      404  {object}  web.Error
+// @Failure      500  {object}  web.Error
+// @Router       /api/v1/customer/{customerID} [get]
 func (w *web) getCustomer(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	customerID := request.Param(r, "customerID")
@@ -74,6 +105,19 @@ func (w *web) getCustomer(rw http.ResponseWriter, r *http.Request) {
 	response.OK(body, rw, r)
 }
 
+// updateCustomer godoc
+// @Summary      Update a customer
+// @Description  Update customer information by ID
+// @Tags         customer
+// @Accept       json
+// @Produce      json
+// @Param        customerID path string true "Customer ID"
+// @Param        request body webpb.UpdateCustomerRequest true "Updated customer information"
+// @Success      204
+// @Failure      400  {object}  web.Error
+// @Failure      404  {object}  web.Error
+// @Failure      500  {object}  web.Error
+// @Router       /api/v1/customer/{customerID} [put]
 func (w *web) updateCustomer(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	customerID := request.Param(r, "customerID")
@@ -97,6 +141,17 @@ func (w *web) updateCustomer(rw http.ResponseWriter, r *http.Request) {
 	response.NoContent(rw)
 }
 
+// deleteCustomer godoc
+// @Summary      Delete a customer
+// @Description  Delete a customer by ID
+// @Tags         customer
+// @Accept       json
+// @Produce      json
+// @Param        customerID path string true "Customer ID"
+// @Success      204
+// @Failure      404  {object}  web.Error
+// @Failure      500  {object}  web.Error
+// @Router       /api/v1/customer/{customerID} [delete]
 func (w *web) deleteCustomer(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	customerID := request.Param(r, "customerID")
